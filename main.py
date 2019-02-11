@@ -10,6 +10,7 @@ Needs the following environment variables:
     - MMW_BOT_ROOM_ID: the room on which send the notifications
 """
 
+import json
 import os
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
@@ -44,6 +45,9 @@ class WWMBotForwarder(BaseHTTPRequestHandler):
         """
         main method, get a json dict from wifi-with-me, send a message to a matrix room
         """
+        length = int(self.headers.get('Content-Length'))
+        data = json.loads(self.rfile.read(length).decode())
+        self.server.matrix_room.send_text(f'Got a request on {self.path}: {data}')
         self.ret_ok()
 
     def ret_ok(self):
