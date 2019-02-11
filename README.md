@@ -21,6 +21,7 @@ pip3 install --user matrix-client
 ## Prod
 
 With a proxyta.net:
+(don't forget about `CHATONS_DOMAIN`, otherwise you will stay on `localhost`)
 
 ```
 docker-compose up -d
