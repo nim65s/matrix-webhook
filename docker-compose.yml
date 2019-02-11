@@ -1,0 +1,18 @@
+version: '3'
+
+networks:
+  web:
+    external: true
+
+services:
+  bot:
+    build: .
+    restart: unless-stopped
+    env_file:
+      - .env
+    networks:
+      - web
+    labels:
+      traefik.enable: "true"
+      traefik.frontend.rule: "Host: ${CHATONS_SERVICE:-wwm}.${CHATONS_DOMAIN:-localhost}, www.${CHATONS_SERVICE:-wwm}.${CHATONS_DOMAIN:-localhost}"
+

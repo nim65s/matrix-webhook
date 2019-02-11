@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """
 wifi-with-matrix script.
 Bridge between https://code.ffdn.org/FFDN/wifi-with-me & a matrix room
@@ -62,4 +62,5 @@ class WWMBotForwarder(BaseHTTPRequestHandler):
 
 
 if __name__ == '__main__':
+    print('Wifi-With-Matrix bridge starting…')
     WWMBotServer(SERVER_ADDRESS, WWMBotForwarder).serve_forever()
