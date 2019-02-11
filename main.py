@@ -2,12 +2,6 @@
 """
 wifi-with-matrix script.
 Bridge between https://code.ffdn.org/FFDN/wifi-with-me & a matrix room
-
-Needs the following environment variables:
-    - MMW_BOT_MATRIX_URL: the url of the matrix homeserver
-    - MMW_BOT_MATRIX_ID: the user id of the bot on this server
-    - MMW_BOT_MATRIX_PW: the password for this user
-    - MMW_BOT_ROOM_ID: the room on which send the notifications
 """
 
 import json
@@ -16,11 +10,12 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 
 from matrix_client.client import MatrixClient
 
-SERVER_ADDRESS = ('', int(os.environ.get('MMW_BOT_PORT', 4785)))
-MATRIX_URL = os.environ.get('MMW_BOT_MATRIX_URL', 'https://matrix.org')
-MATRIX_ID = os.environ.get('MMW_BOT_MATRIX_ID', 'wwm')
-MATRIX_PW = os.environ['MMW_BOT_MATRIX_PW']
-ROOM_ID = os.environ['MMW_BOT_ROOM_ID']
+SERVER_ADDRESS = ('', int(os.environ.get('PORT', 4785)))
+MATRIX_URL = os.environ.get('MATRIX_URL', 'https://matrix.org')
+MATRIX_ID = os.environ.get('MATRIX_ID', 'wwm')
+MATRIX_PW = os.environ['MATRIX_PW']
+ROOM_ID = os.environ['ROOM_ID']
+API_KEY = os.environ['API_KEY']
 
 
 class WWMBotServer(HTTPServer):
@@ -30,9 +25,9 @@ class WWMBotServer(HTTPServer):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.matrix_client = MatrixClient(MATRIX_URL)
-        self.matrix_token = self.matrix_client.login(username=MATRIX_ID, password=MATRIX_PW)
-        self.matrix_room = self.matrix_client.get_rooms()[ROOM_ID]
+        client = MatrixClient(MATRIX_URL)
+        client.login(username=MATRIX_ID, password=MATRIX_PW)
+        self.room = client.get_rooms()[ROOM_ID]
 
 
 class WWMBotForwarder(BaseHTTPRequestHandler):
@@ -47,18 +42,17 @@ class WWMBotForwarder(BaseHTTPRequestHandler):
         """
         length = int(self.headers.get('Content-Length'))
         data = json.loads(self.rfile.read(length).decode())
-        name, url = data['name'], data['url']
-        self.server.matrix_room.send_text(f'Nouvelle demande de {name}: {url}')
-        self.ret_ok()
+        status = 'I need a json dict with name, url, key'
+        if all(key in data for key in ['name', 'url', 'key']):
+            status = 'wrong key'
+            if data['key'] == API_KEY:
+                status = 'OK'
+                self.server.room.send_text(f'Nouvelle demande de {data["name"]}: {data["url"]}')
 
-    def ret_ok(self):
-        """
-        return a success status
-        """
-        self.send_response(200)
+        self.send_response(200 if status == 'OK' else 401)
         self.send_header('Content-Type', 'application/json')
         self.end_headers()
-        self.wfile.write(b"{'status': 'OK'}")
+        self.wfile.write(b"{'status': %a}" % status)
 
 
 if __name__ == '__main__':

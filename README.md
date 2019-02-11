@@ -6,10 +6,10 @@ Bridge between https://code.ffdn.org/FFDN/wifi-with-me & a matrix room
 
 Set the following environment variables:
 
-- MMW_BOT_MATRIX_URL: the url of the matrix homeserver
-- MMW_BOT_MATRIX_ID: the user id of the bot on this server
-- MMW_BOT_MATRIX_PW: the password for this user
-- MMW_BOT_ROOM_ID: the room on which send the notifications
+- MATRIX_URL: the url of the matrix homeserver
+- MATRIX_ID: the user id of the bot on this server
+- MATRIX_PW: the password for this user
+- ROOM_ID: the room on which send the notifications
 
 ## Dev
 
