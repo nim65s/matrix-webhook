@@ -47,7 +47,8 @@ class WWMBotForwarder(BaseHTTPRequestHandler):
         """
         length = int(self.headers.get('Content-Length'))
         data = json.loads(self.rfile.read(length).decode())
-        self.server.matrix_room.send_text(f'Got a request on {self.path}: {data}')
+        name, url = data['name'], data['url']
+        self.server.matrix_room.send_text(f'Nouvelle demande de {name}: {url}')
         self.ret_ok()
 
     def ret_ok(self):
