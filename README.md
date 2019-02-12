@@ -30,5 +30,5 @@ docker-compose up -d
 ## Test
 
 ```
-curl -d '{"name":"toto", "url":"http://radio.localhost/map/#44", "key": "secret"}' wwm.localhost
+curl -d '{"text":"new contrib from toto: http://radio.localhost/map/#44", "key": "secret"}' wwm.localhost
 ```

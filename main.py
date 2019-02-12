@@ -42,12 +42,12 @@ class WWMBotForwarder(BaseHTTPRequestHandler):
         """
         length = int(self.headers.get('Content-Length'))
         data = json.loads(self.rfile.read(length).decode())
-        status = 'I need a json dict with name, url, key'
-        if all(key in data for key in ['name', 'url', 'key']):
+        status = 'I need a json dict with text & key'
+        if all(key in data for key in ['text', 'key']):
             status = 'wrong key'
             if data['key'] == API_KEY:
                 status = 'OK'
-                self.server.room.send_text(f'Nouvelle demande de {data["name"]}: {data["url"]}')
+                self.server.room.send_text(data['text'])
 
         self.send_response(200 if status == 'OK' else 401)
         self.send_header('Content-Type', 'application/json')
