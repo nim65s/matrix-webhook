@@ -32,3 +32,4 @@ docker-compose up -d
 ```
 curl -d '{"text":"new contrib from toto: http://radio.localhost/map/#44", "key": "secret"}' wwm.localhost
 ```
+(or wwm.localhost:4785 without docker)
