@@ -14,7 +14,6 @@ SERVER_ADDRESS = ('', int(os.environ.get('PORT', 4785)))
 MATRIX_URL = os.environ.get('MATRIX_URL', 'https://matrix.org')
 MATRIX_ID = os.environ.get('MATRIX_ID', 'wwm')
 MATRIX_PW = os.environ['MATRIX_PW']
-ROOM_ID = os.environ['ROOM_ID']
 API_KEY = os.environ['API_KEY']
 
 
@@ -27,7 +26,7 @@ class WWMBotServer(HTTPServer):
         super().__init__(*args, **kwargs)
         client = MatrixClient(MATRIX_URL)
         client.login(username=MATRIX_ID, password=MATRIX_PW)
-        self.room = client.get_rooms()[ROOM_ID]
+        self.rooms = client.get_rooms()
 
 
 class WWMBotForwarder(BaseHTTPRequestHandler):
@@ -46,8 +45,10 @@ class WWMBotForwarder(BaseHTTPRequestHandler):
         if all(key in data for key in ['text', 'key']):
             status = 'wrong key'
             if data['key'] == API_KEY:
-                status = 'OK'
-                self.server.room.send_text(data['text'])
+                status = 'I need the id of the room as a path'
+                if self.path[1:] in self.server.rooms:
+                    status = 'OK'
+                    self.server.rooms[self.path[1:]].send_text(data['text'])
 
         self.send_response(200 if status == 'OK' else 401)
         self.send_header('Content-Type', 'application/json')
