@@ -14,4 +14,4 @@ services:
       - web
     labels:
       traefik.enable: "true"
-      traefik.frontend.rule: "Host: ${CHATONS_SERVICE:-mwh}.${CHATONS_DOMAIN:-localhost}, www.${CHATONS_SERVICE:-mwh}.${CHATONS_DOMAIN:-localhost}"
+      traefik.frontend.rule: "Host: ${CHATONS_SERVICE:-matrixwebhook}.${CHATONS_DOMAIN:-localhost}, www.${CHATONS_SERVICE:-matrixwebhook}.${CHATONS_DOMAIN:-localhost}"

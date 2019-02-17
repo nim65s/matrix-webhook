@@ -22,8 +22,9 @@ pip3 install --user matrix-client
 
 - Use [Traefik](https://traefik.io/) on the `web` docker network, eg. with
   [proxyta.net](https://framagit.org/oxyta.net/proxyta.net)
-- Put the configuration into a `.env` file (don't forget about `CHATONS_DOMAIN`, otherwise by default you will stay on
-  `localhost`)
+- Put the configuration into a `.env` file
+- Configure your DNS for `${CHATONS_SERVICE:-matrixwebhook}.${CHATONS_DOMAIN:-localhost}` **and**
+  `www.${CHATONS_SERVICE:-matrixwebhook}.${CHATONS_DOMAIN:-localhost}`
 
 ```
 docker-compose up -d
@@ -32,6 +33,6 @@ docker-compose up -d
 ## Test / Usage
 
 ```
-curl -d '{"text":"new contrib from toto: http://radio.localhost/map/#44", "key": "secret"}' mwh.localhost
+curl -d '{"text":"new contrib from toto: http://radio.localhost/map/#44", "key": "secret"}' matrixwebhook.localhost
 ```
-(or mwh.localhost:4785 without docker)
+(or matrixwebhook.localhost:4785 without docker)
