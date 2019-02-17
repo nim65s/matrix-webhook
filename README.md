@@ -1,6 +1,6 @@
-# wifi-with-matrix
+# Matrix Webhook
 
-Bridge between https://code.ffdn.org/FFDN/wifi-with-me & a matrix room
+Post a message to a matrix room with a simple HTTP POST
 
 ## Configuration
 
@@ -30,6 +30,6 @@ docker-compose up -d
 ## Test
 
 ```
-curl -d '{"text":"new contrib from toto: http://radio.localhost/map/#44", "key": "secret"}' wwm.localhost
+curl -d '{"text":"new contrib from toto: http://radio.localhost/map/#44", "key": "secret"}' mwh.localhost
 ```
-(or wwm.localhost:4785 without docker)
+(or mwh.localhost:4785 without docker)

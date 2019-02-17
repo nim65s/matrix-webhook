@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-wifi-with-matrix script.
-Bridge between https://code.ffdn.org/FFDN/wifi-with-me & a matrix room
+Matrix Webhook
+Post a message to a matrix room with a simple HTTP POST
 """
 
 import json
@@ -17,9 +17,9 @@ MATRIX_PW = os.environ['MATRIX_PW']
 API_KEY = os.environ['API_KEY']
 
 
-class WWMBotServer(HTTPServer):
+class MatrixWebhookServer(HTTPServer):
     """
-    an HTTPServer that also contain a matrix client
+    an HTTPServer that embeds a matrix client
     """
 
     def __init__(self, *args, **kwargs):
@@ -29,7 +29,7 @@ class WWMBotServer(HTTPServer):
         self.rooms = self.client.get_rooms()
 
 
-class WWMBotForwarder(BaseHTTPRequestHandler):
+class MatrixWebhookHandler(BaseHTTPRequestHandler):
     """
     Class given to the server, st. it knows what to do with a request.
     This one handles the HTTP request, and forwards it to the matrix room.
@@ -60,5 +60,4 @@ class WWMBotForwarder(BaseHTTPRequestHandler):
 
 
 if __name__ == '__main__':
-    print('Wifi-With-Matrix bridge starting…')
-    WWMBotServer(SERVER_ADDRESS, WWMBotForwarder).serve_forever()
+    MatrixWebhookServer(SERVER_ADDRESS, MatrixWebhookHandler).serve_forever()
