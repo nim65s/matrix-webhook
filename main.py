@@ -24,9 +24,9 @@ class WWMBotServer(HTTPServer):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        client = MatrixClient(MATRIX_URL)
-        client.login(username=MATRIX_ID, password=MATRIX_PW)
-        self.rooms = client.get_rooms()
+        self.client = MatrixClient(MATRIX_URL)
+        self.client.login(username=MATRIX_ID, password=MATRIX_PW)
+        self.rooms = self.client.get_rooms()
 
 
 class WWMBotForwarder(BaseHTTPRequestHandler):
@@ -45,7 +45,10 @@ class WWMBotForwarder(BaseHTTPRequestHandler):
         if all(key in data for key in ['text', 'key']):
             status = 'wrong key'
             if data['key'] == API_KEY:
-                status = 'I need the id of the room as a path'
+                status = 'I need the id of the room as a path, and to be in this room'
+                if self.path[1:] not in self.server.rooms:
+                    # try to see if this room has been joined recently
+                    self.server.rooms = self.server.client.get_rooms()
                 if self.path[1:] in self.server.rooms:
                     status = 'OK'
                     self.server.rooms[self.path[1:]].send_text(data['text'])
