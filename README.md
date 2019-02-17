@@ -15,7 +15,7 @@ Set the following environment variables:
 
 ```
 pip3 install --user matrix-client
-./main.py
+./matrix_webhook.py
 ```
 
 ## Prod

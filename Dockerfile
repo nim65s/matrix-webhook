@@ -5,6 +5,6 @@ EXPOSE 4785
 RUN pip3 install --no-cache-dir \
     matrix-client
 
-ADD main.py /
+ADD matrix_webhook.py /
 
-CMD /main.py
+CMD /matrix_webhook.py
