@@ -4,7 +4,8 @@ Post a message to a matrix room with a simple HTTP POST
 
 ## Configuration
 
-Set the following environment variables:
+Create a matrix user for the bot, make it join the rooms you want it to talk into, and then set the following
+environment variables:
 
 - `MATRIX_URL`: the url of the matrix homeserver
 - `MATRIX_ID`: the user id of the bot on this server
