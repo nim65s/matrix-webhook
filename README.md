@@ -33,6 +33,6 @@ docker-compose up -d
 ## Test / Usage
 
 ```
-curl -d '{"text":"new contrib from toto: http://radio.localhost/map/#44", "key": "secret"}' matrixwebhook.localhost
+curl -d '{"text":"new contrib from toto: http://radio.localhost/map/#44", "key": "secret"}' matrixwebhook.localhost/!FwpsPdeIYWcXDVpRmO:matrix.org
 ```
 (or matrixwebhook.localhost:4785 without docker)
