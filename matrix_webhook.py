@@ -31,32 +31,31 @@ class MatrixWebhookServer(HTTPServer):
 
 class MatrixWebhookHandler(BaseHTTPRequestHandler):
     """
-    Class given to the server, st. it knows what to do with a request.
-    This one handles the HTTP request, and forwards it to the matrix room.
+    Class given to the server, st. it knows what to do with an HTTP request.
+    This one handles a POST, checks its content, and forwards it to the matrix room.
     """
 
     def do_POST(self):
         """
-        main method, get a json dict from wifi-with-me, send a message to a matrix room
+        get a json dict from the request, send a message to a matrix room
         """
         length = int(self.headers.get('Content-Length'))
         data = json.loads(self.rfile.read(length).decode())
-        status = 'I need a json dict with text & key'
+        status, ret = 400, 'I need a json dict with text & key'
         if all(key in data for key in ['text', 'key']):
-            status = 'wrong key'
+            status, ret = 401, 'I need the good "key"'
             if data['key'] == API_KEY:
-                status = 'I need the id of the room as a path, and to be in this room'
+                status, ret = 404, 'I need the id of the room as a path, and to be in this room'
                 if self.path[1:] not in self.server.rooms:
                     # try to see if this room has been joined recently
                     self.server.rooms = self.server.client.get_rooms()
                 if self.path[1:] in self.server.rooms:
-                    status = 'OK'
-                    self.server.rooms[self.path[1:]].send_text(data['text'])
+                    status, ret = 200, json.dumps(self.server.rooms[self.path[1:]].send_text(data['text']))
 
-        self.send_response(200 if status == 'OK' else 401)
+        self.send_response(status)
         self.send_header('Content-Type', 'application/json')
         self.end_headers()
-        self.wfile.write(b'{"status": "%a"}' % status)
+        self.wfile.write(b'{"status": %i, "ret": "%a"}' % (status, ret))
 
 
 if __name__ == '__main__':

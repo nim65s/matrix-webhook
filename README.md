@@ -10,6 +10,7 @@ environment variables:
 - `MATRIX_URL`: the url of the matrix homeserver
 - `MATRIX_ID`: the user id of the bot on this server
 - `MATRIX_PW`: the password for this user
+- `API_KEY`: a secret to share with the users of the service
 
 ## Dev
 
@@ -33,6 +34,6 @@ docker-compose up -d
 ## Test / Usage
 
 ```
-curl -d '{"text":"new contrib from toto: http://radio.localhost/map/#44", "key": "secret"}' matrixwebhook.localhost/!FwpsPdeIYWcXDVpRmO:matrix.org
+curl -d '{"text":"new contrib from toto: http://radio.localhost/map/#44", "key": "secret"}' 'matrixwebhook.localhost/!FwpsPdeIYWcXDVpRmO:matrix.org'
 ```
-(or matrixwebhook.localhost:4785 without docker)
+(or localhost:4785 without docker)
