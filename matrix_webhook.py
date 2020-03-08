@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """
-Matrix Webhook
+Matrix Webhook.
+
 Post a message to a matrix room with a simple HTTP POST
 v1: matrix-client & http.server
 v2: matrix-nio & aiohttp
@@ -13,7 +14,6 @@ from signal import SIGINT, SIGTERM
 
 from aiohttp import web
 from nio import AsyncClient
-from nio.rooms import MatrixRoom
 
 SERVER_ADDRESS = ('', int(os.environ.get('PORT', 4785)))
 MATRIX_URL = os.environ.get('MATRIX_URL', 'https://matrix.org')
@@ -26,6 +26,7 @@ CLIENT = AsyncClient(MATRIX_URL, MATRIX_ID)
 async def handler(request):
     """
     Coroutine given to the server, st. it knows what to do with an HTTP request.
+
     This one handles a POST, checks its content, and forwards it to the matrix room.
     """
     data = await request.read()
@@ -49,11 +50,10 @@ async def handler(request):
 
 async def main(event):
     """
-    Main coroutine
+    Launch main coroutine.
 
     matrix client login & start web server
     """
-
     await CLIENT.login(MATRIX_PW)
 
     server = web.Server(handler)
@@ -71,6 +71,7 @@ async def main(event):
 
 
 def terminate(event, signal):
+    """Close handling stuff."""
     event.set()
     loop = asyncio.get_event_loop()
     loop.remove_signal_handler(signal)

@@ -1,0 +1,29 @@
+repos:
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v2.4.0
+    hooks:
+    -   id: check-added-large-files
+    -   id: check-ast
+    -   id: check-merge-conflict
+    -   id: check-symlinks
+    -   id: check-toml
+    -   id: check-yaml
+    -   id: debug-statements
+    -   id: detect-private-key
+    -   id: end-of-file-fixer
+    -   id: flake8
+    -   id: mixed-line-ending
+    -   id: trailing-whitespace
+-   repo: https://github.com/pre-commit/mirrors-yapf
+    rev: v0.29.0
+    hooks:
+    -   id: yapf
+-   repo: https://github.com/PyCQA/pydocstyle
+    rev: 5.0.1
+    hooks:
+    -   id: pydocstyle
+-   repo: https://gitlab.com/smop/pre-commit-hooks
+    rev: v1.0.0
+    hooks:
+    -   id: check-poetry
+    -   id: check-gitlab-ci
