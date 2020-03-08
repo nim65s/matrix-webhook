@@ -9,6 +9,7 @@ v2: matrix-nio & aiohttp
 import asyncio
 import json
 import os
+from signal import SIGINT, SIGTERM
 
 from aiohttp import web
 from nio import AsyncClient
@@ -46,7 +47,7 @@ async def handler(request):
                         status=status)
 
 
-async def main():
+async def main(event):
     """
     Main coroutine
 
@@ -61,16 +62,27 @@ async def main():
     site = web.TCPSite(runner, *SERVER_ADDRESS)
     await site.start()
 
-    # pause here for very long time by serving HTTP requests and
-    # waiting for keyboard interruption
-    await asyncio.sleep(100 * 3600)
+    # Run until we get a shutdown request
+    await event.wait()
+
+    # Cleanup
+    await runner.cleanup()
+    await CLIENT.close()
+
+
+def terminate(event, signal):
+    event.set()
+    loop = asyncio.get_event_loop()
+    loop.remove_signal_handler(signal)
 
 
 if __name__ == '__main__':
     loop = asyncio.get_event_loop()
+    event = asyncio.Event()
 
-    try:
-        loop.run_until_complete(main())
-    except KeyboardInterrupt:
-        pass
+    for sig in (SIGINT, SIGTERM):
+        loop.add_signal_handler(sig, terminate, event, sig)
+
+    loop.run_until_complete(main(event))
+
     loop.close()
