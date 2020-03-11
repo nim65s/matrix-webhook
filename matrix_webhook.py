@@ -10,6 +10,7 @@ v2: matrix-nio & aiohttp
 import asyncio
 import json
 import os
+from http import HTTPStatus
 from signal import SIGINT, SIGTERM
 
 from aiohttp import web
@@ -31,11 +32,11 @@ async def handler(request):
     """
     data = await request.read()
     data = json.loads(data.decode())
-    status, ret = 400, 'I need a json dict with text & key'
+    status, ret = HTTPStatus.BAD_REQUEST, 'I need a json dict with text & key'
     if all(key in data for key in ['text', 'key']):
-        status, ret = 401, 'I need the good "key"'
+        status, ret = HTTPStatus.UNAUTHORIZED, 'I need the good "key"'
         if data['key'] == API_KEY:
-            status, ret = 200, 'OK'
+            status, ret = HTTPStatus.OK, 'OK'
             await CLIENT.room_send(room_id=str(request.rel_url)[1:],
                                    message_type="m.room.message",
                                    content={
