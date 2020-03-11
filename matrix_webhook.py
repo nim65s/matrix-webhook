@@ -73,11 +73,11 @@ async def main(event):
 def terminate(event, signal):
     """Close handling stuff."""
     event.set()
-    loop = asyncio.get_event_loop()
-    loop.remove_signal_handler(signal)
+    asyncio.get_event_loop().remove_signal_handler(signal)
 
 
-if __name__ == '__main__':
+def run():
+    """Launch everything."""
     loop = asyncio.get_event_loop()
     event = asyncio.Event()
 
@@ -87,3 +87,7 @@ if __name__ == '__main__':
     loop.run_until_complete(main(event))
 
     loop.close()
+
+
+if __name__ == '__main__':
+    run()
