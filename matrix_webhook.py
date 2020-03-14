@@ -4,7 +4,7 @@ Matrix Webhook.
 
 Post a message to a matrix room with a simple HTTP POST
 v1: matrix-client & http.server
-v2: matrix-nio & aiohttp
+v2: matrix-nio & aiohttp & markdown
 """
 
 import asyncio
@@ -12,6 +12,8 @@ import json
 import os
 from http import HTTPStatus
 from signal import SIGINT, SIGTERM
+
+from markdown import markdown
 
 from aiohttp import web
 from nio import AsyncClient
@@ -42,6 +44,8 @@ async def handler(request):
                                    content={
                                        "msgtype": "m.text",
                                        "body": data['text'],
+                                       "format": "org.matrix.custom.html",
+                                       "formatted_body": markdown(data['text']),
                                    })
 
     return web.Response(text='{"status": %i, "ret": "%s"}' % (status, ret),
