@@ -34,7 +34,8 @@ docker-compose up -d
 ## Test / Usage
 
 ```
-curl -d '{"text":"new contrib from toto: [44](http://radio.localhost/map/#44)", "key": "secret"}' 'matrixwebhook.localhost/!DPrUlnwOhBEfYwsDLh:matrix.org'
+curl -d '{"text":"new contrib from toto: [44](http://radio.localhost/map/#44)", "key": "secret"}' \
+  'http://matrixwebhook.localhost/!DPrUlnwOhBEfYwsDLh:matrix.org'
 ```
 (or localhost:4785 without docker)
 
