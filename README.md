@@ -15,7 +15,7 @@ environment variables:
 ## Dev
 
 ```
-pip3 install --user matrix-client
+pip3 install --user markdown matrix-nio
 ./matrix_webhook.py
 ```
 
