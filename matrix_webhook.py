@@ -13,9 +13,8 @@ import os
 from http import HTTPStatus
 from signal import SIGINT, SIGTERM
 
-from markdown import markdown
-
 from aiohttp import web
+from markdown import markdown
 from nio import AsyncClient
 
 SERVER_ADDRESS = ('', int(os.environ.get('PORT', 4785)))
@@ -45,7 +44,7 @@ async def handler(request):
                                        "msgtype": "m.text",
                                        "body": data['text'],
                                        "format": "org.matrix.custom.html",
-                                       "formatted_body": markdown(data['text']),
+                                       "formatted_body": markdown(data['text'], extensions=['extra']),
                                    })
 
     return web.Response(text='{"status": %i, "ret": "%s"}' % (status, ret),
