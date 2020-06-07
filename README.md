@@ -24,8 +24,7 @@ pip3 install --user markdown matrix-nio
 - Use [Traefik](https://traefik.io/) on the `web` docker network, eg. with
   [proxyta.net](https://framagit.org/oxyta.net/proxyta.net)
 - Put the configuration into a `.env` file
-- Configure your DNS for `${CHATONS_SERVICE:-matrixwebhook}.${CHATONS_DOMAIN:-localhost}` **and**
-  `www.${CHATONS_SERVICE:-matrixwebhook}.${CHATONS_DOMAIN:-localhost}`
+- Configure your DNS for `${CHATONS_SERVICE:-matrixwebhook}.${CHATONS_DOMAIN:-localhost}`
 
 ```
 docker-compose up -d
