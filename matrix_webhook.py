@@ -32,8 +32,12 @@ async def handler(request):
     This one handles a POST, checks its content, and forwards it to the matrix room.
     """
     data = await request.read()
-    data = json.loads(data.decode())
-    status, ret = HTTPStatus.BAD_REQUEST, 'I need a json dict with text & key'
+    try:
+        data = json.loads(data.decode())
+        status, ret = HTTPStatus.BAD_REQUEST, 'I need a json dict with text & key'
+    except json.decoder.JSONDecodeError:
+        data = {}
+        status, ret = HTTPStatus.BAD_REQUEST, 'This was not valid JSON'
     if all(key in data for key in ['text', 'key']):
         status, ret = HTTPStatus.UNAUTHORIZED, 'I need the good "key"'
         if data['key'] == API_KEY:
