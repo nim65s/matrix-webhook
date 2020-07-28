@@ -16,6 +16,7 @@ from signal import SIGINT, SIGTERM
 from aiohttp import web
 from markdown import markdown
 from nio import AsyncClient
+from nio.exceptions import LocalProtocolError
 
 SERVER_ADDRESS = ('', int(os.environ.get('PORT', 4785)))
 MATRIX_URL = os.environ.get('MATRIX_URL', 'https://matrix.org')
@@ -42,14 +43,21 @@ async def handler(request):
         status, ret = HTTPStatus.UNAUTHORIZED, 'I need the good "key"'
         if data['key'] == API_KEY:
             status, ret = HTTPStatus.OK, 'OK'
-            await CLIENT.room_send(room_id=str(request.rel_url)[1:],
-                                   message_type="m.room.message",
-                                   content={
-                                       "msgtype": "m.text",
-                                       "body": data['text'],
-                                       "format": "org.matrix.custom.html",
-                                       "formatted_body": markdown(data['text'], extensions=['extra']),
-                                   })
+            content = {
+                "msgtype": "m.text",
+                "body": data['text'],
+                "format": "org.matrix.custom.html",
+                "formatted_body": markdown(data['text'], extensions=['extra']),
+            }
+            try:
+                await CLIENT.room_send(room_id=str(request.rel_url)[1:],
+                                       message_type="m.room.message",
+                                       content=content)
+            except LocalProtocolError:  # Connection lost, try another login
+                await CLIENT.login(MATRIX_PW)
+                await CLIENT.room_send(room_id=str(request.rel_url)[1:],
+                                       message_type="m.room.message",
+                                       content=content)
 
     return web.Response(text='{"status": %i, "ret": "%s"}' % (status, ret),
                         content_type='application/json',
