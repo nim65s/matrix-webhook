@@ -43,6 +43,7 @@ async def handler(request):
         status, ret = HTTPStatus.UNAUTHORIZED, 'I need the good "key"'
         if data['key'] == API_KEY:
             status, ret = HTTPStatus.OK, 'OK'
+            room_id = str(request.rel_url)[1:]
             content = {
                 "msgtype": "m.text",
                 "body": data['text'],
@@ -50,12 +51,12 @@ async def handler(request):
                 "formatted_body": markdown(data['text'], extensions=['extra']),
             }
             try:
-                await CLIENT.room_send(room_id=str(request.rel_url)[1:],
+                await CLIENT.room_send(room_id=room_id,
                                        message_type="m.room.message",
                                        content=content)
             except LocalProtocolError:  # Connection lost, try another login
                 await CLIENT.login(MATRIX_PW)
-                await CLIENT.room_send(room_id=str(request.rel_url)[1:],
+                await CLIENT.room_send(room_id=room_id,
                                        message_type="m.room.message",
                                        content=content)
 
