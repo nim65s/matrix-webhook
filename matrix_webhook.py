@@ -51,18 +51,21 @@ async def handler(request):
                 "formatted_body": markdown(data['text'], extensions=['extra']),
             }
             try:
-                await CLIENT.room_send(room_id=room_id,
-                                       message_type="m.room.message",
-                                       content=content)
+                await send_room_message(room_id, content)
             except LocalProtocolError:  # Connection lost, try another login
                 await CLIENT.login(MATRIX_PW)
-                await CLIENT.room_send(room_id=room_id,
-                                       message_type="m.room.message",
-                                       content=content)
+                await send_room_message(room_id, content)
 
     return web.Response(text='{"status": %i, "ret": "%s"}' % (status, ret),
                         content_type='application/json',
                         status=status)
+
+
+async def send_room_message(room_id, content):
+    """Send a message to a room."""
+    return await CLIENT.room_send(room_id=room_id,
+                                  message_type='m.room.message',
+                                  content=content)
 
 
 async def main(event):
