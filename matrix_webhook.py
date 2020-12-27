@@ -48,10 +48,10 @@ async def handler(request):
 
     room_id = str(request.rel_url)[1:]
     content = {
-        "msgtype": "m.text",
-        "body": data['text'],
-        "format": "org.matrix.custom.html",
-        "formatted_body": markdown(data['text'], extensions=['extra']),
+        'msgtype': 'm.text',
+        'body': data['text'],
+        'format': 'org.matrix.custom.html',
+        'formatted_body': markdown(data['text'], extensions=['extra']),
     }
     try:
         await send_room_message(room_id, content)
