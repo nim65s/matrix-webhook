@@ -56,9 +56,13 @@ async def handler(request):
                 await CLIENT.login(MATRIX_PW)
                 await send_room_message(room_id, content)
 
-    return web.Response(text='{"status": %i, "ret": "%s"}' % (status, ret),
-                        content_type='application/json',
-                        status=status)
+    return create_json_response(status, ret)
+
+
+def create_json_response(status, ret):
+    """Create a JSON response."""
+    response_data = {'status': status, 'ret': ret}
+    return web.json_response(response_data, status=status)
 
 
 async def send_room_message(room_id, content):
