@@ -33,35 +33,46 @@ async def handler(request):
     This one handles a POST, checks its content, and forwards it to the matrix room.
     """
     data = await request.read()
+
     try:
         data = json.loads(data.decode())
-        status, ret = HTTPStatus.BAD_REQUEST, 'I need a json dict with text & key'
     except json.decoder.JSONDecodeError:
-        data = {}
-        status, ret = HTTPStatus.BAD_REQUEST, 'This was not valid JSON'
-    if all(key in data for key in ['text', 'key']):
-        status, ret = HTTPStatus.UNAUTHORIZED, 'I need the good "key"'
-        if data['key'] == API_KEY:
-            status, ret = HTTPStatus.OK, 'OK'
-            content = {
-                "msgtype": "m.text",
-                "body": data['text'],
-                "format": "org.matrix.custom.html",
-                "formatted_body": markdown(data['text'], extensions=['extra']),
-            }
-            try:
-                await CLIENT.room_send(room_id=str(request.rel_url)[1:],
-                                       message_type="m.room.message",
-                                       content=content)
-            except LocalProtocolError:  # Connection lost, try another login
-                await CLIENT.login(MATRIX_PW)
-                await CLIENT.room_send(room_id=str(request.rel_url)[1:],
-                                       message_type="m.room.message",
-                                       content=content)
+        return create_json_response(HTTPStatus.BAD_REQUEST, 'Invalid JSON')
 
-    return web.Response(text='{"status": %i, "ret": "%s"}' % (status, ret),
-                        content_type='application/json',
-                        status=status)
+    if not all(key in data for key in ['text', 'key']):
+        return create_json_response(HTTPStatus.BAD_REQUEST,
+                                    'Missing text and/or API key property')
+
+    if data['key'] != API_KEY:
+        return create_json_response(HTTPStatus.UNAUTHORIZED, 'Invalid API key')
+
+    room_id = str(request.rel_url)[1:]
+    content = {
+        'msgtype': 'm.text',
+        'body': data['text'],
+        'format': 'org.matrix.custom.html',
+        'formatted_body': markdown(data['text'], extensions=['extra']),
+    }
+    try:
+        await send_room_message(room_id, content)
+    except LocalProtocolError:  # Connection lost, try another login
+        await CLIENT.login(MATRIX_PW)
+        await send_room_message(room_id, content)
+
+    return create_json_response(HTTPStatus.OK, 'OK')
+
+
+def create_json_response(status, ret):
+    """Create a JSON response."""
+    response_data = {'status': status, 'ret': ret}
+    return web.json_response(response_data, status=status)
+
+
+async def send_room_message(room_id, content):
+    """Send a message to a room."""
+    return await CLIENT.room_send(room_id=room_id,
+                                  message_type='m.room.message',
+                                  content=content)
 
 
 async def main(event):
