@@ -1,5 +1,7 @@
 # Matrix Webhook
 
+[![Join the chat at https://gitter.im/matrix-webhook/community](https://badges.gitter.im/matrix-webhook/community.svg)](https://gitter.im/matrix-webhook/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Post a message to a matrix room with a simple HTTP POST
 
 ## Configuration
