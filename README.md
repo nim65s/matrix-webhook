@@ -13,6 +13,9 @@ environment variables:
 - `API_KEY`: a secret to share with the users of the service
 - `API_KEY_FIELD`: The field name inside the request payload holding
   the api key. Default: `key`
+- `ROOM_FIELD`: The field name inside the request payload holding
+  the matrix room id. Default: `room`. The key, value pair is only
+  used if the room id is not passed via the request URL
 - `HOST`: HOST to listen on, all interfaces if `''` (default).
 - `PORT`: PORT to listed on, default to 4785.
 
