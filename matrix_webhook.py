@@ -23,6 +23,7 @@ MATRIX_URL = os.environ.get('MATRIX_URL', 'https://matrix.org')
 MATRIX_ID = os.environ.get('MATRIX_ID', '@wwm:matrix.org')
 MATRIX_PW = os.environ['MATRIX_PW']
 API_KEY = os.environ['API_KEY']
+API_KEY_FIELD = os.environ.get('API_KEY_FIELD', 'key')
 CLIENT = AsyncClient(MATRIX_URL, MATRIX_ID)
 
 
@@ -39,14 +40,16 @@ async def handler(request):
     except json.decoder.JSONDecodeError:
         return create_json_response(HTTPStatus.BAD_REQUEST, 'Invalid JSON')
 
-    if not all(key in data for key in ['text', 'key']):
-        return create_json_response(HTTPStatus.BAD_REQUEST,
-                                    'Missing text and/or API key property')
+    missing_keys = {'text', API_KEY_FIELD} - set(data)
+    if missing_keys:
+        return create_json_response(
+            HTTPStatus.BAD_REQUEST, f'Missing keys: {", ".join(missing_keys)}'
+        )
 
-    if data['key'] != API_KEY:
-        return create_json_response(HTTPStatus.UNAUTHORIZED, 'Invalid API key')
+    if data[API_KEY_FIELD] != API_KEY:
+        return create_json_response(HTTPStatus.UNAUTHORIZED, 'Invalid ' + API_KEY_FIELD)
 
-    room_id = request.path[1:]
+    room_id = request.path.lstrip('/')
     content = {
         'msgtype': 'm.text',
         'body': data['text'],

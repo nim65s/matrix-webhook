@@ -11,6 +11,8 @@ environment variables:
 - `MATRIX_ID`: the user id of the bot on this server
 - `MATRIX_PW`: the password for this user
 - `API_KEY`: a secret to share with the users of the service
+- `API_KEY_FIELD`: The field name inside the request payload holding
+  the api key. Default: `key`
 - `HOST`: HOST to listen on, all interfaces if `''` (default).
 - `PORT`: PORT to listed on, default to 4785.
 
