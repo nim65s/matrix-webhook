@@ -18,7 +18,7 @@ from markdown import markdown
 from nio import AsyncClient
 from nio.exceptions import LocalProtocolError
 
-SERVER_ADDRESS = ('', int(os.environ.get('PORT', 4785)))
+SERVER_ADDRESS = (os.environ.get('INTERFACE', '127.0.0.1'), int(os.environ.get('PORT', 4785)))
 MATRIX_URL = os.environ.get('MATRIX_URL', 'https://matrix.org')
 MATRIX_ID = os.environ.get('MATRIX_ID', '@wwm:matrix.org')
 MATRIX_PW = os.environ['MATRIX_PW']
@@ -39,6 +39,8 @@ async def handler(request):
     except json.decoder.JSONDecodeError:
         return create_json_response(HTTPStatus.BAD_REQUEST, 'Invalid JSON')
 
+    data = parse_grafana_notification(request, data)
+
     if not all(key in data for key in ['text', 'key']):
         return create_json_response(HTTPStatus.BAD_REQUEST,
                                     'Missing text and/or API key property')
@@ -46,7 +48,7 @@ async def handler(request):
     if data['key'] != API_KEY:
         return create_json_response(HTTPStatus.UNAUTHORIZED, 'Invalid API key')
 
-    room_id = str(request.rel_url)[1:]
+    room_id = request.path[1:]
     content = {
         'msgtype': 'm.text',
         'body': data['text'],
@@ -62,6 +64,21 @@ async def handler(request):
     return create_json_response(HTTPStatus.OK, 'OK')
 
 
+def parse_grafana_notification(request, data):
+    if 'key' in request.rel_url.query:
+        data["key"] = request.rel_url.query["key"]
+    text = ""
+    if "title" in data:
+        text = "### " + data["title"] + "\n"
+    if "message" in data:
+       text = text + data["message"] + "\n\n"
+    if "evalMatches" in data:
+        for match in data["evalMatches"]:
+            text = text + "* " + match["metric"] + ": " + str(match["value"]) + "\n"
+    data["text"] = text
+    return data
+
+
 def create_json_response(status, ret):
     """Create a JSON response."""
     response_data = {'status': status, 'ret': ret}
@@ -73,7 +90,6 @@ async def send_room_message(room_id, content):
     return await CLIENT.room_send(room_id=room_id,
                                   message_type='m.room.message',
                                   content=content)
-
 
 async def main(event):
     """

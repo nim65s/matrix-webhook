@@ -1,12 +1,14 @@
 # Matrix Webhook
 
-Post a message to a matrix room with a simple HTTP POST
+Post a message to a matrix room with a simple HTTP POST. This fork supports parsing Grafana notifications.
 
 ## Configuration
 
 Create a matrix user for the bot, make it join the rooms you want it to talk into, and then set the following
 environment variables:
 
+- `INTERFACE`: the IP address of the interface on which to bind. Default: `127.0.0.1`
+- `PORT`: bind port. Default: `4785`
 - `MATRIX_URL`: the url of the matrix homeserver
 - `MATRIX_ID`: the user id of the bot on this server
 - `MATRIX_PW`: the password for this user
@@ -37,6 +39,8 @@ curl -d '{"text":"new contrib from toto: [44](http://radio.localhost/map/#44)", 
   'http://matrixwebhook.localhost/!DPrUlnwOhBEfYwsDLh:matrix.org'
 ```
 (or localhost:4785 without docker)
+
+Alternatively, the `key` can be passed as a get parameter. This is required for Grafana notificaions. The notification URL then is `https://example.com/!DPrUlnwOhBEfYwsDLh:matrix.org?key=YOURTOKEN`.
 
 ## Test room
 
