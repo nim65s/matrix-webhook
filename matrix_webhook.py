@@ -18,7 +18,7 @@ from markdown import markdown
 from nio import AsyncClient
 from nio.exceptions import LocalProtocolError
 
-SERVER_ADDRESS = ('', int(os.environ.get('PORT', 4785)))
+SERVER_ADDRESS = (os.environ.get('INTERFACE', None), int(os.environ.get('PORT', 4785)))
 MATRIX_URL = os.environ.get('MATRIX_URL', 'https://matrix.org')
 MATRIX_ID = os.environ.get('MATRIX_ID', '@wwm:matrix.org')
 MATRIX_PW = os.environ['MATRIX_PW']
