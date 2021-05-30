@@ -18,7 +18,7 @@ from markdown import markdown
 from nio import AsyncClient
 from nio.exceptions import LocalProtocolError
 
-SERVER_ADDRESS = (os.environ.get('INTERFACE', None), int(os.environ.get('PORT', 4785)))
+SERVER_ADDRESS = (os.environ.get('INTERFACE', ''), int(os.environ.get('PORT', 4785)))
 MATRIX_URL = os.environ.get('MATRIX_URL', 'https://matrix.org')
 MATRIX_ID = os.environ.get('MATRIX_ID', '@wwm:matrix.org')
 MATRIX_PW = os.environ['MATRIX_PW']
@@ -46,7 +46,7 @@ async def handler(request):
     if data['key'] != API_KEY:
         return create_json_response(HTTPStatus.UNAUTHORIZED, 'Invalid API key')
 
-    room_id = str(request.rel_url)[1:]
+    room_id = request.path[1:]
     content = {
         'msgtype': 'm.text',
         'body': data['text'],
