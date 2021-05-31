@@ -38,10 +38,10 @@ async def handler(request):
 
     This one handles a POST, checks its content, and forwards it to the matrix room.
     """
-    data = await request.read()
+    data = await request.text()
 
     try:
-        data = json.loads(data.decode())
+        data = json.loads(data)
     except json.decoder.JSONDecodeError:
         return create_json_response(HTTPStatus.BAD_REQUEST, 'Invalid JSON')
 
