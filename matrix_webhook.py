@@ -10,6 +10,7 @@ v2: matrix-nio & aiohttp & markdown
 import asyncio
 import json
 import os
+import logging
 from http import HTTPStatus
 from signal import SIGINT, SIGTERM
 
@@ -25,8 +26,11 @@ MATRIX_PW = os.environ['MATRIX_PW']
 API_KEY = os.environ['API_KEY']
 API_KEY_FIELD = os.environ.get('API_KEY_FIELD', 'key')
 ROOM_FIELD = os.environ.get('ROOM_FIELD', 'room')
+LOG_LEVEL = os.environ.get('LOG_LEVEL', 'INFO')
+
 CLIENT = AsyncClient(MATRIX_URL, MATRIX_ID)
 
+logging.basicConfig(level=getattr(logging, LOG_LEVEL))
 
 async def handler(request):
     """

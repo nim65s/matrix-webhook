@@ -18,6 +18,8 @@ environment variables:
   used if the room id is not passed via the request URL
 - `HOST`: HOST to listen on, all interfaces if `''` (default).
 - `PORT`: PORT to listed on, default to 4785.
+- `LOG_LEVEL`: One of `DEBUG`, `INFO`, `WARNING`, `ERROR`,
+  `CRITICAL`. Default: `INFO`
 
 ## Dev
 
