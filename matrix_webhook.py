@@ -20,6 +20,9 @@ from markdown import markdown
 from nio import AsyncClient
 from nio.exceptions import LocalProtocolError
 
+# Customizable middleware. Override with your stuff:
+from middleware import json_middlewares
+
 SERVER_ADDRESS = (os.environ.get('HOST', ''), int(os.environ.get('PORT', 4785)))
 MATRIX_URL = os.environ.get('MATRIX_URL', 'https://matrix.org')
 MATRIX_ID = os.environ.get('MATRIX_ID', '@wwm:matrix.org')
@@ -55,6 +58,9 @@ async def handler(request):
         except json.decoder.JSONDecodeError as e:
             logging.error(f'Invalid json: {e}\n' + data)
             return create_json_response(HTTPStatus.BAD_REQUEST, 'Invalid JSON')
+
+    for modifyer in json_middlewares:
+        data = modifyer(data)
 
     missing_keys = {'text', API_KEY_FIELD} - set(data)
     if missing_keys:
