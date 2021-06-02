@@ -11,6 +11,7 @@ import asyncio
 import json
 import os
 import logging
+import urllib.parse
 from http import HTTPStatus
 from signal import SIGINT, SIGTERM
 
@@ -39,11 +40,21 @@ async def handler(request):
     This one handles a POST, checks its content, and forwards it to the matrix room.
     """
     data = await request.text()
-
-    try:
-        data = json.loads(data)
-    except json.decoder.JSONDecodeError:
-        return create_json_response(HTTPStatus.BAD_REQUEST, 'Invalid JSON')
+    content_type = request.content_type or guess_content_type(data)
+    if content_type == 'application/x-www-form-urlencoded':
+        try:
+            data = urllib.parse.parse_qs(data, strict_parsing=True, max_num_fields=1)
+            data = {key: value[0] for key, value in data.items()}
+        except ValueError as e:
+            logging.error(f'Invalid urlencoded data: {e}\n' + data)
+            return create_json_response(HTTPStatus.BAD_REQUEST,
+                'Invalid urlencoded data')
+    else:
+        try:
+            data = json.loads(data)
+        except json.decoder.JSONDecodeError as e:
+            logging.error(f'Invalid json: {e}\n' + data)
+            return create_json_response(HTTPStatus.BAD_REQUEST, 'Invalid JSON')
 
     missing_keys = {'text', API_KEY_FIELD} - set(data)
     if missing_keys:
@@ -74,6 +85,13 @@ async def handler(request):
 
     return create_json_response(HTTPStatus.OK, 'OK')
 
+def guess_content_type(payload: str) -> str:
+    """Based on the payload, guess the content type.
+
+    Either application/json or application/x-www-form-urlencoded."""
+    if payload.startswith('{'):
+        return 'application/json'
+    return 'application/x-www-form-urlencoded'
 
 def create_json_response(status, ret):
     """Create a JSON response."""
