@@ -58,11 +58,13 @@ async def handler(request):
     if not room_id:
         return create_json_response(HTTPStatus.BAD_REQUEST, 'Missing key: ' + ROOM_FIELD)
 
+    formatted_body = data.get(
+        'formatted_text', markdown(data['text'], extensions=['extra']))
     content = {
         'msgtype': 'm.text',
         'body': data['text'],
         'format': 'org.matrix.custom.html',
-        'formatted_body': markdown(data['text'], extensions=['extra']),
+        'formatted_body': formatted_body,
     }
     try:
         await send_room_message(room_id, content)
