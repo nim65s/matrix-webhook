@@ -10,6 +10,8 @@ v2: matrix-nio & aiohttp & markdown
 import asyncio
 import json
 import os
+import logging
+import urllib.parse
 from http import HTTPStatus
 from signal import SIGINT, SIGTERM
 
@@ -18,13 +20,21 @@ from markdown import markdown
 from nio import AsyncClient
 from nio.exceptions import LocalProtocolError
 
+# Customizable middleware. Override with your stuff:
+from middleware import json_middlewares
+
 SERVER_ADDRESS = (os.environ.get('HOST', ''), int(os.environ.get('PORT', 4785)))
 MATRIX_URL = os.environ.get('MATRIX_URL', 'https://matrix.org')
 MATRIX_ID = os.environ.get('MATRIX_ID', '@wwm:matrix.org')
 MATRIX_PW = os.environ['MATRIX_PW']
 API_KEY = os.environ['API_KEY']
+API_KEY_FIELD = os.environ.get('API_KEY_FIELD', 'key')
+ROOM_FIELD = os.environ.get('ROOM_FIELD', 'room')
+LOG_LEVEL = os.environ.get('LOG_LEVEL', 'INFO')
+
 CLIENT = AsyncClient(MATRIX_URL, MATRIX_ID)
 
+logging.basicConfig(level=getattr(logging, LOG_LEVEL))
 
 async def handler(request):
     """
@@ -32,26 +42,46 @@ async def handler(request):
 
     This one handles a POST, checks its content, and forwards it to the matrix room.
     """
-    data = await request.read()
+    data = await request.text()
+    content_type = request.content_type or guess_content_type(data)
+    if content_type == 'application/x-www-form-urlencoded':
+        try:
+            data = urllib.parse.parse_qs(data, strict_parsing=True, max_num_fields=1)
+            data = {key: value[0] for key, value in data.items()}
+        except ValueError as e:
+            logging.error(f'Invalid urlencoded data: {e}\n' + data)
+            return create_json_response(HTTPStatus.BAD_REQUEST,
+                'Invalid urlencoded data')
+    else:
+        try:
+            data = json.loads(data)
+        except json.decoder.JSONDecodeError as e:
+            logging.error(f'Invalid json: {e}\n' + data)
+            return create_json_response(HTTPStatus.BAD_REQUEST, 'Invalid JSON')
 
-    try:
-        data = json.loads(data.decode())
-    except json.decoder.JSONDecodeError:
-        return create_json_response(HTTPStatus.BAD_REQUEST, 'Invalid JSON')
+    for modifyer in json_middlewares:
+        data = modifyer(data)
 
-    if not all(key in data for key in ['text', 'key']):
-        return create_json_response(HTTPStatus.BAD_REQUEST,
-                                    'Missing text and/or API key property')
+    missing_keys = {'text', API_KEY_FIELD} - set(data)
+    if missing_keys:
+        return create_json_response(
+            HTTPStatus.BAD_REQUEST, f'Missing keys: {", ".join(missing_keys)}'
+        )
 
-    if data['key'] != API_KEY:
-        return create_json_response(HTTPStatus.UNAUTHORIZED, 'Invalid API key')
+    if data[API_KEY_FIELD] != API_KEY:
+        return create_json_response(HTTPStatus.UNAUTHORIZED, 'Invalid ' + API_KEY_FIELD)
 
-    room_id = request.path[1:]
+    room_id = request.path.lstrip('/') or data.get(ROOM_FIELD)
+    if not room_id:
+        return create_json_response(HTTPStatus.BAD_REQUEST, 'Missing key: ' + ROOM_FIELD)
+
+    formatted_body = data.get(
+        'formatted_text', markdown(data['text'], extensions=['extra']))
     content = {
         'msgtype': 'm.text',
         'body': data['text'],
         'format': 'org.matrix.custom.html',
-        'formatted_body': markdown(data['text'], extensions=['extra']),
+        'formatted_body': formatted_body,
     }
     try:
         await send_room_message(room_id, content)
@@ -61,6 +91,13 @@ async def handler(request):
 
     return create_json_response(HTTPStatus.OK, 'OK')
 
+def guess_content_type(payload: str) -> str:
+    """Based on the payload, guess the content type.
+
+    Either application/json or application/x-www-form-urlencoded."""
+    if payload.startswith('{'):
+        return 'application/json'
+    return 'application/x-www-form-urlencoded'
 
 def create_json_response(status, ret):
     """Create a JSON response."""

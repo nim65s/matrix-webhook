@@ -1,0 +1,8 @@
+version: "3"
+services:
+  bot:
+    environment:
+      - API_KEY_FIELD=username
+      - ROOM_FIELD=channel
+    volumes:
+      - /opt/services/matrix-webhook/middleware/mattermost.py:/middleware.py
