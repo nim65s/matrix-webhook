@@ -1,0 +1,12 @@
+name: build docker image and run tests inside
+on: push
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+      - name: Start
+        run: docker-compose -f test.yml up -d
+      - name: Tests
+        run: docker-compose -f test.yml run --entrypoint "" tests python -m unittest

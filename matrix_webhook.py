@@ -40,8 +40,7 @@ async def handler(request):
         return create_json_response(HTTPStatus.BAD_REQUEST, 'Invalid JSON')
 
     if not all(key in data for key in ['text', 'key']):
-        return create_json_response(HTTPStatus.BAD_REQUEST,
-                                    'Missing text and/or API key property')
+        return create_json_response(HTTPStatus.BAD_REQUEST, 'Missing text and/or API key property')
 
     if data['key'] != API_KEY:
         return create_json_response(HTTPStatus.UNAUTHORIZED, 'Invalid API key')
@@ -51,7 +50,7 @@ async def handler(request):
         'msgtype': 'm.text',
         'body': data['text'],
         'format': 'org.matrix.custom.html',
-        'formatted_body': markdown(data['text'], extensions=['extra']),
+        'formatted_body': markdown(str(data['text']), extensions=['extra']),
     }
     try:
         await send_room_message(room_id, content)
@@ -70,9 +69,7 @@ def create_json_response(status, ret):
 
 async def send_room_message(room_id, content):
     """Send a message to a room."""
-    return await CLIENT.room_send(room_id=room_id,
-                                  message_type='m.room.message',
-                                  content=content)
+    return await CLIENT.room_send(room_id=room_id, message_type='m.room.message', content=content)
 
 
 async def main(event):
