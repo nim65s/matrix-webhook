@@ -2,7 +2,7 @@ FROM python:3.9-slim
 
 EXPOSE 4785
 
-RUN pip3 install --no-cache-dir markdown matrix-nio
+RUN pip install --no-cache-dir markdown matrix-nio
 
 ADD matrix_webhook.py /
 

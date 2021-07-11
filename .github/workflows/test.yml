@@ -9,4 +9,6 @@ jobs:
       - name: Start
         run: docker-compose -f test.yml up -d
       - name: Tests
-        run: docker-compose -f test.yml run --entrypoint "" tests python -m unittest
+        run: docker-compose -f test.yml run --entrypoint "" tests ./tests/start.py
+      - name: "Upload coverage to Codecov"
+        uses: codecov/codecov-action@v1

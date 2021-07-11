@@ -1,17 +1,17 @@
+# Leverage a synapse base to be able to:
+# "from synapse._scripts.register_new_matrix_user import request_registration"
 FROM matrixdotorg/synapse
 
-# This defaults to /data which is a volume aiming at keeping data.
-# Here, we want to trash those, and avoid the permission issues, so let's use something else
+# This variable defaults to /data which is a volume made to keep data.
+# Here, we want to trash those (and avoid the permission issues) by using something else
 ENV SYNAPSE_CONFIG_DIR=/srv
 
+# Generate keys for synapse
 WORKDIR $SYNAPSE_CONFIG_DIR
-
-ADD homeserver.yaml .
-
+ADD tests/homeserver.yaml .
 RUN python -m synapse.app.homeserver --config-path homeserver.yaml --generate-keys
-
 RUN chown -R 991:991 .
 
-RUN python -m pip install aiohttp matrix-nio
+RUN pip install --no-cache-dir aiohttp matrix-nio markdown coverage
 
-ADD . .
+WORKDIR /app

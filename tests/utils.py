@@ -8,6 +8,7 @@ import aiohttp
 import yaml
 from synapse._scripts.register_new_matrix_user import request_registration
 
+BOT_URL = 'http://localhost:4785'
 MATRIX_URL, MATRIX_ID, MATRIX_PW = (os.environ[v] for v in ['MATRIX_URL', 'MATRIX_ID', 'MATRIX_PW'])
 
 
@@ -19,11 +20,11 @@ class AbstractBotTest(unittest.IsolatedAsyncioTestCase):
         self.assertTrue(
             all(await asyncio.gather(
                 wait_available(f'{MATRIX_URL}/_matrix/client/r0/login', 'flows'),
-                wait_available('http://bot:4785/', 'status'),
+                wait_available(BOT_URL, 'status'),
             )))
 
         # Try to register an user for the bot. Don't worry if it already exists.
-        with open('homeserver.yaml') as f:
+        with open('/srv/homeserver.yaml') as f:
             secret = yaml.safe_load(f.read()).get("registration_shared_secret", None)
         request_registration(MATRIX_ID, MATRIX_PW, MATRIX_URL, secret, admin=False, user_type=None, exit=lambda x: x)
 
