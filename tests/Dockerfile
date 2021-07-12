@@ -12,6 +12,6 @@ ADD tests/homeserver.yaml .
 RUN python -m synapse.app.homeserver --config-path homeserver.yaml --generate-keys
 RUN chown -R 991:991 .
 
-RUN pip install --no-cache-dir aiohttp matrix-nio markdown coverage
+RUN pip install --no-cache-dir markdown matrix-nio httpx coverage
 
 WORKDIR /app
