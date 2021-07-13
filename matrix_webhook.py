@@ -18,11 +18,11 @@ from markdown import markdown
 from nio import AsyncClient
 from nio.exceptions import LocalProtocolError
 
-SERVER_ADDRESS = (os.environ.get('HOST', ''), int(os.environ.get('PORT', 4785)))
-MATRIX_URL = os.environ.get('MATRIX_URL', 'https://matrix.org')
-MATRIX_ID = os.environ.get('MATRIX_ID', '@wwm:matrix.org')
-MATRIX_PW = os.environ['MATRIX_PW']
-API_KEY = os.environ['API_KEY']
+SERVER_ADDRESS = (os.environ.get("HOST", ""), int(os.environ.get("PORT", 4785)))
+MATRIX_URL = os.environ.get("MATRIX_URL", "https://matrix.org")
+MATRIX_ID = os.environ.get("MATRIX_ID", "@wwm:matrix.org")
+MATRIX_PW = os.environ["MATRIX_PW"]
+API_KEY = os.environ["API_KEY"]
 CLIENT = AsyncClient(MATRIX_URL, MATRIX_ID)
 
 
@@ -37,20 +37,22 @@ async def handler(request):
     try:
         data = json.loads(data.decode())
     except json.decoder.JSONDecodeError:
-        return create_json_response(HTTPStatus.BAD_REQUEST, 'Invalid JSON')
+        return create_json_response(HTTPStatus.BAD_REQUEST, "Invalid JSON")
 
-    if not all(key in data for key in ['text', 'key']):
-        return create_json_response(HTTPStatus.BAD_REQUEST, 'Missing text and/or API key property')
+    if not all(key in data for key in ["text", "key"]):
+        return create_json_response(
+            HTTPStatus.BAD_REQUEST, "Missing text and/or API key property"
+        )
 
-    if data['key'] != API_KEY:
-        return create_json_response(HTTPStatus.UNAUTHORIZED, 'Invalid API key')
+    if data["key"] != API_KEY:
+        return create_json_response(HTTPStatus.UNAUTHORIZED, "Invalid API key")
 
     room_id = request.path[1:]
     content = {
-        'msgtype': 'm.text',
-        'body': data['text'],
-        'format': 'org.matrix.custom.html',
-        'formatted_body': markdown(str(data['text']), extensions=['extra']),
+        "msgtype": "m.text",
+        "body": data["text"],
+        "format": "org.matrix.custom.html",
+        "formatted_body": markdown(str(data["text"]), extensions=["extra"]),
     }
     try:
         await send_room_message(room_id, content)
@@ -58,18 +60,20 @@ async def handler(request):
         await CLIENT.login(MATRIX_PW)
         await send_room_message(room_id, content)
 
-    return create_json_response(HTTPStatus.OK, 'OK')
+    return create_json_response(HTTPStatus.OK, "OK")
 
 
 def create_json_response(status, ret):
     """Create a JSON response."""
-    response_data = {'status': status, 'ret': ret}
+    response_data = {"status": status, "ret": ret}
     return web.json_response(response_data, status=status)
 
 
 async def send_room_message(room_id, content):
     """Send a message to a room."""
-    return await CLIENT.room_send(room_id=room_id, message_type='m.room.message', content=content)
+    return await CLIENT.room_send(
+        room_id=room_id, message_type="m.room.message", content=content
+    )
 
 
 async def main(event):
@@ -113,5 +117,5 @@ def run():
     loop.close()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     run()
