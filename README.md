@@ -1,5 +1,10 @@
 # Matrix Webhook
 
+![Tests](https://github.com/nim65s/matrix-webhook/actions/workflows/test/badge.svg)
+![Lints](https://github.com/nim65s/matrix-webhook/actions/workflows/lint/badge.svg)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![codecov](https://codecov.io/gh/nim65s/matrix-webhook/branch/master/graph/badge.svg?token=BLGISGCYKG)](https://codecov.io/gh/nim65s/matrix-webhook)
+
 Post a message to a matrix room with a simple HTTP POST
 
 ## Configuration
