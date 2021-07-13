@@ -14,17 +14,16 @@ BOT_URL = 'http://localhost:4785'
 MATRIX_URL, MATRIX_ID, MATRIX_PW = (environ[v] for v in ['MATRIX_URL', 'MATRIX_ID', 'MATRIX_PW'])
 
 
-def check_json(url: str, key: str) -> bool:
-    """Ensure a service at a given url answers with valid json containing a certain key."""
-    try:
-        data = httpx.get(url).json()
-        return key in data
-    except httpx.ConnectError:
-        return False
-
-
 def wait_available(url: str, key: str, timeout: int = 10) -> bool:
     """Wait until a service answer correctly or timeout."""
+    def check_json(url: str, key: str) -> bool:
+        """Ensure a service at a given url answers with valid json containing a certain key."""
+        try:
+            data = httpx.get(url).json()
+            return key in data
+        except httpx.ConnectError:
+            return False
+
     start = time()
     while True:
         if check_json(url, key):
@@ -38,7 +37,7 @@ def run_and_test():
     if not wait_available(f'{MATRIX_URL}/_matrix/client/r0/login', 'flows'):
         return False
 
-    # Try to register an user for the bot.
+    # Try to register a user for the bot.
     with open('/srv/homeserver.yaml') as f:
         secret = yaml.safe_load(f.read()).get("registration_shared_secret", None)
     request_registration(MATRIX_ID, MATRIX_PW, MATRIX_URL, secret, admin=True)

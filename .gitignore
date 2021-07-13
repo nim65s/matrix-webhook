@@ -1,1 +1,5 @@
+.coverage
+.env
+.mypy_cache
 coverage.xml
+htmlcov
