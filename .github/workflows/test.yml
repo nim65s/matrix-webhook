@@ -4,9 +4,6 @@ jobs:
   tests:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Tests
-        run: docker-compose -f test.yml up --exit-code-from tests
-      - name: Coverage
-        uses: codecov/codecov-action@v1
+      - uses: actions/checkout@v2
+      - run: docker-compose -f test.yml up --exit-code-from tests
+      - uses: codecov/codecov-action@v1

@@ -1,4 +1,4 @@
-name: Lint
+name: Lints
 on: [push, pull_request]
 jobs:
   lint:
