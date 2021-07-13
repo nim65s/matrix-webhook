@@ -4,11 +4,9 @@ jobs:
   tests:
     runs-on: ubuntu-latest
     steps:
-      - name: Check out repository code
+      - name: Checkout
         uses: actions/checkout@v2
-      - name: Start
-        run: docker-compose -f test.yml up -d
       - name: Tests
-        run: docker-compose -f test.yml run --entrypoint "" tests ./tests/start.py
-      - name: "Upload coverage to Codecov"
+        run: docker-compose -f test.yml up --exit-code-from tests
+      - name: Coverage
         uses: codecov/codecov-action@v1

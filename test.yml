@@ -5,6 +5,7 @@ services:
     build:
       context: .
       dockerfile: tests/Dockerfile
+    entrypoint: ""
     env_file:
       - tests/.env
     volumes:
