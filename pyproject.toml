@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "matrix-webhook"
+version = "2.1.0"
+description = "Post a message to a matrix room with a simple HTTP POST"
+authors = ["Guilhem Saurel <guilhem.saurel@laas.fr>"]
+license = "BSD-2-Clause"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+Markdown = "^3.3.4"
+matrix-nio = "^0.18.3"
+
+[tool.poetry.dev-dependencies]
+httpx = "^0.18.2"
+coverage = "^5.5"
+black = "^21.6b0"
+pydocstyle = "^6.1.1"
+flake8 = "^3.9.2"
+
+[tool.pydocstyle]
+ignore = ["D203", "D204", "D212"]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
