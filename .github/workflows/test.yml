@@ -1,0 +1,9 @@
+name: Tests
+on: [push, pull_request]
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: docker-compose -f test.yml up --exit-code-from tests
+      - uses: codecov/codecov-action@v1

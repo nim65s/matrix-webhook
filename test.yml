@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  tests:
+    build:
+      context: .
+      dockerfile: tests/Dockerfile
+    entrypoint: ""
+    env_file:
+      - tests/.env
+    volumes:
+      - ./:/app

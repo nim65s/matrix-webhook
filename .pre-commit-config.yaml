@@ -1,6 +1,6 @@
 repos:
 -   repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v2.4.0
+    rev: v4.0.1
     hooks:
     -   id: check-added-large-files
     -   id: check-ast
@@ -11,17 +11,21 @@ repos:
     -   id: debug-statements
     -   id: detect-private-key
     -   id: end-of-file-fixer
-    -   id: flake8
     -   id: mixed-line-ending
     -   id: trailing-whitespace
--   repo: https://github.com/pre-commit/mirrors-yapf
-    rev: v0.29.0
+-   repo: https://github.com/psf/black
+    rev: 21.6b0
     hooks:
-    -   id: yapf
+    -   id: black
+        language_version: python3
 -   repo: https://github.com/PyCQA/pydocstyle
-    rev: 5.0.1
+    rev: 6.1.1
     hooks:
     -   id: pydocstyle
+-   repo: https://github.com/PyCQA/flake8
+    rev: 3.9.2
+    hooks:
+    -   id: flake8
 -   repo: https://gitlab.com/smop/pre-commit-hooks
     rev: v1.0.0
     hooks:
