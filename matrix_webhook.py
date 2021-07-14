@@ -17,6 +17,7 @@ from aiohttp import web
 from markdown import markdown
 from nio import AsyncClient
 from nio.exceptions import LocalProtocolError
+from nio.responses import RoomSendError
 
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument(
@@ -81,6 +82,7 @@ MATRIX_PW = args.matrix_pw
 API_KEY = args.api_key
 CLIENT = AsyncClient(args.matrix_url, args.matrix_id)
 LOGGER = logging.getLogger("matrix-webhook")
+ERROR_MAP = {"M_FORBIDDEN": HTTPStatus.FORBIDDEN}
 
 
 async def handler(request):
@@ -112,13 +114,26 @@ async def handler(request):
         "format": "org.matrix.custom.html",
         "formatted_body": markdown(str(data["text"]), extensions=["extra"]),
     }
-    try:
-        await send_room_message(room_id, content)
-    except LocalProtocolError as e:  # Connection lost, try another login
-        LOGGER.error(f"Send error: {e}")
-        LOGGER.warning("Reconnecting and trying again")
-        await CLIENT.login(MATRIX_PW)
-        await send_room_message(room_id, content)
+    for _ in range(10):
+        try:
+            resp = await send_room_message(room_id, content)
+            if isinstance(resp, RoomSendError):
+                if resp.status_code == "M_UNKNOWN_TOKEN":
+                    LOGGER.warning("Reconnecting")
+                    await CLIENT.login(MATRIX_PW)
+                else:
+                    return create_json_response(
+                        ERROR_MAP[resp.status_code], resp.message
+                    )
+            else:
+                break
+        except LocalProtocolError as e:
+            LOGGER.error(f"Send error: {e}")
+        LOGGER.warning("Trying again")
+    else:
+        return create_json_response(
+            HTTPStatus.GATEWAY_TIMEOUT, "Homeserver not responding"
+        )
 
     return create_json_response(HTTPStatus.OK, "OK")
 
