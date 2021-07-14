@@ -73,7 +73,6 @@ parser.add_argument(
 )
 
 args = parser.parse_args()
-logging.basicConfig(level=50 - 10 * args.verbose)
 
 SERVER_ADDRESS = (args.host, args.port)
 MATRIX_URL = args.matrix_url
@@ -81,6 +80,7 @@ MATRIX_ID = args.matrix_id
 MATRIX_PW = args.matrix_pw
 API_KEY = args.api_key
 CLIENT = AsyncClient(args.matrix_url, args.matrix_id)
+LOGGER = logging.getLogger("matrix-webhook")
 
 
 async def handler(request):
@@ -89,7 +89,7 @@ async def handler(request):
 
     This one handles a POST, checks its content, and forwards it to the matrix room.
     """
-    logging.debug(f"Handling {request=}")
+    LOGGER.debug(f"Handling {request=}")
     data = await request.read()
 
     try:
@@ -115,8 +115,8 @@ async def handler(request):
     try:
         await send_room_message(room_id, content)
     except LocalProtocolError as e:  # Connection lost, try another login
-        logging.error(f"Send error: {e}")
-        logging.warning("Reconnecting and trying again")
+        LOGGER.error(f"Send error: {e}")
+        LOGGER.warning("Reconnecting and trying again")
         await CLIENT.login(MATRIX_PW)
         await send_room_message(room_id, content)
 
@@ -125,14 +125,14 @@ async def handler(request):
 
 def create_json_response(status, ret):
     """Create a JSON response."""
-    logging.debug(f"Creating json response: {status=}, {ret=}")
+    LOGGER.debug(f"Creating json response: {status=}, {ret=}")
     response_data = {"status": status, "ret": ret}
     return web.json_response(response_data, status=status)
 
 
 async def send_room_message(room_id, content):
     """Send a message to a room."""
-    logging.debug(f"Sending room message in {room_id=}: {content=}")
+    LOGGER.debug(f"Sending room message in {room_id=}: {content=}")
     return await CLIENT.room_send(
         room_id=room_id, message_type="m.room.message", content=content
     )
@@ -144,13 +144,13 @@ async def main(event):
 
     matrix client login & start web server
     """
-    logging.info(f"Log in {MATRIX_ID=} on {MATRIX_URL=}")
+    LOGGER.info(f"Log in {MATRIX_ID=} on {MATRIX_URL=}")
     await CLIENT.login(MATRIX_PW)
 
     server = web.Server(handler)
     runner = web.ServerRunner(server)
     await runner.setup()
-    logging.info(f"Binding on {SERVER_ADDRESS=}")
+    LOGGER.info(f"Binding on {SERVER_ADDRESS=}")
     site = web.TCPSite(runner, *SERVER_ADDRESS)
     await site.start()
 
@@ -170,7 +170,7 @@ def terminate(event, signal):
 
 def run():
     """Launch everything."""
-    logging.info("Matrix Webhook starting...")
+    LOGGER.info("Starting...")
     loop = asyncio.get_event_loop()
     event = asyncio.Event()
 
@@ -179,9 +179,11 @@ def run():
 
     loop.run_until_complete(main(event))
 
-    logging.info("Matrix Webhook closing...")
+    LOGGER.info("Closing...")
     loop.close()
 
 
 if __name__ == "__main__":
+    log_format = "%(asctime)s - %(name)s - %(lineno)d - %(levelname)s - %(message)s"
+    logging.basicConfig(level=50 - 10 * args.verbose, format=log_format)
     run()
