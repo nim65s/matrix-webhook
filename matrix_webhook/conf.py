@@ -2,7 +2,7 @@
 import argparse
 import os
 
-parser = argparse.ArgumentParser(description=__doc__)
+parser = argparse.ArgumentParser(description=__doc__, prog="python -m matrix_webhook")
 parser.add_argument(
     "-H",
     "--host",

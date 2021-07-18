@@ -7,26 +7,58 @@
 
 Post a message to a matrix room with a simple HTTP POST
 
-## Configuration
+## Install
 
-Create a matrix user for the bot, make it join the rooms you want it to talk into, and then set the following
-environment variables:
+```
+python3 -m pip install matrix-webhook
+# OR
+docker pull nim65s/matrix-webhook
+```
 
-- `MATRIX_URL`: the url of the matrix homeserver
-- `MATRIX_ID`: the user id of the bot on this server
-- `MATRIX_PW`: the password for this user
-- `API_KEY`: a secret to share with the users of the service
-- `HOST`: HOST to listen on, all interfaces if `''` (default).
-- `PORT`: PORT to listed on, default to 4785.
+## Start
+
+Create a matrix user for the bot, make it join the rooms you want it to talk into, and launch it with the following
+arguments or environment variables:
+
+```
+python -m matrix_webhook -h
+# OR
+docker run --rm -it nim65s/matrix-webhook -h
+```
+
+```
+usage: python -m matrix_webhook [-h] [-H HOST] [-P PORT] [-u MATRIX_URL] -i MATRIX_ID -p MATRIX_PW -k API_KEY [-v]
+
+Configuration for Matrix Webhook.
+
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -H HOST, --host HOST  host to listen to. Default: `''`. Environment variable: `HOST`
+  -P PORT, --port PORT  port to listed to. Default: 4785. Environment variable: `PORT`
+  -u MATRIX_URL, --matrix-url MATRIX_URL
+                        matrix homeserver url. Default: `https://matrix.org`. Environment variable: `MATRIX_URL`
+  -i MATRIX_ID, --matrix-id MATRIX_ID
+                        matrix user-id. Required. Environment variable: `MATRIX_ID`
+  -p MATRIX_PW, --matrix-pw MATRIX_PW
+                        matrix password. Required. Environment variable: `MATRIX_PW`
+  -k API_KEY, --api-key API_KEY
+                        shared secret to use this service. Required. Environment variable: `API_KEY`
+  -v, --verbose         increment verbosity level
+```
+
 
 ## Dev
 
 ```
-pip3 install --user markdown matrix-nio
-./matrix_webhook.py
+poetry install
+# or python3 -m pip install --user markdown matrix-nio
+python3 -m matrix_webhook
 ```
 
 ## Prod
+
+A `docker-compose.yml` is provided:
 
 - Use [Traefik](https://traefik.io/) on the `web` docker network, eg. with
   [proxyta.net](https://framagit.org/oxyta.net/proxyta.net)
@@ -47,4 +79,10 @@ curl -d '{"text":"new contrib from toto: [44](http://radio.localhost/map/#44)", 
 
 ## Test room
 
-[#matrix-webhook:tetaneutral.net](https://matrix.to/#/!DPrUlnwOhBEfYwsDLh:matrix.org?via=laas.fr&via=tetaneutral.net&via=aen.im)
+#matrix-webhook:tetaneutral.net](https://matrix.to/#/!DPrUlnwOhBEfYwsDLh:matrix.org?via=laas.fr&via=tetaneutral.net&via=aen.im)
+
+## Unit tests
+
+```
+docker-compose -f test.yml up --exit-code-from tests --force-recreate --build
+```
