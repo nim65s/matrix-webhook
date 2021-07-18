@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.0.0] - 2021-07-18
+
 - Simplify code
   in [#1](https://github.com/nim65s/matrix-webhook/pull/1)
   by [@homeworkprod](https://github.com/homeworkprod)
@@ -22,7 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   in [#9](https://github.com/nim65s/matrix-webhook/pull/9)
   by [@nim65s](https://github.com/nim65s)
 
-## [1.0.0] - 2020-03-14
+## [2.0.0] - 2020-03-14
 - Update to matrix-nio & aiohttp & markdown
 
 ## [1.0.0] - 2020-02-14
