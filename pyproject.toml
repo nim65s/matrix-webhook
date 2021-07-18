@@ -4,9 +4,12 @@ version = "3.0.0"
 description = "Post a message to a matrix room with a simple HTTP POST"
 authors = ["Guilhem Saurel <guilhem.saurel@laas.fr>"]
 license = "BSD-2-Clause"
+readme = "README.md"
+homepage = "https://github.com/nim65s/matrix-webhook"
+repository = "https://github.com/nim65s/matrix-webhook.git"
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.8"
 Markdown = "^3.3.4"
 matrix-nio = "^0.18.3"
 
