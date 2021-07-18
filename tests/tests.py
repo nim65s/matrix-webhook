@@ -20,9 +20,11 @@ class BotTest(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(
             bot_req({"text": 3, "key": None}), {"status": 401, "ret": "Invalid API key"}
         )
-
-        # TODO: we are not sending to a real room, so this should not be "OK"
-        self.assertEqual(bot_req({"text": 3}, KEY), {"status": 200, "ret": "OK"})
+        # TODO: if the client from matrix_webhook has olm support, this won't be a 403 from synapse,
+        # but a LocalProtocolError from matrix_webhook
+        self.assertEqual(
+            bot_req({"text": 3}, KEY), {"status": 403, "ret": "Unknown room"}
+        )
 
     async def test_message(self):
         """Send a markdown message, and check the result."""
@@ -45,3 +47,15 @@ class BotTest(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(message.sender, FULL_ID)
         self.assertEqual(message.body, text)
         self.assertEqual(message.formatted_body, "<h1>Hello</h1>")
+
+    async def test_reconnect(self):
+        """Check the reconnecting path."""
+        client = nio.AsyncClient(MATRIX_URL, MATRIX_ID)
+        await client.login(MATRIX_PW)
+        room = await client.room_create()
+        await client.logout(all_devices=True)
+        await client.close()
+        self.assertEqual(
+            bot_req({"text": "Re"}, KEY, room.room_id),
+            {"status": 200, "ret": "OK"},
+        )

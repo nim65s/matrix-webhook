@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 """Entry point to start an instrumentalized bot for coverage and run tests."""
 
+import argparse
+import logging
 from os import environ
 from subprocess import Popen, run
 from time import time
@@ -15,6 +17,12 @@ KEY, MATRIX_URL, MATRIX_ID, MATRIX_PW = (
     environ[v] for v in ["API_KEY", "MATRIX_URL", "MATRIX_ID", "MATRIX_PW"]
 )
 FULL_ID = f'@{MATRIX_ID}:{MATRIX_URL.split("/")[2]}'
+LOGGER = logging.getLogger("matrix-webhook.tests.start")
+
+parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument(
+    "-v", "--verbose", action="count", default=0, help="increment verbosity level"
+)
 
 
 def bot_req(req=None, key=None, room_id=None):
@@ -47,6 +55,7 @@ def wait_available(url: str, key: str, timeout: int = 10) -> bool:
 def run_and_test():
     """Launch the bot and its tests."""
     # Start the server, and wait for it
+    LOGGER.info("Spawning synapse")
     srv = Popen(
         [
             "python",
@@ -60,29 +69,38 @@ def run_and_test():
         return False
 
     # Register a user for the bot.
+    LOGGER.info("Registering the bot")
     with open("/srv/homeserver.yaml") as f:
         secret = yaml.safe_load(f.read()).get("registration_shared_secret", None)
     request_registration(MATRIX_ID, MATRIX_PW, MATRIX_URL, secret, admin=True)
 
     # Start the bot, and wait for it
-    bot = Popen(["coverage", "run", "matrix_webhook.py"])
+    LOGGER.info("Spawning the bot")
+    bot = Popen(["coverage", "run", "-m", "matrix_webhook", "-vvvvv"])
     if not wait_available(BOT_URL, "status"):
         return False
 
     # Run the main unittest module
+    LOGGER.info("Runnig unittests")
     ret = main(module=None, exit=False).result.wasSuccessful()
 
+    LOGGER.info("Stopping synapse")
     srv.terminate()
 
     # TODO Check what the bot says when the server is offline
     # print(bot_req({'text': 'bye'}, KEY), {'status': 200, 'ret': 'OK'})
 
+    LOGGER.info("Stopping the bot")
     bot.terminate()
 
+    LOGGER.info("Processing coverage")
     for cmd in ["report", "html", "xml"]:
         run(["coverage", cmd])
     return ret
 
 
 if __name__ == "__main__":
+    args = parser.parse_args()
+    log_format = "%(asctime)s - %(name)s - %(lineno)d - %(levelname)s - %(message)s"
+    logging.basicConfig(level=50 - 10 * args.verbose, format=log_format)
     exit(not run_and_test())

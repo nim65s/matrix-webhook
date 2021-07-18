@@ -17,4 +17,4 @@ RUN pip install --no-cache-dir markdown matrix-nio httpx coverage
 
 WORKDIR /app
 
-CMD ./tests/start.py
+CMD ./tests/start.py -vvv

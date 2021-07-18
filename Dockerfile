@@ -4,6 +4,6 @@ EXPOSE 4785
 
 RUN pip install --no-cache-dir markdown matrix-nio
 
-ADD matrix_webhook.py /
+ADD matrix_webhook matrix_webhook
 
-CMD /matrix_webhook.py
+ENTRYPOINT ["python", "-m", "matrix_webhook"]
