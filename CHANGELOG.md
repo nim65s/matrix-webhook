@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.1.0] - 2021-07-18
+
 - Publish on PyPI & Docker Hub with Github Actions
   in [#10](https://github.com/nim65s/matrix-webhook/pull/10)
   by [@nim65s](https://github.com/)
