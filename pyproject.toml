@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "matrix-webhook"
-version = "3.1.0"
+version = "3.1.1"
 description = "Post a message to a matrix room with a simple HTTP POST"
 authors = ["Guilhem Saurel <guilhem.saurel@laas.fr>"]
 license = "BSD-2-Clause"
