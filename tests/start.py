@@ -76,7 +76,7 @@ def run_and_test():
 
     # Start the bot, and wait for it
     LOGGER.info("Spawning the bot")
-    bot = Popen(["coverage", "run", "matrix_webhook.py", "-vvvvv"])
+    bot = Popen(["coverage", "run", "-m", "matrix_webhook", "-vvvvv"])
     if not wait_available(BOT_URL, "status"):
         return False
 

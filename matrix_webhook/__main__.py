@@ -5,11 +5,9 @@ Matrix Webhook.
 Post a message to a matrix room with a simple HTTP POST
 """
 
-import argparse
 import asyncio
 import json
 import logging
-import os
 from http import HTTPStatus
 from signal import SIGINT, SIGTERM
 
@@ -19,70 +17,12 @@ from nio import AsyncClient
 from nio.exceptions import LocalProtocolError
 from nio.responses import RoomSendError
 
-parser = argparse.ArgumentParser(description=__doc__)
-parser.add_argument(
-    "-H",
-    "--host",
-    default=os.environ.get("HOST", ""),
-    help="host to listen to. Default: `''`. Environment variable: `HOST`",
-)
-parser.add_argument(
-    "-P",
-    "--port",
-    type=int,
-    default=os.environ.get("PORT", 4785),
-    help="port to listed to. Default: 4785. Environment variable: `PORT`",
-)
-parser.add_argument(
-    "-u",
-    "--matrix-url",
-    default=os.environ.get("MATRIX_URL", "https://matrix.org"),
-    help="matrix homeserver url. Default: `https://matrix.org`. Environment variable: `MATRIX_URL`",
-)
-parser.add_argument(
-    "-i",
-    "--matrix-id",
-    help="matrix user-id. Required. Environment variable: `MATRIX_ID`",
-    **(
-        {"default": os.environ["MATRIX_ID"]}
-        if "MATRIX_ID" in os.environ
-        else {"required": True}
-    ),
-)
-parser.add_argument(
-    "-p",
-    "--matrix-pw",
-    help="matrix password. Required. Environment variable: `MATRIX_PW`",
-    **(
-        {"default": os.environ["MATRIX_PW"]}
-        if "MATRIX_PW" in os.environ
-        else {"required": True}
-    ),
-)
-parser.add_argument(
-    "-k",
-    "--api-key",
-    help="shared secret to use this service. Required. Environment variable: `API_KEY`",
-    **(
-        {"default": os.environ["API_KEY"]}
-        if "API_KEY" in os.environ
-        else {"required": True}
-    ),
-)
-parser.add_argument(
-    "-v", "--verbose", action="count", default=0, help="increment verbosity level"
-)
+from . import conf
 
-args = parser.parse_args()
-
-SERVER_ADDRESS = (args.host, args.port)
-MATRIX_URL = args.matrix_url
-MATRIX_ID = args.matrix_id
-MATRIX_PW = args.matrix_pw
-API_KEY = args.api_key
-CLIENT = AsyncClient(args.matrix_url, args.matrix_id)
-LOGGER = logging.getLogger("matrix-webhook")
 ERROR_MAP = {"M_FORBIDDEN": HTTPStatus.FORBIDDEN}
+
+CLIENT = AsyncClient(conf.MATRIX_URL, conf.MATRIX_ID)
+LOGGER = logging.getLogger("matrix-webhook")
 
 
 async def handler(request):
@@ -104,7 +44,7 @@ async def handler(request):
             HTTPStatus.BAD_REQUEST, "Missing text and/or API key property"
         )
 
-    if data["key"] != API_KEY:
+    if data["key"] != conf.API_KEY:
         return create_json_response(HTTPStatus.UNAUTHORIZED, "Invalid API key")
 
     room_id = request.path[1:]
@@ -120,7 +60,7 @@ async def handler(request):
             if isinstance(resp, RoomSendError):
                 if resp.status_code == "M_UNKNOWN_TOKEN":
                     LOGGER.warning("Reconnecting")
-                    await CLIENT.login(MATRIX_PW)
+                    await CLIENT.login(conf.MATRIX_PW)
                 else:
                     return create_json_response(
                         ERROR_MAP[resp.status_code], resp.message
@@ -159,14 +99,14 @@ async def main(event):
 
     matrix client login & start web server
     """
-    LOGGER.info(f"Log in {MATRIX_ID=} on {MATRIX_URL=}")
-    await CLIENT.login(MATRIX_PW)
+    LOGGER.info(f"Log in {conf.MATRIX_ID=} on {conf.MATRIX_URL=}")
+    await CLIENT.login(conf.MATRIX_PW)
 
     server = web.Server(handler)
     runner = web.ServerRunner(server)
     await runner.setup()
-    LOGGER.info(f"Binding on {SERVER_ADDRESS=}")
-    site = web.TCPSite(runner, *SERVER_ADDRESS)
+    LOGGER.info(f"Binding on {conf.SERVER_ADDRESS=}")
+    site = web.TCPSite(runner, *conf.SERVER_ADDRESS)
     await site.start()
 
     # Run until we get a shutdown request
@@ -200,5 +140,5 @@ def run():
 
 if __name__ == "__main__":
     log_format = "%(asctime)s - %(name)s - %(lineno)d - %(levelname)s - %(message)s"
-    logging.basicConfig(level=50 - 10 * args.verbose, format=log_format)
+    logging.basicConfig(level=50 - 10 * conf.VERBOSE, format=log_format)
     run()
