@@ -1,0 +1,15 @@
+name: PyPI
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  pypi:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: pip install -U poetry twine wheel
+      - run: poetry build
+      - run: twine upload --non-interactive -u __token__ -p ${{ secrets.PYPI_TOKEN }} dist/*
