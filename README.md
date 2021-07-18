@@ -81,7 +81,7 @@ curl -d '{"text":"new contrib from toto: [44](http://radio.localhost/map/#44)", 
 
 ## Test room
 
-#matrix-webhook:tetaneutral.net](https://matrix.to/#/!DPrUlnwOhBEfYwsDLh:matrix.org?via=laas.fr&via=tetaneutral.net&via=aen.im)
+[#matrix-webhook:tetaneutral.net](https://matrix.to/#/!DPrUlnwOhBEfYwsDLh:matrix.org?via=laas.fr&via=tetaneutral.net&via=aen.im)
 
 ## Unit tests
 
