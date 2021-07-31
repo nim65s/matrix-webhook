@@ -78,6 +78,32 @@ class BotTest(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(message.body, body)
         self.assertEqual(message.formatted_body, "<h1>Hello</h1>")
 
+    async def test_formatted_body(self):
+        """Send a formatted message, and check the result."""
+        body = "Formatted message"
+        formatted_body = "<del>markdown</del><strong>Formatted</strong> message"
+        messages = []
+        client = nio.AsyncClient(MATRIX_URL, MATRIX_ID)
+
+        await client.login(MATRIX_PW)
+        room = await client.room_create()
+
+        self.assertEqual(
+            bot_req(
+                {"body": body, "formatted_body": formatted_body}, KEY, room.room_id
+            ),
+            {"status": 200, "ret": "OK"},
+        )
+
+        sync = await client.sync()
+        messages = await client.room_messages(room.room_id, sync.next_batch)
+        await client.close()
+
+        message = messages.chunk[0]
+        self.assertEqual(message.sender, FULL_ID)
+        self.assertEqual(message.body, body)
+        self.assertEqual(message.formatted_body, formatted_body)
+
     async def test_reconnect(self):
         """Check the reconnecting path."""
         client = nio.AsyncClient(MATRIX_URL, MATRIX_ID)

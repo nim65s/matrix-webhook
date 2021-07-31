@@ -54,12 +54,17 @@ async def handler(request):
     if data["key"] != conf.API_KEY:
         return create_json_response(HTTPStatus.UNAUTHORIZED, "Invalid API key")
 
+    if "formatted_body" in data:
+        formatted_body = data["formatted_body"]
+    else:
+        formatted_body = markdown(str(data["body"]), extensions=["extra"])
+
     room_id = request.path[1:]
     content = {
         "msgtype": "m.text",
         "body": data["body"],
         "format": "org.matrix.custom.html",
-        "formatted_body": markdown(str(data["body"]), extensions=["extra"]),
+        "formatted_body": formatted_body,
     }
     for _ in range(10):
         try:
