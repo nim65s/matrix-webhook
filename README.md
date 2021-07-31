@@ -79,6 +79,11 @@ curl -d '{"body":"new contrib from toto: [44](http://radio.localhost/map/#44)", 
 ```
 (or localhost:4785 without docker)
 
+### Grafana
+
+Add a webhook with an URL like:
+`http://matrixwebhook.localhost/!DPrUlnwOhBEfYwsDLh:matrix.org?key=secret&formatter=grafana'
+
 ## Test room
 
 [#matrix-webhook:tetaneutral.net](https://matrix.to/#/!DPrUlnwOhBEfYwsDLh:matrix.org?via=laas.fr&via=tetaneutral.net&via=aen.im)
