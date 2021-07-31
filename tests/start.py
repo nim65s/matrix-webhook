@@ -25,12 +25,17 @@ parser.add_argument(
 )
 
 
-def bot_req(req=None, key=None, room_id=None):
+def bot_req(req=None, key=None, room_id=None, key_as_param=False):
     """Bot requests boilerplate."""
+    params = {}
+
     if key is not None:
-        req["key"] = key
+        if key_as_param:
+            params["key"] = key
+        else:
+            req["key"] = key
     url = BOT_URL if room_id is None else f"{BOT_URL}/{room_id}"
-    return httpx.post(url, json=req).json()
+    return httpx.post(url, params=params, json=req).json()
 
 
 def wait_available(url: str, key: str, timeout: int = 10) -> bool:

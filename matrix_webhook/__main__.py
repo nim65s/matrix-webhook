@@ -38,9 +38,13 @@ async def handler(request):
     except json.decoder.JSONDecodeError:
         return create_json_response(HTTPStatus.BAD_REQUEST, "Invalid JSON")
 
-    # legacy naming:
+    # legacy naming
     if "text" in data and "body" not in data:
         data["body"] = data["text"]
+
+    # allow key to be passed as a parameter
+    if "key" in request.rel_url.query and "key" not in data:
+        data["key"] = request.rel_url.query["key"]
 
     if not all(key in data for key in ["body", "key"]):
         return create_json_response(

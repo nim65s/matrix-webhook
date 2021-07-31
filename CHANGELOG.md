@@ -6,7 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- update "text" key to "body".
+- allow "key" to be passed as a parameter
+- rename "text" to "body".
 
 ## [3.1.0] - 2021-07-18
 
