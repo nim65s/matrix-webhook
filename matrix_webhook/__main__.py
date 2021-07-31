@@ -38,9 +38,13 @@ async def handler(request):
     except json.decoder.JSONDecodeError:
         return create_json_response(HTTPStatus.BAD_REQUEST, "Invalid JSON")
 
-    if not all(key in data for key in ["text", "key"]):
+    # legacy naming:
+    if "text" in data and "body" not in data:
+        data["body"] = data["text"]
+
+    if not all(key in data for key in ["body", "key"]):
         return create_json_response(
-            HTTPStatus.BAD_REQUEST, "Missing text and/or API key property"
+            HTTPStatus.BAD_REQUEST, "Missing body and/or API key property"
         )
 
     if data["key"] != conf.API_KEY:
@@ -49,9 +53,9 @@ async def handler(request):
     room_id = request.path[1:]
     content = {
         "msgtype": "m.text",
-        "body": data["text"],
+        "body": data["body"],
         "format": "org.matrix.custom.html",
-        "formatted_body": markdown(str(data["text"]), extensions=["extra"]),
+        "formatted_body": markdown(str(data["body"]), extensions=["extra"]),
     }
     for _ in range(10):
         try:

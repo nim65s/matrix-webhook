@@ -88,7 +88,7 @@ def run_and_test():
     srv.terminate()
 
     # TODO Check what the bot says when the server is offline
-    # print(bot_req({'text': 'bye'}, KEY), {'status': 200, 'ret': 'OK'})
+    # print(bot_req({'data': 'bye'}, KEY), {'status': 200, 'ret': 'OK'})
 
     LOGGER.info("Stopping the bot")
     bot.terminate()
