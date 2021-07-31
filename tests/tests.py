@@ -24,6 +24,10 @@ class BotTest(unittest.IsolatedAsyncioTestCase):
             bot_req({"body": 3}, "wrong_key", key_as_param=True),
             {"status": 401, "ret": "Invalid API key"},
         )
+        self.assertEqual(
+            bot_req({"body": 3}, KEY, params={"formatter": "wrong_formatter"}),
+            {"status": 400, "ret": "Unknown formatter"},
+        )
         # TODO: if the client from matrix_webhook has olm support, this won't be a 403 from synapse,
         # but a LocalProtocolError from matrix_webhook
         self.assertEqual(

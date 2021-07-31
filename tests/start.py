@@ -25,10 +25,10 @@ parser.add_argument(
 )
 
 
-def bot_req(req=None, key=None, room_id=None, key_as_param=False):
+def bot_req(req=None, key=None, room_id=None, params=None, key_as_param=False):
     """Bot requests boilerplate."""
-    params = {}
-
+    if params is None:
+        params = {}
     if key is not None:
         if key_as_param:
             params["key"] = key
