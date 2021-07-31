@@ -16,7 +16,7 @@ from nio import AsyncClient
 from nio.exceptions import LocalProtocolError
 from nio.responses import RoomSendError
 
-from . import conf
+from . import conf, formatters
 
 ERROR_MAP = {"M_FORBIDDEN": HTTPStatus.FORBIDDEN}
 
@@ -45,6 +45,12 @@ async def handler(request):
     # allow key to be passed as a parameter
     if "key" in request.rel_url.query and "key" not in data:
         data["key"] = request.rel_url.query["key"]
+
+    if "formatter" in request.rel_url.query:
+        try:
+            data = getattr(formatters, request.rel_url.query["formatter"])(data)
+        except AttributeError:
+            return create_json_response(HTTPStatus.BAD_REQUEST, "Unknown formatter")
 
     if not all(key in data for key in ["body", "key"]):
         return create_json_response(
