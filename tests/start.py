@@ -25,7 +25,14 @@ parser.add_argument(
 )
 
 
-def bot_req(req=None, key=None, room_id=None, params=None, key_as_param=False):
+def bot_req(
+    req=None,
+    key=None,
+    room_id=None,
+    params=None,
+    key_as_param=False,
+    room_as_parameter=False,
+):
     """Bot requests boilerplate."""
     if params is None:
         params = {}
@@ -34,7 +41,9 @@ def bot_req(req=None, key=None, room_id=None, params=None, key_as_param=False):
             params["key"] = key
         else:
             req["key"] = key
-    url = BOT_URL if room_id is None else f"{BOT_URL}/{room_id}"
+    if room_as_parameter:
+        params["room_id"] = room_id
+    url = BOT_URL if room_id is None or room_as_parameter else f"{BOT_URL}/{room_id}"
     return httpx.post(url, params=params, json=req).json()
 
 

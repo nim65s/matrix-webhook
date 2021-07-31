@@ -52,9 +52,18 @@ async def handler(request):
         except AttributeError:
             return create_json_response(HTTPStatus.BAD_REQUEST, "Unknown formatter")
 
-    if not all(key in data for key in ["body", "key"]):
+    if "room_id" in request.rel_url.query and "room_id" not in data:
+        data["room_id"] = request.rel_url.query["room_id"]
+    if "room_id" not in data:
+        data["room_id"] = request.path.lstrip("/")
+
+    missing = []
+    for key in ["body", "key", "room_id"]:
+        if key not in data or not data[key]:
+            missing.append(key)
+    if missing:
         return create_json_response(
-            HTTPStatus.BAD_REQUEST, "Missing body and/or API key property"
+            HTTPStatus.BAD_REQUEST, f"Missing {', '.join(missing)}"
         )
 
     if data["key"] != conf.API_KEY:
@@ -65,7 +74,6 @@ async def handler(request):
     else:
         formatted_body = markdown(str(data["body"]), extensions=["extra"])
 
-    room_id = request.path[1:]
     content = {
         "msgtype": "m.text",
         "body": data["body"],
@@ -74,7 +82,7 @@ async def handler(request):
     }
     for _ in range(10):
         try:
-            resp = await send_room_message(room_id, content)
+            resp = await send_room_message(data["room_id"], content)
             if isinstance(resp, RoomSendError):
                 if resp.status_code == "M_UNKNOWN_TOKEN":
                     LOGGER.warning("Reconnecting")

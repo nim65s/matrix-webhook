@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - add formatted_body to bypass markdown with direct
   [matrix-custom-HTML](https://matrix.org/docs/spec/client_server/r0.6.1#m-room-message-msgtypes)
 - allow "key" to be passed as a parameter
+- allow "room_id" to be passed as a parameter or with the data
 - rename "text" to "body".
 
 ## [3.1.0] - 2021-07-18
