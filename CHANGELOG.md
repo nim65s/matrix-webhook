@@ -13,11 +13,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - allow "room_id" to be passed as a parameter or with the data
 - rename "text" to "body".
 
+## [3.1.1] - 2021-07-18
+
 ## [3.1.0] - 2021-07-18
 
 - Publish on PyPI & Docker Hub with Github Actions
   in [#10](https://github.com/nim65s/matrix-webhook/pull/10)
-  by [@nim65s](https://github.com/)
+  by [@nim65s](https://github.com/nim65s)
 
 ## [3.0.0] - 2021-07-18
 
@@ -43,6 +45,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.0.0] - 2020-02-14
 - First release with matrix-client & http.server
 
-[Unreleased]: https://github.com/nim65s/matrix-webhook/compare/v2.0.0...devel
+[Unreleased]: https://github.com/nim65s/matrix-webhook/compare/v3.1.1...devel
+[3.1.1]: https://github.com/nim65s/matrix-webhook/compare/v3.1.0...v3.1.1
+[3.1.0]: https://github.com/nim65s/matrix-webhook/compare/v3.0.0...v3.1.0
+[3.0.0]: https://github.com/nim65s/matrix-webhook/compare/v2.0.0...v3.0.0
 [2.0.0]: https://github.com/nim65s/matrix-webhook/compare/v1.0.0...v2.0.0
 [1.0.0]: https://github.com/nim65s/matrix-webhook/releases/tag/v1.0.0
