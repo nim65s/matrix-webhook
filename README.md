@@ -87,7 +87,7 @@ Add a JSON webhook with `?formatter=github`, and put the `API_KEY` as secret
 
 ### For Grafana
 
-Add a webhook with an URL ending with `?formatter=grafana&key=API_KEY'
+Add a webhook with an URL ending with `?formatter=grafana&key=API_KEY`
 
 ## Test room
 
