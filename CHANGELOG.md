@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.2.0] - 2021-08-27
+
 - add github & grafana formatters
 - add formatted_body to bypass markdown with direct
   [matrix-custom-HTML](https://matrix.org/docs/spec/client_server/r0.6.1#m-room-message-msgtypes)
@@ -48,7 +50,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.0.0] - 2020-02-14
 - First release with matrix-client & http.server
 
-[Unreleased]: https://github.com/nim65s/matrix-webhook/compare/v3.1.1...master
+[Unreleased]: https://github.com/nim65s/matrix-webhook/compare/v3.2.0...master
+[3.2.0] https://github.com/nim65s/matrix-webhook/compare/v3.1.1...v3.2.0
 [3.1.1]: https://github.com/nim65s/matrix-webhook/compare/v3.1.0...v3.1.1
 [3.1.0]: https://github.com/nim65s/matrix-webhook/compare/v3.0.0...v3.1.0
 [3.0.0]: https://github.com/nim65s/matrix-webhook/compare/v2.0.0...v3.0.0
