@@ -86,7 +86,7 @@ class BotTest(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(message.formatted_body, "<h1>Hello</h1>")
 
     async def test_room_id_parameter(self):
-        """Send a markdown message in a room given as parameter, and check the result."""
+        """Send a markdown message in a room given as parameter."""
         body = "# Hello"
         messages = []
         client = nio.AsyncClient(MATRIX_URL, MATRIX_ID)

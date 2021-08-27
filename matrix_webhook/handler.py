@@ -3,6 +3,7 @@
 import json
 import logging
 from http import HTTPStatus
+from hmac import HMAC
 
 from markdown import markdown
 
@@ -18,10 +19,10 @@ async def matrix_webhook(request):
     This one handles a POST, checks its content, and forwards it to the matrix room.
     """
     LOGGER.debug(f"Handling {request=}")
-    data = await request.read()
+    data_b = await request.read()
 
     try:
-        data = json.loads(data.decode())
+        data = json.loads(data_b.decode())
     except json.decoder.JSONDecodeError:
         return utils.create_json_response(HTTPStatus.BAD_REQUEST, "Invalid JSON")
 
@@ -47,6 +48,16 @@ async def matrix_webhook(request):
         data["room_id"] = request.rel_url.query["room_id"]
     if "room_id" not in data:
         data["room_id"] = request.path.lstrip("/")
+
+    # If we get a good SHA-256 HMAC digest,
+    # we can consider that the sender has the right API key
+    if "digest" in data:
+        if data["digest"] == HMAC(conf.API_KEY.encode(), data_b, "sha256").hexdigest():
+            data["key"] = conf.API_KEY
+        else:  # but if there is a wrong digest, an informative error should be provided
+            return utils.create_json_response(
+                HTTPStatus.UNAUTHORIZED, "Invalid SHA-256 HMAC digest"
+            )
 
     missing = []
     for key in ["body", "key", "room_id"]:

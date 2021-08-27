@@ -6,10 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- add grafana formatter
+- add github & grafana formatters
 - add formatted_body to bypass markdown with direct
   [matrix-custom-HTML](https://matrix.org/docs/spec/client_server/r0.6.1#m-room-message-msgtypes)
 - allow "key" to be passed as a parameter
+- allow to use a sha256 HMAC hex digest with the key instead of the raw key
 - allow "room_id" to be passed as a parameter or with the data
 - rename "text" to "body".
 - Publish releases also on github from github actions
