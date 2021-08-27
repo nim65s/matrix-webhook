@@ -22,8 +22,8 @@ def github(data, headers):
         pusher, ref, a, b, c = [
             data[k] for k in ["pusher", "ref", "after", "before", "compare"]
         ]
-        pusher = f"[{pusher['name']}](https://github.com/{pusher['name']})"
-        data["body"] = f"@{pusher} pushed on {ref}: [{b} → {a}]({c}):\n\n"
+        pusher = f"[@{pusher['name']}](https://github.com/{pusher['name']})"
+        data["body"] = f"{pusher} pushed on {ref}: [{b} → {a}]({c}):\n\n"
         for commit in data["commits"]:
             data["body"] += f"- [{commit['message']}]({commit['url']})\n"
     else:

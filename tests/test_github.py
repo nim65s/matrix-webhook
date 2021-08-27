@@ -93,7 +93,7 @@ class GithubFormatterTest(unittest.IsolatedAsyncioTestCase):
         before = "ac7d1d9647008145e9d0cf65d24744d0db4862b8"
         after = "4bcdb25c809391baaabc264d9309059f9f48ead2"
         GH = "https://github.com"
-        expected = f'<p>@<a href="{GH}/nim65s">nim65s</a> pushed on refs/heads/devel: '
+        expected = f'<p><a href="{GH}/nim65s">@nim65s</a> pushed on refs/heads/devel: '
         expected += f'<a href="{GH}/nim65s/matrix-webhook/compare/ac7d1d964700...'
         expected += f'4bcdb25c8093">{before} → {after}</a>:</p>\n<ul>\n<li>'
         expected += f'<a href="{GH}/nim65s/matrix-webhook/commit/{after}">'
