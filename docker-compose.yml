@@ -6,6 +6,7 @@ networks:
 
 services:
   bot:
+    image: nim65s/matrix-webhook
     build: .
     restart: unless-stopped
     env_file:
