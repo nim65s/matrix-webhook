@@ -20,7 +20,8 @@ parser.add_argument(
     "-u",
     "--matrix-url",
     default=os.environ.get("MATRIX_URL", "https://matrix.org"),
-    help="matrix homeserver url. Default: `https://matrix.org`. Environment variable: `MATRIX_URL`",
+    help="matrix homeserver url. Default: `https://matrix.org`. "
+    "Environment variable: `MATRIX_URL`",
 )
 parser.add_argument(
     "-i",

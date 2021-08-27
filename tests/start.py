@@ -51,7 +51,8 @@ def wait_available(url: str, key: str, timeout: int = 10) -> bool:
     """Wait until a service answer correctly or timeout."""
 
     def check_json(url: str, key: str) -> bool:
-        """Ensure a service at a given url answers with valid json containing a certain key."""
+        """Ensure a service at a given url answers
+        with valid json containing a certain key."""
         try:
             data = httpx.get(url).json()
             return key in data
