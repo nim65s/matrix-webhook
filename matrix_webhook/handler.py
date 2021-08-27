@@ -35,7 +35,9 @@ async def matrix_webhook(request):
 
     if "formatter" in request.rel_url.query:
         try:
-            data = getattr(formatters, request.rel_url.query["formatter"])(data)
+            data = getattr(formatters, request.rel_url.query["formatter"])(
+                data, request.headers
+            )
         except AttributeError:
             return utils.create_json_response(
                 HTTPStatus.BAD_REQUEST, "Unknown formatter"

@@ -79,9 +79,13 @@ curl -d '{"body":"new contrib from toto: [44](http://radio.localhost/map/#44)", 
 ```
 (or localhost:4785 without docker)
 
-### Grafana
+### For Github
 
-Add a webhook with an URL like ending with `?formatter=grafana&key=API_KEY'
+Add a JSON webhook with `?formatter=github`, and put the `API_KEY` as secret
+
+### For Grafana
+
+Add a webhook with an URL ending with `?formatter=grafana&key=API_KEY'
 
 ## Test room
 

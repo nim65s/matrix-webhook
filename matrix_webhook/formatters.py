@@ -1,7 +1,7 @@
 """Formatters for matrix webhook."""
 
 
-def grafana(data):
+def grafana(data, headers):
     """Pretty-print a grafana notification."""
     text = ""
     if "title" in data:
