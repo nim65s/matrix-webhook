@@ -18,3 +18,5 @@ sed -i "/^\[Unreleased\]/a [v$NEW] https://github.com/nim65s/matrix-webhook/comp
 git add pyproject.toml CHANGELOG.md
 git commit -m "Release v$NEW"
 git tag -s "v$NEW" -m "Release v$NEW"
+git push
+git push --tags
