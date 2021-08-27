@@ -6,7 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [3.2.0] - 2021-08-27
+- fix changelog
+
+## [v3.2.0] - 2021-08-27
 
 - add github & grafana formatters
 - add formatted_body to bypass markdown with direct
@@ -18,15 +20,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Publish releases also on github from github actions
 - fix tests for recent synapse docker image
 
-## [3.1.1] - 2021-07-18
+## [v3.1.1] - 2021-07-18
 
-## [3.1.0] - 2021-07-18
+## [v3.1.0] - 2021-07-18
 
 - Publish on PyPI & Docker Hub with Github Actions
   in [#10](https://github.com/nim65s/matrix-webhook/pull/10)
   by [@nim65s](https://github.com/nim65s)
 
-## [3.0.0] - 2021-07-18
+## [v3.0.0] - 2021-07-18
 
 - Simplify code
   in [#1](https://github.com/nim65s/matrix-webhook/pull/1)
@@ -44,16 +46,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   in [#9](https://github.com/nim65s/matrix-webhook/pull/9)
   by [@nim65s](https://github.com/nim65s)
 
-## [2.0.0] - 2020-03-14
+## [v2.0.0] - 2020-03-14
 - Update to matrix-nio & aiohttp & markdown
 
-## [1.0.0] - 2020-02-14
+## [v1.0.0] - 2020-02-14
 - First release with matrix-client & http.server
 
 [Unreleased]: https://github.com/nim65s/matrix-webhook/compare/v3.2.0...master
-[3.2.0] https://github.com/nim65s/matrix-webhook/compare/v3.1.1...v3.2.0
-[3.1.1]: https://github.com/nim65s/matrix-webhook/compare/v3.1.0...v3.1.1
-[3.1.0]: https://github.com/nim65s/matrix-webhook/compare/v3.0.0...v3.1.0
-[3.0.0]: https://github.com/nim65s/matrix-webhook/compare/v2.0.0...v3.0.0
-[2.0.0]: https://github.com/nim65s/matrix-webhook/compare/v1.0.0...v2.0.0
-[1.0.0]: https://github.com/nim65s/matrix-webhook/releases/tag/v1.0.0
+[v3.2.0] https://github.com/nim65s/matrix-webhook/compare/v3.1.1...v3.2.0
+[v3.1.1]: https://github.com/nim65s/matrix-webhook/compare/v3.1.0...v3.1.1
+[v3.1.0]: https://github.com/nim65s/matrix-webhook/compare/v3.0.0...v3.1.0
+[v3.0.0]: https://github.com/nim65s/matrix-webhook/compare/v2.0.0...v3.0.0
+[v2.0.0]: https://github.com/nim65s/matrix-webhook/compare/v1.0.0...v2.0.0
+[v1.0.0]: https://github.com/nim65s/matrix-webhook/releases/tag/v1.0.0
