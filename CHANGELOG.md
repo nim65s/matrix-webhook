@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v3.2.1] - 2021-08-28
+
 - fix changelog
 
 ## [v3.2.0] - 2021-08-27
@@ -52,7 +54,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [v1.0.0] - 2020-02-14
 - First release with matrix-client & http.server
 
-[Unreleased]: https://github.com/nim65s/matrix-webhook/compare/v3.2.0...master
+[Unreleased]: https://github.com/nim65s/matrix-webhook/compare/v3.2.1...master
+[v3.2.1] https://github.com/nim65s/matrix-webhook/compare/v3.2.0...v3.2.1
 [v3.2.0] https://github.com/nim65s/matrix-webhook/compare/v3.1.1...v3.2.0
 [v3.1.1]: https://github.com/nim65s/matrix-webhook/compare/v3.1.0...v3.1.1
 [v3.1.0]: https://github.com/nim65s/matrix-webhook/compare/v3.0.0...v3.1.0
