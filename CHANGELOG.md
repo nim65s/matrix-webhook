@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - allow "room_id" to be passed as a parameter or with the data
 - rename "text" to "body".
 - Publish releases also on github from github actions
-- fixed tests for recent synapse docker image
+- fix tests for recent synapse docker image
 
 ## [3.1.1] - 2021-07-18
 
