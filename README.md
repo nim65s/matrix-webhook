@@ -91,7 +91,7 @@ Add a webhook with an URL ending with `?formatter=grafana&key=API_KEY`
 
 ## Test room
 
-[#matrix-webhook:tetaneutral.net](https://matrix.to/#/!DPrUlnwOhBEfYwsDLh:matrix.org?via=laas.fr&via=tetaneutral.net&via=aen.im)
+[#matrix-webhook:tetaneutral.net](https://matrix.to/#/!DPrUlnwOhBEfYwsDLh:matrix.org)
 
 ## Unit tests
 
