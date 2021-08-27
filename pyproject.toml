@@ -21,7 +21,7 @@ pydocstyle = "^6.1.1"
 flake8 = "^3.9.2"
 
 [tool.pydocstyle]
-ignore = ["D203", "D204", "D212"]
+ignore = ["D200", "D203", "D204", "D212"]
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
