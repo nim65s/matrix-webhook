@@ -42,5 +42,5 @@ class GrafanaFormatterTest(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(message.sender, FULL_ID)
         self.assertEqual(
             message.body,
-            "### [Alerting] Panel Title alert\nNotification Message\n\n* Count: 1\n",
+            "#### [Alerting] Panel Title alert\nNotification Message\n\n* Count: 1\n",
         )

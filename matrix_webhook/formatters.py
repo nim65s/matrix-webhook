@@ -5,7 +5,7 @@ def grafana(data, headers):
     """Pretty-print a grafana notification."""
     text = ""
     if "title" in data:
-        text = "### " + data["title"] + "\n"
+        text = "#### " + data["title"] + "\n"
     if "message" in data:
         text = text + data["message"] + "\n\n"
     if "evalMatches" in data:
