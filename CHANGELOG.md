@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- join room before sending message
+  in [#12](https://github.com/nim65s/matrix-webhook/pull/12)
+  by [@bboehmke](https://github.com/bboehmke)
+
 ## [v3.2.1] - 2021-08-28
 
 - fix changelog
