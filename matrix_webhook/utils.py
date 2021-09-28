@@ -18,6 +18,8 @@ CLIENT = AsyncClient(conf.MATRIX_URL, conf.MATRIX_ID)
 def error_map(resp):
     """Map response errors to HTTP status."""
     if resp.status_code == "M_UNKNOWN":
+        # in this case, we should directly consider the HTTP status from the response
+        # ref. https://matrix.org/docs/spec/client_server/r0.6.1#api-standards
         return resp.transport_response.status
     return ERROR_MAP[resp.status_code]
 
