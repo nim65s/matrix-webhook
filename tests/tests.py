@@ -33,11 +33,11 @@ class BotTest(unittest.IsolatedAsyncioTestCase):
         # this won't be a 403 from synapse, but a LocalProtocolError from matrix_webhook
         self.assertEqual(
             bot_req({"body": 3}, KEY, "wrong_room"),
-            {"status": 403, "ret": "Unknown room"},
+            {"status": 400, "ret": "wrong_room was not legal room ID or room alias"},
         )
         self.assertEqual(
             bot_req({"body": 3}, KEY, "wrong_room", key_as_param=True),
-            {"status": 403, "ret": "Unknown room"},
+            {"status": 400, "ret": "wrong_room was not legal room ID or room alias"},
         )
 
     async def test_message(self):

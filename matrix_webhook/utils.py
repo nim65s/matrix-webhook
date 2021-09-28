@@ -15,6 +15,13 @@ LOGGER = logging.getLogger("matrix_webhook.utils")
 CLIENT = AsyncClient(conf.MATRIX_URL, conf.MATRIX_ID)
 
 
+def error_map(resp):
+    """Map response errors to HTTP status."""
+    if resp.status_code == "M_UNKNOWN":
+        return resp.transport_response.status
+    return ERROR_MAP[resp.status_code]
+
+
 def create_json_response(status, ret):
     """Create a JSON response."""
     LOGGER.debug(f"Creating json response: {status=}, {ret=}")
@@ -34,9 +41,7 @@ async def join_room(room_id):
                     LOGGER.warning("Reconnecting")
                     await CLIENT.login(conf.MATRIX_PW)
                 else:
-                    return create_json_response(
-                        ERROR_MAP[resp.status_code], resp.message
-                    )
+                    return create_json_response(error_map(resp), resp.message)
             else:
                 return None
         except LocalProtocolError as e:
@@ -59,9 +64,7 @@ async def send_room_message(room_id, content):
                     LOGGER.warning("Reconnecting")
                     await CLIENT.login(conf.MATRIX_PW)
                 else:
-                    return create_json_response(
-                        ERROR_MAP[resp.status_code], resp.message
-                    )
+                    return create_json_response(error_map(resp), resp.message)
             else:
                 return create_json_response(HTTPStatus.OK, "OK")
         except LocalProtocolError as e:
