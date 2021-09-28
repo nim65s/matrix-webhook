@@ -21,8 +21,7 @@ docker pull nim65s/matrix-webhook
 
 ## Start
 
-Create a matrix user for the bot, make it join the rooms you want it to talk into, and launch it with the following
-arguments or environment variables:
+Create a matrix user for the bot, and launch this app it with the following arguments or environment variables:
 
 ```
 python -m matrix_webhook -h
