@@ -25,6 +25,6 @@ repos:
         args:
         - --ignore=D200,D203,D212
 -   repo: https://github.com/PyCQA/flake8
-    rev: 3.9.2
+    rev: 4.0.1
     hooks:
     -   id: flake8
