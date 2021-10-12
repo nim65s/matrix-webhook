@@ -10,7 +10,10 @@ from nio.responses import RoomSendError, JoinError
 
 from . import conf
 
-ERROR_MAP = {"M_FORBIDDEN": HTTPStatus.FORBIDDEN}
+ERROR_MAP = {
+    "M_FORBIDDEN": HTTPStatus.FORBIDDEN,
+    "M_CONSENT_NOT_GIVEN": HTTPStatus.FORBIDDEN,
+}
 LOGGER = logging.getLogger("matrix_webhook.utils")
 CLIENT = AsyncClient(conf.MATRIX_URL, conf.MATRIX_ID)
 
