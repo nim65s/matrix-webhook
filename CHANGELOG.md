@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- add gitlab formatter for google chat & microsoft teams
+  in [#21](https://github.com/nim65s/matrix-webhook/pull/21)
+  by [@GhislainC](https://github.com/GhislainC)
 - join room before sending message
   in [#12](https://github.com/nim65s/matrix-webhook/pull/12)
   by [@bboehmke](https://github.com/bboehmke)
