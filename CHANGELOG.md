@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- add pyupgrade
 - add gitlab formatter for google chat & microsoft teams
   in [#21](https://github.com/nim65s/matrix-webhook/pull/21)
   by [@GhislainC](https://github.com/GhislainC)

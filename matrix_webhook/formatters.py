@@ -21,9 +21,9 @@ def github(data, headers):
     """Pretty-print a github notification."""
     # TODO: Write nice useful formatters. This is only an example.
     if headers["X-GitHub-Event"] == "push":
-        pusher, ref, a, b, c = [
+        pusher, ref, a, b, c = (
             data[k] for k in ["pusher", "ref", "after", "before", "compare"]
-        ]
+        )
         pusher = f"[@{pusher['name']}](https://github.com/{pusher['name']})"
         data["body"] = f"{pusher} pushed on {ref}: [{b} → {a}]({c}):\n\n"
         for commit in data["commits"]:

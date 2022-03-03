@@ -19,6 +19,7 @@ coverage = "^5.5"
 black = "^21.6b0"
 pydocstyle = "^6.1.1"
 flake8 = "^3.9.2"
+pyupgrade = "^2.31.0"
 
 [tool.pydocstyle]
 ignore = ["D200", "D203", "D204", "D212"]
