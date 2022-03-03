@@ -1,5 +1,7 @@
 """Formatters for matrix webhook."""
 
+import re
+
 
 def grafana(data, headers):
     """Pretty-print a grafana notification."""
@@ -29,4 +31,30 @@ def github(data, headers):
     else:
         data["body"] = "notification from github"
     data["digest"] = headers["X-Hub-Signature-256"].replace("sha256=", "")
+    return data
+
+
+def gitlab_gchat(data, headers):
+    """Pretty-print a gitlab notification preformatted for Google Chat."""
+    data["body"] = re.sub("<(.*?)\\|(.*?)>", "[\\2](\\1)", data["body"], re.MULTILINE)
+    return data
+
+
+def gitlab_teams(data, headers):
+    """Pretty-print a gitlab notification preformatted for Microsoft Teams."""
+    body = []
+    for section in data["sections"]:
+        if "text" in section.keys():
+            text = section["text"].split("\n\n")
+            text = ["* " + t for t in text]
+            body.append("\n" + "  \n".join(text))
+        elif all(
+            k in section.keys()
+            for k in ("activityTitle", "activitySubtitle", "activityText")
+        ):
+            text = section["activityTitle"] + " " + section["activitySubtitle"] + " → "
+            text += section["activityText"]
+            body.append(text)
+
+    data["body"] = "  \n".join(body)
     return data

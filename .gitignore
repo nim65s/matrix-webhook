@@ -3,3 +3,4 @@
 .mypy_cache
 coverage.xml
 htmlcov
+__pycache__

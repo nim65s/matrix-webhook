@@ -88,6 +88,19 @@ Add a JSON webhook with `?formatter=github`, and put the `API_KEY` as secret
 
 Add a webhook with an URL ending with `?formatter=grafana&key=API_KEY`
 
+### For Gitlab
+
+At a group level, Gitlab does not permit to setup webhooks. A workaround consists to use Google
+Chat or Microsoft Teams notification integration with a custom URL (Gitlab does not check if the url begins with the normal url of the service).
+
+#### Google Chat
+
+Add a Google Chat integration with an URL ending with `?formatter=gitlab_gchat&key=API_KEY`
+
+#### Microsoft Teams
+
+Add a Microsoft Teams integration with an URL ending with `?formatter=gitlab_teams&key=API_KEY`
+
 ## Test room
 
 [#matrix-webhook:tetaneutral.net](https://matrix.to/#/!DPrUlnwOhBEfYwsDLh:matrix.org)
