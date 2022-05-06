@@ -30,4 +30,3 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
 matrix-webhook = "matrix_webhook.run:run"
-
