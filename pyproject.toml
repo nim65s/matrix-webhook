@@ -14,7 +14,7 @@ Markdown = "^3.3.4"
 matrix-nio = "^0.18.3"
 
 [tool.poetry.dev-dependencies]
-httpx = "^0.18.2"
+httpx = "^0.23.0"
 coverage = "^5.5"
 black = "^21.6b0"
 pydocstyle = "^6.1.1"
