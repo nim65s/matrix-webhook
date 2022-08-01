@@ -127,3 +127,4 @@ class GithubFormatterTest(unittest.IsolatedAsyncioTestCase):
             ).json(),
             {"status": 401, "ret": "Invalid SHA-256 HMAC digest"},
         )
+        await client.close()
