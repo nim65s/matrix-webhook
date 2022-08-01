@@ -1,0 +1,12 @@
+name: Test entrypoints
+on: [push, pull_request]
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+      - run: python -m pip install -U pip
+      - run: python -m pip install .
+      - run: matrix-webhook -h
+      - run: python -m matrix_webhook -h
