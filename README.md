@@ -24,6 +24,8 @@ docker pull nim65s/matrix-webhook
 Create a matrix user for the bot, and launch this app it with the following arguments or environment variables:
 
 ```
+matrix-webhook -h
+# OR
 python -m matrix_webhook -h
 # OR
 docker run --rm -it nim65s/matrix-webhook -h
