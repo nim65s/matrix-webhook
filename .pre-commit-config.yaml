@@ -25,7 +25,7 @@ repos:
         args:
         - --ignore=D200,D203,D212
 -   repo: https://github.com/PyCQA/flake8
-    rev: 5.0.2
+    rev: 5.0.4
     hooks:
     -   id: flake8
 -   repo: https://github.com/asottile/pyupgrade
