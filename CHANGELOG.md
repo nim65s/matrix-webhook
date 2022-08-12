@@ -6,6 +6,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- fix tests
+- add `matrix-webhook` script
+  in [#25](https://github.com/nim65s/matrix-webhook/pull/25)
+  and [#35](https://github.com/nim65s/matrix-webhook/pull/35)
+  by [@a7p](https://github.com/a7p)
+- publish linux/arm64 image
+  in [#37](https://github.com/nim65s/matrix-webhook/pull/35)
+  by [@kusold](https://github.com/kusold)
+- update badges
+- setup dependabot
+- misc upgrades from poetry update, pre-commit.ci, and dependabot
+
 ## [v3.3.0] - 2022-03-04
 
 - add pyupgrade
