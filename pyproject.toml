@@ -8,6 +8,9 @@ readme = "README.md"
 homepage = "https://github.com/nim65s/matrix-webhook"
 repository = "https://github.com/nim65s/matrix-webhook.git"
 
+[tool.poetry.urls]
+"changelog" = "https://github.com/nim65s/matrix-webhook/blob/master/CHANGELOG.md"
+
 [tool.poetry.dependencies]
 python = "^3.8"
 Markdown = "^3.3.4"
