@@ -4,8 +4,10 @@ import re
 
 
 def grafana(data, headers):
-    """Pretty-print a grafana notification."""
+    """Pretty-print a Grafana (version 8 and older) notification."""
     text = ""
+    if "ruleName" not in data and "alerts" in data:
+        return grafana_9x(data, headers)
     if "title" in data:
         text = "#### " + data["title"] + "\n"
     if "message" in data:
@@ -13,6 +15,17 @@ def grafana(data, headers):
     if "evalMatches" in data:
         for match in data["evalMatches"]:
             text = text + "* " + match["metric"] + ": " + str(match["value"]) + "\n"
+    data["body"] = text
+    return data
+
+
+def grafana_9x(data, headers):
+    """Pretty-print a Grafana newer than v9.x notification."""
+    text = ""
+    if "title" in data:
+        text = "#### " + data["title"] + "\n"
+    if "message" in data:
+        text = text + data["message"].replace("\n", "\n\n") + "\n\n"
     data["body"] = text
     return data
 
