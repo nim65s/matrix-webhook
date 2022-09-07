@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Add formatter for grafana 9
+  in [#45](https://github.com/nim65s/matrix-webhook/pull/45)
+  by [@svenseeberg](https://github.com/svenseeberg)
+
 ## [v3.4.0] - 2022-08-12
 
 - fix tests
