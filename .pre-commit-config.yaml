@@ -19,7 +19,7 @@ repos:
     -   id: black
         language_version: python3
 -   repo: https://github.com/PyCQA/pydocstyle
-    rev: 6.2.3
+    rev: 6.3.0
     hooks:
     -   id: pydocstyle
         args:
