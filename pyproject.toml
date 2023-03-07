@@ -23,13 +23,13 @@ matrix-nio = ">=0.18.3,<0.21.0"
 optional = true
 
 [tool.poetry.group.dev.dependencies]
-black = "^22.8.0"
+black = "^23.1.0"
 coverage = ">=6.4.4,<8.0.0"
 flake8 = "^5.0.4"
 httpx = "^0.23.0"
 isort = "^5.12.0"
 pydocstyle = "^6.1.1"
-safety = "^2.3.5"
+safety = {version = "^2.4.0b1", allow-prereleases = true}
 
 [tool.pydocstyle]
 add-ignore = ["D200", "D203", "D204", "D212"]
