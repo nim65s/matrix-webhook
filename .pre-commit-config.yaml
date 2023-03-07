@@ -4,30 +4,35 @@ repos:
     hooks:
     -   id: check-added-large-files
     -   id: check-ast
+    -   id: check-executables-have-shebangs
+    -   id: check-json
     -   id: check-merge-conflict
     -   id: check-symlinks
     -   id: check-toml
     -   id: check-yaml
     -   id: debug-statements
+    -   id: destroyed-symlinks
     -   id: detect-private-key
     -   id: end-of-file-fixer
+    -   id: fix-byte-order-marker
     -   id: mixed-line-ending
     -   id: trailing-whitespace
--   repo: https://github.com/psf/black
-    rev: 23.1.0
+-   repo: https://github.com/PyCQA/isort
+    rev: 5.12.0
     hooks:
-    -   id: black
-        language_version: python3
+    -   id: isort
 -   repo: https://github.com/PyCQA/pydocstyle
     rev: 6.3.0
     hooks:
     -   id: pydocstyle
-        args:
-        - --ignore=D200,D203,D212
 -   repo: https://github.com/PyCQA/flake8
     rev: 6.0.0
     hooks:
     -   id: flake8
+-   repo: https://github.com/psf/black
+    rev: 23.1.0
+    hooks:
+    -   id: black
 -   repo: https://github.com/asottile/pyupgrade
     rev: v3.3.1
     hooks:

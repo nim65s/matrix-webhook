@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- update tooling & lints
+
 ## [v3.5.0] - 2022-09-07
 
 - Add formatter for grafana 9
