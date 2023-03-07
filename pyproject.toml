@@ -29,6 +29,7 @@ flake8 = "^5.0.4"
 httpx = "^0.23.0"
 isort = "^5.12.0"
 pydocstyle = "^6.1.1"
+safety = "^2.3.5"
 
 [tool.pydocstyle]
 add-ignore = ["D200", "D203", "D204", "D212"]
