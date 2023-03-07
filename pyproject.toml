@@ -23,7 +23,7 @@ matrix-nio = ">=0.18.3,<0.21.0"
 optional = true
 
 [tool.poetry.group.dev.dependencies]
-black = "^22.8.0"
+black = ">=22.8,<24.0"
 coverage = "^6.4.4"
 flake8 = "^5.0.4"
 httpx = "^0.23.0"
