@@ -10,9 +10,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - run: pip install -U poetry twine wheel
-      - run: poetry build
-      - run: twine upload --non-interactive -u __token__ -p ${{ secrets.PYPI_TOKEN }} dist/*
+      - run: pipx install poetry
+      - uses: actions/setup-python@v4
+          with:
+            python-version: '3.10'
+            cache: poetry
+      - run: poetry publish --build -u __token__ -p ${{ secrets.PYPI_TOKEN }}
       - run: echo "TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
       - run: gh release create -t "Release ${{ env.TAG}}" -n "$(awk '/## \[${{ env.TAG }}] - /{flag=1;next}/## \[/{flag=0}flag' CHANGELOG.md)" ${{ env.TAG }} dist/*
         env:

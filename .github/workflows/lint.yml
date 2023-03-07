@@ -5,5 +5,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: psf/black@stable
-      - uses: pyupio/safety@2.3.5
+      - run: pipx install poetry
+      - uses: actions/setup-python@v4
+          with:
+            python-version: '3.10'
+            cache: poetry
+      - run: poetry install --with dev --no-interaction
+      - run: poetry run flake8 .
+      - run: poetry run black .
+      - run: poetry run pydocstyle
+      - run: poetry run safety check
+      - run: poetry run poetry check

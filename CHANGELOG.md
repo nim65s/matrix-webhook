@@ -6,7 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- update tooling & lints
+- update tooling
+- update lints
+- update ci/cd
 
 ## [v3.5.0] - 2022-09-07
 
