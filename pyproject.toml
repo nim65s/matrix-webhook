@@ -24,7 +24,7 @@ optional = true
 
 [tool.poetry.group.dev.dependencies]
 black = "^22.8.0"
-coverage = "^6.4.4"
+coverage = ">=6.4.4,<8.0.0"
 flake8 = "^5.0.4"
 httpx = "^0.23.0"
 isort = "^5.12.0"
