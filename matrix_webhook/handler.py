@@ -2,8 +2,8 @@
 
 import json
 import logging
-from http import HTTPStatus
 from hmac import HMAC
+from http import HTTPStatus
 
 from markdown import markdown
 
