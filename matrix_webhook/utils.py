@@ -6,7 +6,7 @@ from http import HTTPStatus
 from aiohttp import web
 from nio import AsyncClient
 from nio.exceptions import LocalProtocolError
-from nio.responses import RoomSendError, JoinError
+from nio.responses import JoinError, RoomSendError
 
 from . import conf
 
