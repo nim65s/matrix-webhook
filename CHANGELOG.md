@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- update docker to python 3.11
 - update tooling
 - update lints
 - update ci/cd
