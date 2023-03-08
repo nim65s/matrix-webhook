@@ -37,21 +37,13 @@ parser.add_argument(
     "-p",
     "--matrix-pw",
     help="matrix password. Either this or token required. Environment variable: `MATRIX_PW`",
-    **(
-        {"default": os.environ["MATRIX_PW"]}
-        if "MATRIX_PW" in os.environ
-        else {}
-    ),
+    **({"default": os.environ["MATRIX_PW"]} if "MATRIX_PW" in os.environ else {}),
 )
 parser.add_argument(
     "-t",
     "--matrix-token",
     help="matrix access token. Either this or password required. Environment variable: `MATRIX_TOKEN`",
-    **(
-        {"default": os.environ["MATRIX_TOKEN"]}
-        if "MATRIX_TOKEN" in os.environ
-        else {}
-    ),
+    **({"default": os.environ["MATRIX_TOKEN"]} if "MATRIX_TOKEN" in os.environ else {}),
 )
 parser.add_argument(
     "-k",
