@@ -35,7 +35,7 @@ docker run --rm -it nim65s/matrix-webhook -h
 ```
 
 ```
-usage: python -m matrix_webhook [-h] [-H HOST] [-P PORT] [-u MATRIX_URL] -i MATRIX_ID [-p MATRIX_PW] [-t MATRIX_TOKEN] -k API_KEY [-v]
+usage: python -m matrix_webhook [-h] [-H HOST] [-P PORT] [-u MATRIX_URL] -i MATRIX_ID (-p MATRIX_PW | -t MATRIX_TOKEN) -k API_KEY [-v]
 
 Configuration for Matrix Webhook.
 
