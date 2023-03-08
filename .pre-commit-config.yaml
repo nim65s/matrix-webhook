@@ -25,7 +25,6 @@ repos:
     rev: 6.3.0
     hooks:
     -   id: pydocstyle
-        additional_dependencies: ['.[toml]']
 -   repo: https://github.com/PyCQA/flake8
     rev: 6.0.0
     hooks:
