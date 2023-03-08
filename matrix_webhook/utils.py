@@ -44,7 +44,8 @@ async def join_room(room_id):
             if isinstance(resp, JoinError):
                 if resp.status_code == "M_UNKNOWN_TOKEN":
                     LOGGER.warning("Reconnecting")
-                    await CLIENT.login(conf.MATRIX_PW)
+                    if conf.MATRIX_PW:
+                        await CLIENT.login(conf.MATRIX_PW)
                 else:
                     return create_json_response(error_map(resp), resp.message)
             else:
@@ -67,7 +68,8 @@ async def send_room_message(room_id, content):
             if isinstance(resp, RoomSendError):
                 if resp.status_code == "M_UNKNOWN_TOKEN":
                     LOGGER.warning("Reconnecting")
-                    await CLIENT.login(conf.MATRIX_PW)
+                    if conf.MATRIX_PW:
+                        await CLIENT.login(conf.MATRIX_PW)
                 else:
                     return create_json_response(error_map(resp), resp.message)
             else:
