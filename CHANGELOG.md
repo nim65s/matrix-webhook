@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Add support for using predefined access tokens
+  in [#67](https://github.com/nim65s/matrix-webhook/pull/67)
+  by [@ananace](https://github.com/ananace)
+
 ## [v3.6.0] - 2023-03-07
 
 - update docker to python 3.11
