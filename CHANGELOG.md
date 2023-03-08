@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v3.7.0] - 2023-03-08
+
 - Add support for using predefined access tokens
   in [#67](https://github.com/nim65s/matrix-webhook/pull/67)
   by [@ananace](https://github.com/ananace)
@@ -95,7 +97,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [v1.0.0] - 2020-02-14
 - First release with matrix-client & http.server
 
-[Unreleased]: https://github.com/nim65s/matrix-webhook/compare/v3.6.0...master
+[Unreleased]: https://github.com/nim65s/matrix-webhook/compare/v3.7.0...master
+[v3.7.0]: https://github.com/nim65s/matrix-webhook/compare/v3.6.0...v3.7.0
 [v3.6.0]: https://github.com/nim65s/matrix-webhook/compare/v3.5.0...v3.6.0
 [v3.5.0]: https://github.com/nim65s/matrix-webhook/compare/v3.4.0...v3.5.0
 [v3.4.0]: https://github.com/nim65s/matrix-webhook/compare/v3.3.0...v3.4.0
