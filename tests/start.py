@@ -4,6 +4,7 @@
 import argparse
 import logging
 from os import environ
+from pathlib import Path
 from subprocess import Popen, run
 from time import time
 from unittest import main
@@ -21,7 +22,11 @@ LOGGER = logging.getLogger("matrix-webhook.tests.start")
 
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument(
-    "-v", "--verbose", action="count", default=0, help="increment verbosity level"
+    "-v",
+    "--verbose",
+    action="count",
+    default=0,
+    help="increment verbosity level",
 )
 
 
@@ -77,14 +82,14 @@ def run_and_test():
             "synapse.app.homeserver",
             "--config-path",
             "/srv/homeserver.yaml",
-        ]
+        ],
     )
     if not wait_available(f"{MATRIX_URL}/_matrix/client/r0/login", "flows"):
         return False
 
     # Register a user for the bot.
     LOGGER.info("Registering the bot")
-    with open("/srv/homeserver.yaml") as f:
+    with Path("/srv/homeserver.yaml").open() as f:
         secret = yaml.safe_load(f.read()).get("registration_shared_secret", None)
     request_registration(MATRIX_ID, MATRIX_PW, MATRIX_URL, secret, admin=True)
 

@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- tools: flake8, pydocstyle, pyupgrade → ruff
+
 ## [v3.7.0] - 2023-03-08
 
 - Add support for using predefined access tokens

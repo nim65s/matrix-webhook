@@ -63,7 +63,9 @@ async def send_room_message(room_id, content):
     for _ in range(10):
         try:
             resp = await CLIENT.room_send(
-                room_id=room_id, message_type="m.room.message", content=content
+                room_id=room_id,
+                message_type="m.room.message",
+                content=content,
             )
             if isinstance(resp, RoomSendError):
                 if resp.status_code == "M_UNKNOWN_TOKEN":

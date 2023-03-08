@@ -13,8 +13,7 @@ LOGGER = logging.getLogger("matrix_webhook.handler")
 
 
 async def matrix_webhook(request):
-    """
-    Coroutine given to the server, st. it knows what to do with an HTTP request.
+    """Coroutine given to the server, st. it knows what to do with an HTTP request.
 
     This one handles a POST, checks its content, and forwards it to the matrix room.
     """
@@ -37,11 +36,13 @@ async def matrix_webhook(request):
     if "formatter" in request.rel_url.query:
         try:
             data = getattr(formatters, request.rel_url.query["formatter"])(
-                data, request.headers
+                data,
+                request.headers,
             )
         except AttributeError:
             return utils.create_json_response(
-                HTTPStatus.BAD_REQUEST, "Unknown formatter"
+                HTTPStatus.BAD_REQUEST,
+                "Unknown formatter",
             )
 
     if "room_id" in request.rel_url.query and "room_id" not in data:
@@ -56,7 +57,8 @@ async def matrix_webhook(request):
             data["key"] = conf.API_KEY
         else:  # but if there is a wrong digest, an informative error should be provided
             return utils.create_json_response(
-                HTTPStatus.UNAUTHORIZED, "Invalid SHA-256 HMAC digest"
+                HTTPStatus.UNAUTHORIZED,
+                "Invalid SHA-256 HMAC digest",
             )
 
     missing = []
@@ -65,7 +67,8 @@ async def matrix_webhook(request):
             missing.append(key)
     if missing:
         return utils.create_json_response(
-            HTTPStatus.BAD_REQUEST, f"Missing {', '.join(missing)}"
+            HTTPStatus.BAD_REQUEST,
+            f"Missing {', '.join(missing)}",
         )
 
     if data["key"] != conf.API_KEY:

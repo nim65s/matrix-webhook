@@ -34,7 +34,7 @@ parser.add_argument(
     ),
 )
 auth = parser.add_mutually_exclusive_group(
-    required=all(v not in os.environ for v in ["MATRIX_PW", "MATRIX_TOKEN"])
+    required=all(v not in os.environ for v in ["MATRIX_PW", "MATRIX_TOKEN"]),
 )
 auth.add_argument(
     "-p",
@@ -61,7 +61,11 @@ parser.add_argument(
     ),
 )
 parser.add_argument(
-    "-v", "--verbose", action="count", default=0, help="increment verbosity level"
+    "-v",
+    "--verbose",
+    action="count",
+    default=0,
+    help="increment verbosity level",
 )
 
 args = parser.parse_args()

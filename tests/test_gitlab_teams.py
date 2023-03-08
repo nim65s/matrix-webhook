@@ -1,9 +1,7 @@
-"""
-Test module for gitlab "teams" formatter.
-
-"""
+"""Test module for gitlab "teams" formatter."""
 
 import unittest
+from pathlib import Path
 
 import httpx
 import nio
@@ -22,7 +20,7 @@ class GitlabTeamsFormatterTest(unittest.IsolatedAsyncioTestCase):
         await client.login(MATRIX_PW)
         room = await client.room_create()
 
-        with open("tests/example_gitlab_teams.json") as f:
+        with Path("tests/example_gitlab_teams.json").open() as f:
             example_gitlab_teams_request = f.read()
         self.assertEqual(
             httpx.post(

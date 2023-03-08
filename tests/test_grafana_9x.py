@@ -1,10 +1,10 @@
-"""
-Test module for grafana v9 formatter.
+"""Test module for grafana v9 formatter.
 
 ref https://grafana.com/docs/grafana/latest/alerting/old-alerting/notifications/#webhook
 """
 
 import unittest
+from pathlib import Path
 
 import httpx
 import nio
@@ -23,7 +23,7 @@ class Grafana9xFormatterTest(unittest.IsolatedAsyncioTestCase):
         await client.login(MATRIX_PW)
         room = await client.room_create()
 
-        with open("tests/example_grafana_9x.json") as f:
+        with Path("tests/example_grafana_9x.json").open() as f:
             example_grafana_request = f.read()
         self.assertEqual(
             httpx.post(

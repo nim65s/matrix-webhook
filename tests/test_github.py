@@ -1,6 +1,7 @@
 """Test module for grafana formatter."""
 
 import unittest
+from pathlib import Path
 
 import httpx
 import nio
@@ -39,7 +40,7 @@ class GithubFormatterTest(unittest.IsolatedAsyncioTestCase):
         await client.login(MATRIX_PW)
         room = await client.room_create()
 
-        with open("tests/example_github_push.json", "rb") as f:
+        with Path("tests/example_github_push.json", "rb").open() as f:
             example_github_push = f.read().strip()
         self.assertEqual(
             httpx.post(
@@ -72,7 +73,7 @@ class GithubFormatterTest(unittest.IsolatedAsyncioTestCase):
         await client.login(MATRIX_PW)
         room = await client.room_create()
 
-        with open("tests/example_github_push.json", "rb") as f:
+        with Path("tests/example_github_push.json").open("rb") as f:
             example_github_push = f.read().strip()
         self.assertEqual(
             httpx.post(
@@ -92,11 +93,11 @@ class GithubFormatterTest(unittest.IsolatedAsyncioTestCase):
 
         before = "ac7d1d9647008145e9d0cf65d24744d0db4862b8"
         after = "4bcdb25c809391baaabc264d9309059f9f48ead2"
-        GH = "https://github.com"
-        expected = f'<p><a href="{GH}/nim65s">@nim65s</a> pushed on refs/heads/devel: '
-        expected += f'<a href="{GH}/nim65s/matrix-webhook/compare/ac7d1d964700...'
+        gh = "https://github.com"
+        expected = f'<p><a href="{gh}/nim65s">@nim65s</a> pushed on refs/heads/devel: '
+        expected += f'<a href="{gh}/nim65s/matrix-webhook/compare/ac7d1d964700...'
         expected += f'4bcdb25c8093">{before} → {after}</a>:</p>\n<ul>\n<li>'
-        expected += f'<a href="{GH}/nim65s/matrix-webhook/commit/{after}">'
+        expected += f'<a href="{gh}/nim65s/matrix-webhook/commit/{after}">'
         expected += "formatters: also get headers</a></li>\n</ul>"
 
         message = messages.chunk[0]
@@ -113,7 +114,7 @@ class GithubFormatterTest(unittest.IsolatedAsyncioTestCase):
         await client.login(MATRIX_PW)
         room = await client.room_create()
 
-        with open("tests/example_github_push.json", "rb") as f:
+        with Path("tests/example_github_push.json").open("rb") as f:
             example_github_push = f.read().strip()
 
         self.assertEqual(

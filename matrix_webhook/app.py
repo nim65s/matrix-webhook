@@ -12,8 +12,7 @@ LOGGER = logging.getLogger("matrix_webhook.app")
 
 
 async def main(event):
-    """
-    Launch main coroutine.
+    """Launch main coroutine.
 
     matrix client login & start web server
     """

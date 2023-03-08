@@ -21,26 +21,17 @@ repos:
     rev: 5.12.0
     hooks:
     -   id: isort
--   repo: https://github.com/PyCQA/pydocstyle
-    rev: 6.3.0
-    hooks:
-    -   id: pydocstyle
--   repo: https://github.com/PyCQA/flake8
-    rev: 6.0.0
-    hooks:
-    -   id: flake8
 -   repo: https://github.com/psf/black
     rev: 23.1.0
     hooks:
     -   id: black
--   repo: https://github.com/asottile/pyupgrade
-    rev: v3.3.1
-    hooks:
-    -   id: pyupgrade
-        args:
-        -   --py38-plus
 -   repo: https://github.com/pappasam/toml-sort
     rev: v0.22.4
     hooks:
     - id: toml-sort-fix
       exclude: 'poetry.lock'
+- repo: https://github.com/charliermarsh/ruff-pre-commit
+  rev: v0.0.254
+  hooks:
+    - id: ruff
+      args: [--fix, --exit-non-zero-on-fix]

@@ -50,7 +50,8 @@ class BotTest(unittest.IsolatedAsyncioTestCase):
         room = await client.room_create()
 
         self.assertEqual(
-            bot_req({"text": text}, KEY, room.room_id), {"status": 200, "ret": "OK"}
+            bot_req({"text": text}, KEY, room.room_id),
+            {"status": 200, "ret": "OK"},
         )
 
         sync = await client.sync()
@@ -118,7 +119,8 @@ class BotTest(unittest.IsolatedAsyncioTestCase):
         room = await client.room_create()
 
         self.assertEqual(
-            bot_req({"body": body}, KEY, room.room_id), {"status": 200, "ret": "OK"}
+            bot_req({"body": body}, KEY, room.room_id),
+            {"status": 200, "ret": "OK"},
         )
 
         sync = await client.sync()
@@ -142,7 +144,9 @@ class BotTest(unittest.IsolatedAsyncioTestCase):
 
         self.assertEqual(
             bot_req(
-                {"body": body, "formatted_body": formatted_body}, KEY, room.room_id
+                {"body": body, "formatted_body": formatted_body},
+                KEY,
+                room.room_id,
             ),
             {"status": 200, "ret": "OK"},
         )

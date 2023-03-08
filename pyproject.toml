@@ -38,5 +38,10 @@ matrix-webhook = "matrix_webhook.__main__:main"
 [tool.poetry.urls]
 "changelog" = "https://github.com/nim65s/matrix-webhook/blob/master/CHANGELOG.md"
 
+[tool.ruff]
+extend-ignore = ["D203", "D213"]
+extend-select = ["A", "B", "C", "COM", "D", "EM", "EXE", "G", "N", "PTH", "RET", "RUF", "UP", "W", "YTT"]
+target-version = "py38"
+
 [tool.tomlsort]
 all = true
