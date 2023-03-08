@@ -38,8 +38,5 @@ matrix-webhook = "matrix_webhook.__main__:main"
 [tool.poetry.urls]
 "changelog" = "https://github.com/nim65s/matrix-webhook/blob/master/CHANGELOG.md"
 
-[tool.pydocstyle]
-add-ignore = ["D200", "D203", "D204", "D212"]
-
 [tool.tomlsort]
 all = true
