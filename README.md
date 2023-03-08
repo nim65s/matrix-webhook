@@ -35,12 +35,11 @@ docker run --rm -it nim65s/matrix-webhook -h
 ```
 
 ```
-usage: python -m matrix_webhook [-h] [-H HOST] [-P PORT] [-u MATRIX_URL] -i MATRIX_ID -p MATRIX_PW -k API_KEY [-v]
+usage: python -m matrix_webhook [-h] [-H HOST] [-P PORT] [-u MATRIX_URL] -i MATRIX_ID [-p MATRIX_PW] [-t MATRIX_TOKEN] -k API_KEY [-v]
 
 Configuration for Matrix Webhook.
 
-
-optional arguments:
+options:
   -h, --help            show this help message and exit
   -H HOST, --host HOST  host to listen to. Default: `''`. Environment variable: `HOST`
   -P PORT, --port PORT  port to listed to. Default: 4785. Environment variable: `PORT`
@@ -49,7 +48,9 @@ optional arguments:
   -i MATRIX_ID, --matrix-id MATRIX_ID
                         matrix user-id. Required. Environment variable: `MATRIX_ID`
   -p MATRIX_PW, --matrix-pw MATRIX_PW
-                        matrix password. Required. Environment variable: `MATRIX_PW`
+                        matrix password. Either this or token required. Environment variable: `MATRIX_PW`
+  -t MATRIX_TOKEN, --matrix-token MATRIX_TOKEN
+                        matrix access token. Either this or password required. Environment variable: `MATRIX_TOKEN`
   -k API_KEY, --api-key API_KEY
                         shared secret to use this service. Required. Environment variable: `API_KEY`
   -v, --verbose         increment verbosity level

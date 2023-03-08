@@ -17,8 +17,12 @@ async def main(event):
 
     matrix client login & start web server
     """
-    LOGGER.info(f"Log in {conf.MATRIX_ID=} on {conf.MATRIX_URL=}")
-    await utils.CLIENT.login(conf.MATRIX_PW)
+    if conf.MATRIX_PW:
+        LOGGER.info(f"Log in {conf.MATRIX_ID=} on {conf.MATRIX_URL=}")
+        await utils.CLIENT.login(conf.MATRIX_PW)
+    else:
+        LOGGER.info(f"Restoring log in {conf.MATRIX_ID=} on {conf.MATRIX_URL=}")
+        utils.CLIENT.access_token = conf.MATRIX_TOKEN
 
     server = web.Server(handler.matrix_webhook)
     runner = web.ServerRunner(server)
