@@ -40,7 +40,7 @@ class GithubFormatterTest(unittest.IsolatedAsyncioTestCase):
         await client.login(MATRIX_PW)
         room = await client.room_create()
 
-        with Path("tests/example_github_push.json", "rb").open() as f:
+        with Path("tests/example_github_push.json").open("rb") as f:
             example_github_push = f.read().strip()
         self.assertEqual(
             httpx.post(
