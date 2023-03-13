@@ -39,7 +39,7 @@ matrix-webhook = "matrix_webhook.__main__:main"
 
 [tool.ruff]
 extend-ignore = ["D203", "D213"]
-extend-select = ["A", "B", "C", "COM", "D", "EM", "EXE", "G", "N", "PTH", "RET", "RUF", "UP", "W", "YTT"]
+extend-select = ["A", "B", "COM", "D", "EM", "EXE", "G", "N", "PTH", "RET", "RUF", "UP", "W", "YTT"]
 target-version = "py38"
 
 [tool.tomlsort]
