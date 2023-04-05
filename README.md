@@ -56,6 +56,25 @@ options:
   -v, --verbose         increment verbosity level
 ```
 
+### Healthcheck
+
+For load balancers which require a healthcheck endpoint to validate the availability of the service, the `/health` path can be used. The endpoint will return a **HTTP 200** status and a json document.
+
+Using the Healthcheck endpoint with Traefik and docker-compose:
+
+```yaml
+version: '3'
+
+...
+
+services:
+  bot:
+    ...
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.matrix-webhook.rule: "Host(`${CHATONS_SERVICE:-matrixwebhook}.${CHATONS_DOMAIN:-localhost}`)"
+      traefik.http.services.matrix-webhook.loadbalancer.healthcheck.path: /health
+```
 
 ## Dev
 
@@ -84,6 +103,7 @@ docker-compose up -d
 curl -d '{"body":"new contrib from toto: [44](http://radio.localhost/map/#44)", "key": "secret"}' \
   'http://matrixwebhook.localhost/!DPrUlnwOhBEfYwsDLh:matrix.org'
 ```
+
 (or localhost:4785 without docker)
 
 ### For Github

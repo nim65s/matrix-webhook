@@ -18,6 +18,11 @@ async def matrix_webhook(request):
     This one handles a POST, checks its content, and forwards it to the matrix room.
     """
     LOGGER.debug(f"Handling {request=}")
+
+    # healthcheck
+    if request.rel_url.path == "/health":
+        return utils.create_json_response(HTTPStatus.OK, "OK")
+
     data_b = await request.read()
 
     try:
