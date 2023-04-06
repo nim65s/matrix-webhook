@@ -171,3 +171,7 @@ class BotTest(unittest.IsolatedAsyncioTestCase):
             bot_req({"body": "Re"}, KEY, room.room_id),
             {"status": 200, "ret": "OK"},
         )
+
+    async def test_healthcheck(self):
+        """Check the healthcheck endpoint returns 200."""
+        self.assertEqual(bot_req(room_id="health"), {"status": 200, "ret": "OK"})
