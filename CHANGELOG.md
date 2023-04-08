@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v3.8.0] - 2023-04-08
+
 - add a healthcheck for load balancers
   in [#77](https://github.com/nim65s/matrix-webhook/pull/77)
   by [@chronicc](https://github.com/chronicc)
@@ -103,7 +105,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [v1.0.0] - 2020-02-14
 - First release with matrix-client & http.server
 
-[Unreleased]: https://github.com/nim65s/matrix-webhook/compare/v3.7.0...master
+[Unreleased]: https://github.com/nim65s/matrix-webhook/compare/v3.8.0...master
+[v3.8.0]: https://github.com/nim65s/matrix-webhook/compare/v3.7.0...v3.8.0
 [v3.7.0]: https://github.com/nim65s/matrix-webhook/compare/v3.6.0...v3.7.0
 [v3.6.0]: https://github.com/nim65s/matrix-webhook/compare/v3.5.0...v3.6.0
 [v3.5.0]: https://github.com/nim65s/matrix-webhook/compare/v3.4.0...v3.5.0
