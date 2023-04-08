@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- add a healthcheck for load balancers
+  in [#77](https://github.com/nim65s/matrix-webhook/pull/77)
+  by [@chronicc](https://github.com/chronicc)
+- error_map: default to 500
 - tools: flake8, pydocstyle, pyupgrade → ruff
 
 ## [v3.7.0] - 2023-03-08
