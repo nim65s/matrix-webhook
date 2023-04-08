@@ -1,6 +1,7 @@
 """Matrix Webhook utils."""
 
 import logging
+from collections import defaultdict
 from http import HTTPStatus
 
 from aiohttp import web
@@ -10,10 +11,13 @@ from nio.responses import JoinError, RoomSendError
 
 from . import conf
 
-ERROR_MAP = {
-    "M_FORBIDDEN": HTTPStatus.FORBIDDEN,
-    "M_CONSENT_NOT_GIVEN": HTTPStatus.FORBIDDEN,
-}
+ERROR_MAP = defaultdict(
+    lambda: HTTPStatus.INTERNAL_SERVER_ERROR,
+    {
+        "M_FORBIDDEN": HTTPStatus.FORBIDDEN,
+        "M_CONSENT_NOT_GIVEN": HTTPStatus.FORBIDDEN,
+    },
+)
 LOGGER = logging.getLogger("matrix_webhook.utils")
 CLIENT = AsyncClient(conf.MATRIX_URL, conf.MATRIX_ID)
 
