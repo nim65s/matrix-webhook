@@ -1,37 +1,43 @@
 repos:
--   repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.4.0
-    hooks:
-    -   id: check-added-large-files
-    -   id: check-ast
-    -   id: check-executables-have-shebangs
-    -   id: check-json
-    -   id: check-merge-conflict
-    -   id: check-symlinks
-    -   id: check-toml
-    -   id: check-yaml
-    -   id: debug-statements
-    -   id: destroyed-symlinks
-    -   id: detect-private-key
-    -   id: end-of-file-fixer
-    -   id: fix-byte-order-marker
-    -   id: mixed-line-ending
-    -   id: trailing-whitespace
--   repo: https://github.com/PyCQA/isort
-    rev: 5.12.0
-    hooks:
-    -   id: isort
--   repo: https://github.com/psf/black
-    rev: 23.3.0
-    hooks:
-    -   id: black
--   repo: https://github.com/pappasam/toml-sort
-    rev: v0.23.1
-    hooks:
-    - id: toml-sort-fix
-      exclude: 'poetry.lock'
+- repo: https://github.com/PyCQA/isort
+  rev: 5.12.0
+  hooks:
+  - id: isort
 - repo: https://github.com/charliermarsh/ruff-pre-commit
   rev: v0.0.265
   hooks:
-    - id: ruff
-      args: [--fix, --exit-non-zero-on-fix]
+  - id: ruff
+    args:
+    - --fix
+    - --exit-non-zero-on-fix
+- repo: https://github.com/nim65s/pre-commit-sort
+  rev: v0.0.1
+  hooks:
+  - id: pre-commit-sort
+- repo: https://github.com/pappasam/toml-sort
+  rev: v0.23.1
+  hooks:
+  - id: toml-sort-fix
+    exclude: poetry.lock
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v4.4.0
+  hooks:
+  - id: check-added-large-files
+  - id: check-ast
+  - id: check-executables-have-shebangs
+  - id: check-json
+  - id: check-merge-conflict
+  - id: check-symlinks
+  - id: check-toml
+  - id: check-yaml
+  - id: debug-statements
+  - id: destroyed-symlinks
+  - id: detect-private-key
+  - id: end-of-file-fixer
+  - id: fix-byte-order-marker
+  - id: mixed-line-ending
+  - id: trailing-whitespace
+- repo: https://github.com/psf/black
+  rev: 23.3.0
+  hooks:
+  - id: black
