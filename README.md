@@ -124,7 +124,7 @@ Add a Microsoft Teams integration with an URL ending with `?formatter=gitlab_tea
 
 #### Github Release Notifier
 
-To receiver notifications about new releases of projects hosted at github.com you can add a matrix webhook ending with `?formatter=grn&key=API_KEY` to [Github Release Notifier (grn)](https://github.com/femtopixel/github-release-notifier).  
+To receiver notifications about new releases of projects hosted at github.com you can add a matrix webhook ending with `?formatter=grn&key=API_KEY` to [Github Release Notifier (grn)](https://github.com/femtopixel/github-release-notifier).
 
 ## Test room
 
