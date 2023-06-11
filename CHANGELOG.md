@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- add github-release-notifier formatter
+  in [#93](https://github.com/nim65s/matrix-webhook/pull/93)
+  by [@nrekretep](https://github.com/nrekretep)
+
 ## [v3.8.0] - 2023-04-08
 
 - add a healthcheck for load balancers
