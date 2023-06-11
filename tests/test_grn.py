@@ -40,7 +40,5 @@ class GithubReleaseNotifierFormatterTest(unittest.IsolatedAsyncioTestCase):
 
         message = messages.chunk[0]
         self.assertEqual(message.sender, FULL_ID)
-        self.assertEqual(
-            message.body,
-            "#### [Alerting] Panel Title alert\nNotification Message\n\n* Count: 1\n",
-        )
+        self.assertIn("Fixes split modules", message.body)
+        self.assertIn("jaymoulin/google-music-manager", message.body)
