@@ -1,4 +1,4 @@
-"""Test module for github release notifier (grn) formatter.
+"""Test module for Github Release Notifier (grn) formatter.
 
 ref https://github.com/femtopixel/github-release-notifier
 """
