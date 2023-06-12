@@ -71,3 +71,17 @@ def gitlab_teams(data, headers):
 
     data["body"] = "  \n".join(body)
     return data
+
+
+def grn(data, headers):
+    """Pretty-print a github release notifier (grn) notification."""
+    version, title, author, package = (
+        data[k] for k in ["version", "title", "author", "package_name"]
+    )
+    data["body"] = (
+        f"### {package} - {version}\n\n{title}\n\n"
+        f"[{author} released new version **{version}** for **{package}**]"
+        f"(https://github.com/{package}/releases/tag/{version}).\n\n"
+    )
+
+    return data

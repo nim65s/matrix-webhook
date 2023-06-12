@@ -122,6 +122,10 @@ Add a Google Chat integration with an URL ending with `?formatter=gitlab_gchat&k
 
 Add a Microsoft Teams integration with an URL ending with `?formatter=gitlab_teams&key=API_KEY`
 
+#### Github Release Notifier
+
+To receiver notifications about new releases of projects hosted at github.com you can add a matrix webhook ending with `?formatter=grn&key=API_KEY` to [Github Release Notifier (grn)](https://github.com/femtopixel/github-release-notifier).
+
 ## Test room
 
 [#matrix-webhook:tetaneutral.net](https://matrix.to/#/!DPrUlnwOhBEfYwsDLh:matrix.org)
