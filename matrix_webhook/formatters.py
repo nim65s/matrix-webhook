@@ -49,7 +49,12 @@ def github(data, headers):
 
 def gitlab_gchat(data, headers):
     """Pretty-print a gitlab notification preformatted for Google Chat."""
-    data["body"] = re.sub("<(.*?)\\|(.*?)>", "[\\2](\\1)", data["body"], re.MULTILINE)
+    data["body"] = re.sub(
+        "<(.*?)\\|(.*?)>",
+        "[\\2](\\1)",
+        data["body"],
+        flags=re.MULTILINE,
+    )
     return data
 
 
