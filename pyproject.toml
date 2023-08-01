@@ -17,7 +17,7 @@ version = "3.8.0"
 
 [tool.poetry.dependencies]
 Markdown = "^3.3.4"
-matrix-nio = ">=0.18.3,<0.21.0"
+matrix-nio = ">=0.18.3,<0.22.0"
 python = "^3.8"
 
 [tool.poetry.group.dev]
