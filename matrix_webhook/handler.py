@@ -7,7 +7,9 @@ from http import HTTPStatus
 
 from markdown import markdown
 
-from . import conf, formatters, utils
+import conf
+import formatters
+import utils
 
 LOGGER = logging.getLogger("matrix_webhook.handler")
 

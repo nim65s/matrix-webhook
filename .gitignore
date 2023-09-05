@@ -4,3 +4,5 @@
 coverage.xml
 htmlcov
 __pycache__
+/storage/*
+.idea

@@ -61,6 +61,24 @@ parser.add_argument(
     ),
 )
 parser.add_argument(
+    "-s",
+    "--storage",
+    help="path to the storage location used for session storage.",
+    default="./storage"
+)
+parser.add_argument(
+    "-kp",
+    "--key-password",
+    help="password for the e2e encryption keys."
+)
+parser.add_argument(
+    "-e",
+    "--encryption",
+    help="Enable e2e encryption",
+    action=argparse.BooleanOptionalAction,
+    default=False
+)
+parser.add_argument(
     "-v",
     "--verbose",
     action="count",
@@ -76,4 +94,7 @@ MATRIX_ID = args.matrix_id
 MATRIX_PW = args.matrix_pw
 MATRIX_TOKEN = args.matrix_token
 API_KEY = args.api_key
+STORAGE_LOCATION = args.storage
+KEY_PASSWORD = args.key_password
+E2E = args.encryption
 VERBOSE = args.verbose
