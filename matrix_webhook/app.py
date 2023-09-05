@@ -9,6 +9,7 @@ from aiohttp import web
 import conf
 import handler
 import utils
+from verify import verify
 from storage import DataStorage
 from matrix import MatrixClient
 
@@ -25,6 +26,11 @@ async def main(event):
     matrix_client = MatrixClient(storage)
 
     await matrix_client.login()
+
+    if conf.MODE == "verify":
+        await verify(matrix_client)
+        return
+
     utils.CLIENT = matrix_client
 
     print("Running")

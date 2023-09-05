@@ -3,6 +3,7 @@ import argparse
 import os
 
 parser = argparse.ArgumentParser(description=__doc__, prog="python -m matrix_webhook")
+parser.add_argument("-m", "--mode", help="set the run mode", default="run", choices=["run", "verify"])
 parser.add_argument(
     "-H",
     "--host",
@@ -88,6 +89,7 @@ parser.add_argument(
 
 args = parser.parse_args()
 
+MODE = args.mode
 SERVER_ADDRESS = (args.host, args.port)
 MATRIX_URL = args.matrix_url
 MATRIX_ID = args.matrix_id

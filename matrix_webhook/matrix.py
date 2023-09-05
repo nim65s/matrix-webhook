@@ -3,7 +3,7 @@ import sys
 
 from nio import AsyncClientConfig, AsyncClient, LoginResponse, JoinError, RoomSendError
 
-from matrix_webhook.storage import DataStorage, MatrixData
+from storage import DataStorage, MatrixData
 import conf
 
 LOGGER = logging.getLogger("matrix_webhook.matrix")
@@ -89,6 +89,10 @@ class MatrixClient:
             await self._first_login()
         else:
             await self._restore_login()
+            
+    def get_client(self):
+        """Get the raw client."""
+        return self._client
 
     async def close(self):
         """Close connection."""
