@@ -1,7 +1,8 @@
 """Matrix Webhook module entrypoint."""
 import logging
 
-from . import app, conf
+import app
+import conf
 
 
 def main():

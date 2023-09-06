@@ -4,9 +4,13 @@ import asyncio
 import logging
 from signal import SIGINT, SIGTERM
 
+import conf
+import handler
+import utils
 from aiohttp import web
-
-from . import conf, handler, utils
+from matrix import MatrixClient
+from storage import DataStorage
+from verify import verify
 
 LOGGER = logging.getLogger("matrix_webhook.app")
 
@@ -16,12 +20,18 @@ async def main(event):
 
     matrix client login & start web server
     """
-    if conf.MATRIX_PW:
-        LOGGER.info(f"Log in {conf.MATRIX_ID=} on {conf.MATRIX_URL=}")
-        await utils.CLIENT.login(conf.MATRIX_PW)
-    else:
-        LOGGER.info(f"Restoring log in {conf.MATRIX_ID=} on {conf.MATRIX_URL=}")
-        utils.CLIENT.access_token = conf.MATRIX_TOKEN
+    storage = DataStorage(conf.STORAGE_LOCATION)
+    matrix_client = MatrixClient(storage)
+
+    await matrix_client.login()
+
+    if conf.MODE == "verify":
+        await verify(matrix_client)
+        return
+
+    utils.CLIENT = matrix_client
+
+    print("Running")
 
     server = web.Server(handler.matrix_webhook)
     runner = web.ServerRunner(server)
@@ -35,7 +45,7 @@ async def main(event):
 
     # Cleanup
     await runner.cleanup()
-    await utils.CLIENT.close()
+    await matrix_client.close()
 
 
 def terminate(event, signal):

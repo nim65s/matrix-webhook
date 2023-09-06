@@ -4,6 +4,9 @@ import os
 
 parser = argparse.ArgumentParser(description=__doc__, prog="python -m matrix_webhook")
 parser.add_argument(
+    "-m", "--mode", help="set the run mode", default="run", choices=["run", "verify"]
+)
+parser.add_argument(
     "-H",
     "--host",
     default=os.environ.get("HOST", ""),
@@ -33,22 +36,13 @@ parser.add_argument(
         else {"required": True}
     ),
 )
-auth = parser.add_mutually_exclusive_group(
-    required=all(v not in os.environ for v in ["MATRIX_PW", "MATRIX_TOKEN"]),
-)
-auth.add_argument(
+parser.add_argument(
     "-p",
     "--matrix-pw",
     help="matrix password. Either this or token required. "
     "Environment variable: `MATRIX_PW`",
     **({"default": os.environ["MATRIX_PW"]} if "MATRIX_PW" in os.environ else {}),
-)
-auth.add_argument(
-    "-t",
-    "--matrix-token",
-    help="matrix access token. Either this or password required. "
-    "Environment variable: `MATRIX_TOKEN`",
-    **({"default": os.environ["MATRIX_TOKEN"]} if "MATRIX_TOKEN" in os.environ else {}),
+    required=True,
 )
 parser.add_argument(
     "-k",
@@ -61,6 +55,24 @@ parser.add_argument(
     ),
 )
 parser.add_argument(
+    "-s",
+    "--storage",
+    help="path to the storage location used for session storage.",
+    default="./storage",
+)
+parser.add_argument(
+    "-kp",
+    "--key-password",
+    help="password for the e2e encryption keys.",
+)
+parser.add_argument(
+    "-e",
+    "--encryption",
+    help="Enable e2e encryption",
+    action=argparse.BooleanOptionalAction,
+    default=False,
+)
+parser.add_argument(
     "-v",
     "--verbose",
     action="count",
@@ -70,10 +82,13 @@ parser.add_argument(
 
 args = parser.parse_args()
 
+MODE = args.mode
 SERVER_ADDRESS = (args.host, args.port)
 MATRIX_URL = args.matrix_url
 MATRIX_ID = args.matrix_id
 MATRIX_PW = args.matrix_pw
-MATRIX_TOKEN = args.matrix_token
 API_KEY = args.api_key
+STORAGE_LOCATION = args.storage
+KEY_PASSWORD = args.key_password
+E2E = args.encryption
 VERBOSE = args.verbose
