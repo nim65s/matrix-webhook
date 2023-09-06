@@ -1,6 +1,6 @@
 import json
 from dataclasses import dataclass
-from os import path, makedirs
+from os import makedirs, path
 
 
 @dataclass
@@ -12,9 +12,8 @@ class MatrixData:
 
 
 class DataStorage:
-
     def __init__(self, location):
-        """Constructor"""
+        """Constructor."""
         self.session_folder = location
 
         self.filename = self.session_folder + "/data.json"
@@ -31,7 +30,7 @@ class DataStorage:
         return self.session_folder
 
     def write_account_data(self, data: MatrixData):
-        """Save the matrix data """
+        """Save the matrix data."""
         data._file_exists = True
         data_text = json.dumps(data.__dict__)
 
@@ -45,7 +44,12 @@ class DataStorage:
         if not self.exists():
             return MatrixData("", "", False)
 
-        with open(self.filename, "r") as file:
+        with open(self.filename) as file:
             parsed_json = json.load(file)
 
-            return MatrixData(access_token=parsed_json["access_token"], device_id=parsed_json["device_id"], encryption=parsed_json["encryption"], _file_exists=True)
+            return MatrixData(
+                access_token=parsed_json["access_token"],
+                device_id=parsed_json["device_id"],
+                encryption=parsed_json["encryption"],
+                _file_exists=True,
+            )

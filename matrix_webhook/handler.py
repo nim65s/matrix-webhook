@@ -5,11 +5,10 @@ import logging
 from hmac import HMAC
 from http import HTTPStatus
 
-from markdown import markdown
-
 import conf
 import formatters
 import utils
+from markdown import markdown
 
 LOGGER = logging.getLogger("matrix_webhook.handler")
 

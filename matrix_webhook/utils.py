@@ -5,9 +5,8 @@ from collections import defaultdict
 from http import HTTPStatus
 
 from aiohttp import web
-from nio.exceptions import LocalProtocolError
-
 from matrix import MatrixClient, MatrixException
+from nio.exceptions import LocalProtocolError
 
 ERROR_MAP = defaultdict(
     lambda: HTTPStatus.INTERNAL_SERVER_ERROR,
@@ -27,6 +26,7 @@ def error_map(resp):
         # ref. https://matrix.org/docs/spec/client_server/r0.6.1#api-standards
         return resp.transport_response.status
     return ERROR_MAP[resp.status_code]
+
 
 def create_json_response(status, ret):
     """Create a JSON response."""

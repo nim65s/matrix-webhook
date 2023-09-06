@@ -3,7 +3,9 @@ import argparse
 import os
 
 parser = argparse.ArgumentParser(description=__doc__, prog="python -m matrix_webhook")
-parser.add_argument("-m", "--mode", help="set the run mode", default="run", choices=["run", "verify"])
+parser.add_argument(
+    "-m", "--mode", help="set the run mode", default="run", choices=["run", "verify"]
+)
 parser.add_argument(
     "-H",
     "--host",
@@ -40,7 +42,7 @@ parser.add_argument(
     help="matrix password. Either this or token required. "
     "Environment variable: `MATRIX_PW`",
     **({"default": os.environ["MATRIX_PW"]} if "MATRIX_PW" in os.environ else {}),
-    required=True
+    required=True,
 )
 parser.add_argument(
     "-k",
@@ -56,19 +58,19 @@ parser.add_argument(
     "-s",
     "--storage",
     help="path to the storage location used for session storage.",
-    default="./storage"
+    default="./storage",
 )
 parser.add_argument(
     "-kp",
     "--key-password",
-    help="password for the e2e encryption keys."
+    help="password for the e2e encryption keys.",
 )
 parser.add_argument(
     "-e",
     "--encryption",
     help="Enable e2e encryption",
     action=argparse.BooleanOptionalAction,
-    default=False
+    default=False,
 )
 parser.add_argument(
     "-v",

@@ -4,14 +4,13 @@ import asyncio
 import logging
 from signal import SIGINT, SIGTERM
 
-from aiohttp import web
-
 import conf
 import handler
 import utils
-from verify import verify
-from storage import DataStorage
+from aiohttp import web
 from matrix import MatrixClient
+from storage import DataStorage
+from verify import verify
 
 LOGGER = logging.getLogger("matrix_webhook.app")
 
@@ -21,7 +20,6 @@ async def main(event):
 
     matrix client login & start web server
     """
-
     storage = DataStorage(conf.STORAGE_LOCATION)
     matrix_client = MatrixClient(storage)
 
