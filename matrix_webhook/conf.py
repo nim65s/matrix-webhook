@@ -34,22 +34,13 @@ parser.add_argument(
         else {"required": True}
     ),
 )
-auth = parser.add_mutually_exclusive_group(
-    required=all(v not in os.environ for v in ["MATRIX_PW", "MATRIX_TOKEN"]),
-)
-auth.add_argument(
+parser.add_argument(
     "-p",
     "--matrix-pw",
     help="matrix password. Either this or token required. "
     "Environment variable: `MATRIX_PW`",
     **({"default": os.environ["MATRIX_PW"]} if "MATRIX_PW" in os.environ else {}),
-)
-auth.add_argument(
-    "-t",
-    "--matrix-token",
-    help="matrix access token. Either this or password required. "
-    "Environment variable: `MATRIX_TOKEN`",
-    **({"default": os.environ["MATRIX_TOKEN"]} if "MATRIX_TOKEN" in os.environ else {}),
+    required=True
 )
 parser.add_argument(
     "-k",
@@ -94,7 +85,6 @@ SERVER_ADDRESS = (args.host, args.port)
 MATRIX_URL = args.matrix_url
 MATRIX_ID = args.matrix_id
 MATRIX_PW = args.matrix_pw
-MATRIX_TOKEN = args.matrix_token
 API_KEY = args.api_key
 STORAGE_LOCATION = args.storage
 KEY_PASSWORD = args.key_password
