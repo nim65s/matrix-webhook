@@ -10,6 +10,12 @@ parser.add_argument(
     help="host to listen to. Default: `''`. Environment variable: `HOST`",
 )
 parser.add_argument(
+    "-U",
+    "--path",
+    default=os.environ.get("PATH", ""),
+    help="unix path to listen to. Default: `''`. Environment variable: `PATH`",
+)
+parser.add_argument(
     "-P",
     "--port",
     type=int,
@@ -71,6 +77,7 @@ parser.add_argument(
 args = parser.parse_args()
 
 SERVER_ADDRESS = (args.host, args.port)
+SERVER_PATH = args.path
 MATRIX_URL = args.matrix_url
 MATRIX_ID = args.matrix_id
 MATRIX_PW = args.matrix_pw

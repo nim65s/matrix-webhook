@@ -2,6 +2,7 @@
 
 import asyncio
 import logging
+import os
 from signal import SIGINT, SIGTERM
 
 from aiohttp import web
@@ -27,8 +28,14 @@ async def main(event):
     runner = web.ServerRunner(server)
     await runner.setup()
     LOGGER.info(f"Binding on {conf.SERVER_ADDRESS=}")
-    site = web.TCPSite(runner, *conf.SERVER_ADDRESS)
+    if conf.SERVER_PATH:
+        site = web.UnixSite(runner, conf.SERVER_PATH)
+    else:
+        site = web.TCPSite(runner, *conf.SERVER_ADDRESS)
     await site.start()
+
+    if conf.SERVER_PATH:
+        os.chmod(conf.SERVER_PATH, 0o774)
 
     # Run until we get a shutdown request
     await event.wait()
