@@ -2,8 +2,8 @@
 
 import asyncio
 import logging
-from signal import SIGINT, SIGTERM
 from pathlib import Path
+from signal import SIGINT, SIGTERM
 
 from aiohttp import web
 
