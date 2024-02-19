@@ -2,8 +2,8 @@
 
 import asyncio
 import logging
-import os
 from signal import SIGINT, SIGTERM
+from pathlib import Path
 
 from aiohttp import web
 
@@ -35,7 +35,7 @@ async def main(event):
     await site.start()
 
     if conf.SERVER_PATH:
-        os.chmod(conf.SERVER_PATH, 0o774)
+        Path.chmod(conf.SERVER_PATH, 0o664)
 
     # Run until we get a shutdown request
     await event.wait()

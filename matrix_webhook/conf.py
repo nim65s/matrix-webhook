@@ -10,10 +10,10 @@ parser.add_argument(
     help="host to listen to. Default: `''`. Environment variable: `HOST`",
 )
 parser.add_argument(
-    "-U",
-    "--path",
-    default=os.environ.get("PATH", ""),
-    help="unix path to listen to. Default: `''`. Environment variable: `PATH`",
+    "-S",
+    "--server-path",
+    default=os.environ.get("SERVER_PATH", ""),
+    help="unix path to listen to. Default: `''`. Environment variable: `SERVER_PATH`",
 )
 parser.add_argument(
     "-P",
