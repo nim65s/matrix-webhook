@@ -1,4 +1,5 @@
 """Matrix Webhook module entrypoint."""
+
 import logging
 
 from . import app, conf

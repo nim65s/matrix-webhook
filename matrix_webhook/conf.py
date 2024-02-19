@@ -1,4 +1,5 @@
 """Configuration for Matrix Webhook."""
+
 import argparse
 import os
 
