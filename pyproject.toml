@@ -16,18 +16,18 @@ repository = "https://github.com/nim65s/matrix-webhook.git"
 version = "3.8.0"
 
 [tool.poetry.dependencies]
-Markdown = "^3.3.4"
-matrix-nio = ">=0.18.3,<0.22.0"
+Markdown = "^3.5.2"
+matrix-nio = "^0.24"
 python = "^3.8"
 
 [tool.poetry.group.dev]
 optional = true
 
 [tool.poetry.group.dev.dependencies]
-coverage = ">=6.4.4,<8.0.0"
-httpx = ">=0.23,<0.25"
+coverage = "^7.4.1"
+httpx = "^0.26"
 ruff = "^0.2"
-safety = {allow-prereleases = true, version = "^2.4.0b1"}
+safety = {allow-prereleases = true, version = "^3.0.1"}
 
 [tool.poetry.scripts]
 matrix-webhook = "matrix_webhook.__main__:main"
