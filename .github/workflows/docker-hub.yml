@@ -16,7 +16,7 @@ jobs:
         id: meta
         with:
           images: nim65s/matrix-webhook
-      - uses: docker/setup-qemu-action@v2
+      - uses: docker/setup-qemu-action@v3
         name: Set up QEMU
       - uses: docker/setup-buildx-action@v2
         name: Set up Docker Buildx
