@@ -18,16 +18,19 @@ async def main(event):
     matrix client login & start web server
     """
     if conf.MATRIX_PW:
-        LOGGER.info(f"Log in {conf.MATRIX_ID=} on {conf.MATRIX_URL=}")
+        msg = f"Log in {conf.MATRIX_ID=} on {conf.MATRIX_URL=}"
+        LOGGER.info(msg)
         await utils.CLIENT.login(conf.MATRIX_PW)
     else:
-        LOGGER.info(f"Restoring log in {conf.MATRIX_ID=} on {conf.MATRIX_URL=}")
+        msg = f"Restoring log in {conf.MATRIX_ID=} on {conf.MATRIX_URL=}"
+        LOGGER.info(msg)
         utils.CLIENT.access_token = conf.MATRIX_TOKEN
 
     server = web.Server(handler.matrix_webhook)
     runner = web.ServerRunner(server)
     await runner.setup()
-    LOGGER.info(f"Binding on {conf.SERVER_ADDRESS=}")
+    msg = f"Binding on {conf.SERVER_ADDRESS=}"
+    LOGGER.info(msg)
     if conf.SERVER_PATH:
         site = web.UnixSite(runner, conf.SERVER_PATH)
     else:

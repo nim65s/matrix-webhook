@@ -17,7 +17,8 @@ async def matrix_webhook(request):
 
     This one handles a POST, checks its content, and forwards it to the matrix room.
     """
-    LOGGER.debug(f"Handling {request=}")
+    msg = f"Handling {request=}"
+    LOGGER.debug(msg)
 
     # healthcheck
     if request.rel_url.path == "/health":

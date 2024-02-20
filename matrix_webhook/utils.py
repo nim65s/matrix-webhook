@@ -33,14 +33,16 @@ def error_map(resp):
 
 def create_json_response(status, ret):
     """Create a JSON response."""
-    LOGGER.debug(f"Creating json response: {status=}, {ret=}")
+    msg = f"Creating json response: {status=}, {ret=}"
+    LOGGER.debug(msg)
     response_data = {"status": status, "ret": ret}
     return web.json_response(response_data, status=status)
 
 
 async def join_room(room_id):
     """Try to join the room."""
-    LOGGER.debug(f"Join room {room_id=}")
+    msg = f"Join room {room_id=}"
+    LOGGER.debug(msg)
 
     for _ in range(10):
         try:
@@ -55,14 +57,16 @@ async def join_room(room_id):
             else:
                 return None
         except LocalProtocolError as e:
-            LOGGER.error(f"Send error: {e}")
+            msg = f"Send error: {e}"
+            LOGGER.error(msg)
         LOGGER.warning("Trying again")
     return create_json_response(HTTPStatus.GATEWAY_TIMEOUT, "Homeserver not responding")
 
 
 async def send_room_message(room_id, content):
     """Send a message to a room."""
-    LOGGER.debug(f"Sending room message in {room_id=}: {content=}")
+    msg = f"Sending room message in {room_id=}: {content=}"
+    LOGGER.debug(msg)
 
     for _ in range(10):
         try:
@@ -81,6 +85,7 @@ async def send_room_message(room_id, content):
             else:
                 return create_json_response(HTTPStatus.OK, "OK")
         except LocalProtocolError as e:
-            LOGGER.error(f"Send error: {e}")
+            msg = f"Send error: {e}"
+            LOGGER.error(msg)
         LOGGER.warning("Trying again")
     return create_json_response(HTTPStatus.GATEWAY_TIMEOUT, "Homeserver not responding")
