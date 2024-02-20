@@ -77,7 +77,7 @@ parser.add_argument(
 args = parser.parse_args()
 
 SERVER_ADDRESS = (args.host, args.port)
-SERVER_PATH = args.path
+SERVER_PATH = args.server_path
 MATRIX_URL = args.matrix_url
 MATRIX_ID = args.matrix_id
 MATRIX_PW = args.matrix_pw
