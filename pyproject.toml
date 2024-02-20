@@ -36,9 +36,11 @@ matrix-webhook = "matrix_webhook.__main__:main"
 "changelog" = "https://github.com/nim65s/matrix-webhook/blob/master/CHANGELOG.md"
 
 [tool.ruff]
+target-version = "py38"
+
+[tool.ruff.lint]
 extend-ignore = ["D203", "D213"]
 extend-select = ["A", "B", "COM", "D", "EM", "EXE", "G", "I", "N", "PTH", "RET", "RUF", "UP", "W", "YTT"]
-target-version = "py38"
 
 [tool.tomlsort]
 all = true
