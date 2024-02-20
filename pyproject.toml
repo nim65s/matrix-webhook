@@ -24,11 +24,9 @@ python = "^3.8"
 optional = true
 
 [tool.poetry.group.dev.dependencies]
-black = "^23.1.0"
 coverage = ">=6.4.4,<8.0.0"
 httpx = ">=0.23,<0.25"
-isort = "^5.12.0"
-ruff = ">=0.0.254,<0.0.282"
+ruff = "^0.2"
 safety = {allow-prereleases = true, version = "^2.4.0b1"}
 
 [tool.poetry.scripts]
@@ -39,7 +37,7 @@ matrix-webhook = "matrix_webhook.__main__:main"
 
 [tool.ruff]
 extend-ignore = ["D203", "D213"]
-extend-select = ["A", "B", "COM", "D", "EM", "EXE", "G", "N", "PTH", "RET", "RUF", "UP", "W", "YTT"]
+extend-select = ["A", "B", "COM", "D", "EM", "EXE", "G", "I", "N", "PTH", "RET", "RUF", "UP", "W", "YTT"]
 target-version = "py38"
 
 [tool.tomlsort]

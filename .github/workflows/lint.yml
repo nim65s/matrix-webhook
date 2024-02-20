@@ -11,7 +11,7 @@ jobs:
           python-version: '3.10'
           cache: poetry
       - run: poetry install --with dev --no-interaction
-      - run: poetry run black .
-      - run: poetry run ruff .
+      - run: poetry run ruff format .
+      - run: poetry run ruff check .
       - run: poetry run safety check
       - run: poetry run poetry check
