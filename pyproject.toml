@@ -26,7 +26,7 @@ optional = true
 [tool.poetry.group.dev.dependencies]
 coverage = "^7.4.2"
 httpx = "^0.26"
-ruff = "^0.2"
+ruff = ">=0.2,<0.4"
 safety = {allow-prereleases = true, version = "^3.0.1"}
 
 [tool.poetry.scripts]
