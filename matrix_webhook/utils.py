@@ -59,6 +59,9 @@ async def join_room(room_id):
         except LocalProtocolError as e:
             msg = f"Send error: {e}"
             LOGGER.error(msg)
+            LOGGER.warning("Reconnecting")
+            if conf.MATRIX_PW:
+                await CLIENT.login(conf.MATRIX_PW)
         LOGGER.warning("Trying again")
     return create_json_response(HTTPStatus.GATEWAY_TIMEOUT, "Homeserver not responding")
 
