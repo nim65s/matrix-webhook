@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - replace black & isort by ruff
 - update dependencies
 - try to reconnect on LocalProtocolError
+- add mwe gitlab webhook formatter. Intergrations are better for now
 
 ## [v3.8.0] - 2023-04-08
 
