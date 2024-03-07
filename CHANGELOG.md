@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   by [@timo-schluessler](https://github.com/timo-schluessler)
 - replace black & isort by ruff
 - update dependencies
+- try to reconnect on LocalProtocolError
 
 ## [v3.8.0] - 2023-04-08
 
