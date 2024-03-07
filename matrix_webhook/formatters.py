@@ -78,6 +78,26 @@ def gitlab_teams(data, headers):
     return data
 
 
+def gitlab_webhook(data, headers):
+    """Pretty-print a gitlab notification.
+
+    NB: This is a work-in-progress minimal example for now
+    """
+    body = []
+
+    event_name = data["event_name"]
+    user_name = data["user_name"]
+    project = data["project"]
+
+    body.append(f"New {event_name} event")
+    body.append(f"on [{project['name']}]({project['web_url']})")
+    body.append(f"by {user_name}.")
+
+    data["body"] = " ".join(body)
+    data["key"] = headers["X-Gitlab-Token"]
+    return data
+
+
 def grn(data, headers):
     """Pretty-print a github release notifier (grn) notification."""
     version, title, author, package = (
