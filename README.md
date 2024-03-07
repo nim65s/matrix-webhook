@@ -111,7 +111,7 @@ Add a webhook with an URL ending with `?formatter=grafana&key=API_KEY`
 
 ### For Gitlab
 
-At a group level, Gitlab does not permit to setup webhooks. A workaround consists to use Google
+At the group level, Gitlab does not permit to setup webhooks. A workaround consists to use Google
 Chat or Microsoft Teams notification integration with a custom URL (Gitlab does not check if the url begins with the normal url of the service).
 
 #### Google Chat
@@ -122,7 +122,12 @@ Add a Google Chat integration with an URL ending with `?formatter=gitlab_gchat&k
 
 Add a Microsoft Teams integration with an URL ending with `?formatter=gitlab_teams&key=API_KEY`
 
-#### Github Release Notifier
+#### Gitlab Webhook
+
+At the project level, you can add a webhook with an URL ending with `?formatter=gitlab_webhook` and put your `API_KEY`
+as secret token
+
+### Github Release Notifier
 
 To receiver notifications about new releases of projects hosted at github.com you can add a matrix webhook ending with `?formatter=grn&key=API_KEY` to [Github Release Notifier (grn)](https://github.com/femtopixel/github-release-notifier).
 
