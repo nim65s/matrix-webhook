@@ -94,7 +94,8 @@ def gitlab_webhook(data, headers):
     body.append(f"by {user_name}.")
 
     data["body"] = " ".join(body)
-    data["key"] = headers["X-Gitlab-Token"]
+    if "X-Gitlab-Token" in headers:
+        data["key"] = headers["X-Gitlab-Token"]
     return data
 
 
