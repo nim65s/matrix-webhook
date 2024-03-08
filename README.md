@@ -32,6 +32,8 @@ matrix-webhook -h
 # OR
 python -m matrix_webhook -h
 # OR
+poetry run matrix-webhook -h
+# OR
 docker run --rm -it nim65s/matrix-webhook -h
 ```
 
