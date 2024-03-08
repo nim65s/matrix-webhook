@@ -38,7 +38,7 @@ async def main(event):
     await site.start()
 
     if conf.SERVER_PATH:
-        Path.chmod(conf.SERVER_PATH, 0o664)
+        Path(conf.SERVER_PATH).chmod(0o664)
 
     # Run until we get a shutdown request
     await event.wait()
