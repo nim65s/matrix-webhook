@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   by [@timo-schluessler](https://github.com/timo-schluessler)
 - try to reconnect on LocalProtocolError
   in [#135](https://github.com/nim65s/matrix-webhook/pull/135)
+- flakify
+  in [#136](https://github.com/nim65s/matrix-webhook/pull/136)
 - add mwe gitlab webhook formatter. Intergrations are better for now
 - replace black & isort by ruff
 - update dependencies
