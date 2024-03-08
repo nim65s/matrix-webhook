@@ -20,7 +20,7 @@
           with pkgs.python3Packages;
           buildPythonApplication {
             pname = "matrix-webhook";
-            version = "3.9.0";
+            version = "3.9.1";
             src = pkgs.nix-gitignore.gitignoreSource [ ./.nixignore ] ./.;
             pyproject = true;
             buildInputs = [ poetry-core ];
