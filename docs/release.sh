@@ -16,7 +16,7 @@ sed -i "/^\[Unreleased\]/s/$OLD/$NEW/" CHANGELOG.md
 sed -i "/^\[Unreleased\]/a [v$NEW]: https://github.com/nim65s/matrix-webhook/compare/v$OLD...v$NEW" CHANGELOG.md
 sed -i "/version/s/$OLD/$NEW/" flake.nix
 
-git add pyproject.toml CHANGELOG.md
+git add pyproject.toml CHANGELOG.md flake.nix
 git commit -m "Release v$NEW"
 git tag -s "v$NEW" -m "Release v$NEW"
 git push
