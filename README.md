@@ -127,7 +127,7 @@ Add a Microsoft Teams integration with an URL ending with `?formatter=gitlab_tea
 #### Gitlab Webhook
 
 At the project level, you can add a webhook with an URL ending with `?formatter=gitlab_webhook` and put your `API_KEY`
-as secret token
+as secret token. Not yet as pretty as other formatters, contributions welcome !
 
 ### Github Release Notifier
 
