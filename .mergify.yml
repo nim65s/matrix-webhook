@@ -1,0 +1,15 @@
+pull_request_rules:
+  - name: merge automatically when CI passes and PR is approved
+    conditions:
+      - check-success = lint
+      - check-success = Nix build on ubuntu
+      - check-success = Nix build on macos
+      - check-success = tests
+      - check-success = test-entrypoints
+      - or:
+        - approved-reviews-by = nim65s
+        - author = nim65s
+        - author = pre-commit-ci[bot]
+        - author = dependabot[bot]
+    actions:
+      merge:
