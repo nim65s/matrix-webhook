@@ -13,8 +13,8 @@ repository = "https://github.com/nim65s/matrix-webhook.git"
 version = "3.9.1"
 
 [tool.poetry.dependencies]
-Markdown = "^3.7"
-matrix-nio = "^0.24"
+Markdown = "^3.6"
+matrix-nio = "^0.25"
 python = "^3.8"
 
 [tool.poetry.group.dev]
