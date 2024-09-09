@@ -5,5 +5,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: docker-compose -f test.yml up --exit-code-from tests
+      - run: docker compose -f test.yml up --exit-code-from tests
       - uses: codecov/codecov-action@v4
