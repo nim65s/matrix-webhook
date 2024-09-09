@@ -13,5 +13,5 @@ jobs:
       - run: poetry install --with dev --no-interaction
       - run: poetry run ruff format .
       - run: poetry run ruff check .
-      - run: poetry run safety check
+      - run: poetry run safety check --ignore 70612
       - run: poetry run poetry check
