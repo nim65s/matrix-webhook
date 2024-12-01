@@ -6,4 +6,4 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: docker compose -f test.yml up --exit-code-from tests
-      - uses: codecov/codecov-action@v4
+      - uses: codecov/codecov-action@v5
