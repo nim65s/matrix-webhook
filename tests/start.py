@@ -17,7 +17,7 @@ BOT_URL = "http://localhost:4785"
 KEY, MATRIX_URL, MATRIX_ID, MATRIX_PW = (
     environ[v] for v in ["API_KEY", "MATRIX_URL", "MATRIX_ID", "MATRIX_PW"]
 )
-FULL_ID = f'@{MATRIX_ID}:{MATRIX_URL.split("/")[2]}'
+FULL_ID = f"@{MATRIX_ID}:{MATRIX_URL.split('/')[2]}"
 LOGGER = logging.getLogger("matrix-webhook.tests.start")
 
 parser = argparse.ArgumentParser(description=__doc__)
