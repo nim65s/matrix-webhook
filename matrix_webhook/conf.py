@@ -71,7 +71,7 @@ parser.add_argument(
     "-v",
     "--verbose",
     action="count",
-    default=os.environ.get("VERBOSITY", 0),
+    default=int(os.environ.get("VERBOSITY", 0)),
     help="increment verbosity level",
 )
 
