@@ -72,4 +72,3 @@ rc_room_creation:
 rc_user_directory:
   per_second: 1000
   burst_count: 1000
-
