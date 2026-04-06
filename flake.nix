@@ -39,7 +39,6 @@
             poetry
             python3Packages.coverage
             python3Packages.httpx
-            python3Packages.safety
           ];
         };
       }
