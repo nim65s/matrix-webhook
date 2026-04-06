@@ -1,0 +1,74 @@
+
+rc_message:
+  per_second: 1000
+  burst_count: 1000
+rc_registration:
+  per_second: 1000
+  burst_count: 1000
+rc_registration_token_validity:
+  per_second: 1000
+  burst_count: 1000
+rc_login:
+  address:
+    per_second: 1000
+    burst_count: 1000
+  account:
+    per_second: 1000
+    burst_count: 1000
+  failed_attempts:
+    per_second: 1000
+    burst_count: 1000
+rc_admin_redaction:
+  per_second: 1000
+  burst_count: 1000
+rc_joins:
+  local:
+    per_second: 1000
+    burst_count: 1000
+  remote:
+    per_second: 1000
+    burst_count: 1000
+rc_joins_per_room:
+  per_second: 1000
+  burst_count: 1000
+rc_3pid_validation:
+  per_second: 1000
+  burst_count: 1000
+rc_invites:
+  per_room:
+    per_second: 1000
+    burst_count: 1000
+  per_user:
+    per_second: 1000
+    burst_count: 1000
+  per_issuer:
+    per_second: 1000
+    burst_count: 1000
+rc_third_party_invite:
+  per_second: 1000
+  burst_count: 1000
+rc_media_create:
+  per_second: 1000
+  burst_count: 1000
+rc_federation:
+  window_size: 1000
+  sleep_limit: 1000
+  sleep_delay: 1000
+  reject_limit: 1000
+  concurrent: 1000
+rc_presence:
+  per_user:
+    per_second: 1000
+    burst_count: 1000
+rc_delayed_event_mgmt:
+  per_second: 1000
+  burst_count: 1000
+rc_reports:
+  per_second: 1000
+  burst_count: 1000
+rc_room_creation:
+  per_second: 1000
+  burst_count: 1000
+rc_user_directory:
+  per_second: 1000
+  burst_count: 1000
