@@ -142,5 +142,5 @@ To receiver notifications about new releases of projects hosted at github.com yo
 ## Unit tests
 
 ```
-docker-compose -f test.yml up --exit-code-from tests --force-recreate --build
+docker compose -f test.yml up --exit-code-from tests --force-recreate --build
 ```
