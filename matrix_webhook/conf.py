@@ -74,6 +74,12 @@ parser.add_argument(
     default=int(os.environ.get("VERBOSITY", 0)),
     help="increment verbosity level",
 )
+parser.add_argument(
+    "--proxy",
+    default=os.environ.get("PROXY", None),
+    help="The proxy that should be used for the HTTP connection. Environment variable: `PROXY`",
+)
+
 
 args = parser.parse_args()
 
@@ -85,3 +91,4 @@ MATRIX_PW = args.matrix_pw
 MATRIX_TOKEN = args.matrix_token
 API_KEY = args.api_key
 VERBOSE = args.verbose
+PROXY = args.proxy

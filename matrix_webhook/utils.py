@@ -19,7 +19,7 @@ ERROR_MAP = defaultdict(
     },
 )
 LOGGER = logging.getLogger("matrix_webhook.utils")
-CLIENT = AsyncClient(conf.MATRIX_URL, conf.MATRIX_ID)
+CLIENT = AsyncClient(conf.MATRIX_URL, conf.MATRIX_ID, proxy=conf.PROXY)
 
 
 def error_map(resp):

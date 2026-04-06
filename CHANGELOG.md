@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - allow configuration of verbosity through environment variable `VERBOSITY`
   in [#169](https://github.com/nim65s/matrix-webhook/pull/169)
   by [@nim65s](https://github.com/nim65s)
+- allow configuration of HTTP proxy
+  in [#169](https://github.com/nim65s/matrix-webhook/pull/243)
+  by [@nim65s](https://github.com/nim65s)
 - setup mergify
 
 ## [v3.9.1] - 2024-03-09
