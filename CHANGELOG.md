@@ -13,6 +13,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   in [#169](https://github.com/nim65s/matrix-webhook/pull/243)
   by [@nim65s](https://github.com/nim65s)
 - setup mergify
+- captioned image support: markdown image links pointing to http(s) URLs in
+  the body (`![alt](https://...)`) cause the bot to fetch the URL, upload
+  to the homeserver media repo, and emit a single `m.image` event with the
+  remaining body as caption and a `filename` field per MSC4193. Bodies
+  without image links continue to send as `m.text`. Failed uploads fall
+  back to `m.text` with the original body unchanged, with a warning logged.
 
 ## [v3.9.1] - 2024-03-09
 

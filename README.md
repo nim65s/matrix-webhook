@@ -105,6 +105,28 @@ curl -d '{"body":"new contrib from toto: [44](http://radio.localhost/map/#44)", 
 
 (or localhost:4785 without docker)
 
+### Captioned images
+
+When the body contains a markdown image link with an http(s) URL
+(`![alt](https://...)`), the bot fetches the URL, uploads the bytes to
+the homeserver media repo, and sends a single `m.image` event whose
+`url` is the resulting `mxc://` URI. The rest of the body — with all
+markdown image links stripped — becomes the caption (`body` and
+`formatted_body`), and the original URL's basename is preserved in the
+`filename` field so [MSC4193](https://github.com/matrix-org/matrix-spec-proposals/pull/4193)-aware
+clients render the image with a caption rather than treating `body` as
+the file name.
+
+```
+curl -d '{"body":"**Title**\n\n![poster](https://example.com/poster.png)\n\nDescription text.", "key":"secret"}' \
+  'http://matrixwebhook.localhost/!DPrUlnwOhBEfYwsDLh:matrix.org'
+```
+
+Bodies with no image links continue to send as `m.text` events
+unchanged. If the fetch or upload fails, the original body — including
+the markdown image markup — is sent as `m.text` and a warning is
+logged, so a flaky upstream CDN never drops a message.
+
 ### For Github
 
 Add a JSON webhook with `?formatter=github`, and put the `API_KEY` as secret
