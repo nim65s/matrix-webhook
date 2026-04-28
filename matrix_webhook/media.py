@@ -16,6 +16,32 @@ LOGGER = logging.getLogger("matrix_webhook.media")
 
 # Markdown image syntax with an http(s) URL: ``![alt](url)``.
 _MD_IMG_RE = re.compile(r"!\[([^\]]*)\]\((https?://[^)\s]+)\)")
+# Permissive markdown image regex (any URL contents, including empty).
+_MD_ANY_IMG_RE = re.compile(r"!\[([^\]]*)\]\(([^)]*)\)")
+
+
+def strip_orphan_image_links(body):
+    """Drop markdown image refs whose URL is empty or not http(s).
+
+    Templating engines on the sender side (e.g. Jellyseerr's
+    ``{{image}}``) can produce ``![alt]()`` for events with no
+    associated media, which the markdown renderer would emit as a
+    broken ``<img>`` tag. http(s) refs are preserved so the
+    upload-failure fallback path still shows the user the URL.
+    """
+
+    def _decide(match):
+        url = (match.group(2) or "").strip()
+        if url.startswith(("http://", "https://")):
+            return match.group(0)
+        return ""
+
+    out = _MD_ANY_IMG_RE.sub(_decide, body)
+    if out == body:
+        # Nothing stripped; return as-is to preserve whitespace that
+        # other paths (e.g. formatter outputs) may rely on.
+        return body
+    return re.sub(r"\n{3,}", "\n\n", out).strip()
 
 
 async def upload_from_url(url):

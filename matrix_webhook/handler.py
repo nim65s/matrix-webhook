@@ -97,6 +97,10 @@ async def matrix_webhook(request):
         body = str(data["body"])
         content = await media.captioned_image_or_text(body)
         if content is None:
+            # Drop empty / non-http markdown image refs so they don't render
+            # as broken <img> tags. http(s) refs are preserved (so an
+            # upload-failure URL stays visible).
+            body = media.strip_orphan_image_links(body)
             content = {
                 "msgtype": "m.text",
                 "body": body,

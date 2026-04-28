@@ -185,3 +185,29 @@ class CaptionedImageTest(unittest.IsolatedAsyncioTestCase):
         # No m.image event sent
         for event in messages.chunk:
             self.assertNotIsInstance(event, nio.RoomMessageImage)
+
+    async def test_orphan_empty_image_link_stripped(self):
+        """Empty `![alt]()` is stripped from m.text fallback so it doesn't render as a broken img."""
+        body = "**Title**\n\n![poster]()\n\nDescription text."
+        client = nio.AsyncClient(MATRIX_URL, MATRIX_ID)
+
+        await client.login(MATRIX_PW)
+        room = await client.room_create()
+
+        self.assertEqual(
+            httpx.post(
+                f"{BOT_URL}/{room.room_id}",
+                json={"body": body, "key": KEY},
+            ).json(),
+            {"status": 200, "ret": "OK"},
+        )
+
+        sync = await client.sync()
+        messages = await client.room_messages(room.room_id, sync.next_batch)
+        await client.close()
+
+        msg = messages.chunk[0]
+        self.assertIsInstance(msg, nio.RoomMessageText)
+        self.assertEqual(msg.body, "**Title**\n\nDescription text.")
+        self.assertNotIn("![poster]", msg.body)
+        self.assertNotIn("<img", msg.formatted_body)
