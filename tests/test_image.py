@@ -186,6 +186,33 @@ class CaptionedImageTest(unittest.IsolatedAsyncioTestCase):
         for event in messages.chunk:
             self.assertNotIsInstance(event, nio.RoomMessageImage)
 
+    async def test_unreachable_image_host_falls_back_to_text(self):
+        """An image URL whose host doesn't resolve must NOT crash the request."""
+        # Port closed on a non-existent hostname — produces a DNS or
+        # connection error (aiohttp.ClientError, not ValueError).
+        bad_url = "http://this-host-does-not-exist.invalid/poster.png"
+        body = f"caption text\n\n![poster]({bad_url})"
+        client = nio.AsyncClient(MATRIX_URL, MATRIX_ID)
+
+        await client.login(MATRIX_PW)
+        room = await client.room_create()
+
+        self.assertEqual(
+            httpx.post(
+                f"{BOT_URL}/{room.room_id}",
+                json={"body": body, "key": KEY},
+            ).json(),
+            {"status": 200, "ret": "OK"},
+        )
+
+        sync = await client.sync()
+        messages = await client.room_messages(room.room_id, sync.next_batch)
+        await client.close()
+
+        msg = messages.chunk[0]
+        self.assertIsInstance(msg, nio.RoomMessageText)
+        self.assertIn(bad_url, msg.body)
+
     async def test_orphan_empty_image_link_stripped(self):
         """Empty `![alt]()` is stripped from m.text fallback so it doesn't render as a broken img."""
         body = "**Title**\n\n![poster]()\n\nDescription text."

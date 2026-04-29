@@ -53,12 +53,22 @@ async def upload_from_url(url):
     msg = f"Fetching image from {url=}"
     LOGGER.debug(msg)
 
-    async with aiohttp.ClientSession() as session, session.get(url) as resp:
-        if resp.status != HTTPStatus.OK:
-            msg = f"Failed to fetch {url}: HTTP {resp.status}"
-            raise ValueError(msg)
-        content_type = resp.headers.get("Content-Type", "application/octet-stream")
-        image_bytes = await resp.read()
+    try:
+        async with aiohttp.ClientSession() as session, session.get(url) as resp:
+            if resp.status != HTTPStatus.OK:
+                msg = f"Failed to fetch {url}: HTTP {resp.status}"
+                raise ValueError(msg)
+            content_type = resp.headers.get(
+                "Content-Type",
+                "application/octet-stream",
+            )
+            image_bytes = await resp.read()
+    except aiohttp.ClientError as e:
+        # DNS resolution, connection refused, TLS failures, etc. Convert to
+        # ValueError so the caller's existing ``except ValueError`` branch
+        # treats them like any other fetch failure (fall back to m.text).
+        msg = f"Failed to fetch {url}: {e!r}"
+        raise ValueError(msg) from e
 
     filename = PurePosixPath(urlparse(url).path).name or "image"
 
