@@ -107,7 +107,7 @@ curl -d '{"body":"new contrib from toto: [44](http://radio.localhost/map/#44)", 
 
 ### Captioned images
 
-Supports sending images as messages by including an `image_url` field in the payload along with `body`. When `image_url` is detected in the payload, the message will be sent as an image type with the `body` field included as the image caption. 
+Supports sending images as messages by including an `image_url` field in the payload along with `body`. When `image_url` is detected in the payload, the message will be sent as an image type with the `body` field included as the image caption.
 
 Requests without `image_url` continue to send as `m.text` events.
 If the fetch or upload fails, `body` is sent as `m.text` and a warning is logged.
