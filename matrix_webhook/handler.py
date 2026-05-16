@@ -80,33 +80,20 @@ async def matrix_webhook(request):
     if data["key"] != conf.API_KEY:
         return utils.create_json_response(HTTPStatus.UNAUTHORIZED, "Invalid API key")
 
-    # If a `formatted_body` is supplied directly, the caller is taking full
-    # control of HTML rendering: pass through as `m.text` unchanged.
-    # Otherwise, look for markdown image links in `body`. The presence of
-    # any such link upgrades the event to `m.image` with the (stripped)
-    # body as caption, so MSC4193-aware clients render image-with-caption
-    # inline. The fallback for no images / failed upload is `m.text`.
-    if "formatted_body" in data:
+    body = str(data["body"])
+    formatted_body = data.get("formatted_body")
+    image_url = data.get("image_url")
+
+    content = None
+    if image_url:
+        content = await media.captioned_image(image_url, body, formatted_body)
+    if content is None:
         content = {
             "msgtype": "m.text",
-            "body": data["body"],
+            "body": body,
             "format": "org.matrix.custom.html",
-            "formatted_body": data["formatted_body"],
+            "formatted_body": formatted_body or markdown(body, extensions=["extra"]),
         }
-    else:
-        body = str(data["body"])
-        content = await media.captioned_image_or_text(body)
-        if content is None:
-            # Drop empty / non-http markdown image refs so they don't render
-            # as broken <img> tags. http(s) refs are preserved (so an
-            # upload-failure URL stays visible).
-            body = media.strip_orphan_image_links(body)
-            content = {
-                "msgtype": "m.text",
-                "body": body,
-                "format": "org.matrix.custom.html",
-                "formatted_body": markdown(body, extensions=["extra"]),
-            }
 
     # try to join room first -> non none response means error
     resp = await utils.join_room(data["room_id"])

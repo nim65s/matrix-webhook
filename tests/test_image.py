@@ -58,7 +58,7 @@ class _FixtureHandler(BaseHTTPRequestHandler):
 
 
 class CaptionedImageTest(unittest.IsolatedAsyncioTestCase):
-    """Verify markdown image links produce captioned ``m.image`` events."""
+    """Verify explicit ``image_url`` produces captioned ``m.image`` events."""
 
     @classmethod
     def setUpClass(cls):
@@ -75,8 +75,8 @@ class CaptionedImageTest(unittest.IsolatedAsyncioTestCase):
         cls.thread.join(timeout=2)
 
     async def test_image_with_caption(self):
-        """Body with a markdown image and surrounding text -> m.image with caption."""
-        body = f"**Title**\n\n![poster]({FIXTURE_URL})\n\nDescription text."
+        """Body + image_url -> m.image with body as caption."""
+        body = "**Title**\n\nDescription text."
         client = nio.AsyncClient(MATRIX_URL, MATRIX_ID)
 
         await client.login(MATRIX_PW)
@@ -85,7 +85,7 @@ class CaptionedImageTest(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(
             httpx.post(
                 f"{BOT_URL}/{room.room_id}",
-                json={"body": body, "key": KEY},
+                json={"body": body, "image_url": FIXTURE_URL, "key": KEY},
             ).json(),
             {"status": 200, "ret": "OK"},
         )
@@ -98,44 +98,15 @@ class CaptionedImageTest(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(msg.sender, FULL_ID)
         self.assertIsInstance(msg, nio.RoomMessageImage)
         self.assertTrue(msg.url.startswith("mxc://"))
-        # Caption: image markdown stripped, text preserved
-        self.assertEqual(msg.body, "**Title**\n\nDescription text.")
-        # filename field disambiguates body-as-caption (MSC4193)
+        self.assertEqual(msg.body, body)
         src = msg.source["content"]
         self.assertEqual(src["filename"], "poster.png")
         self.assertEqual(src["info"]["mimetype"], "image/png")
         self.assertEqual(src["info"]["size"], len(PNG_BYTES))
         self.assertIn("<strong>Title</strong>", src["formatted_body"])
 
-    async def test_image_only_no_caption(self):
-        """Body that is just a markdown image -> m.image with body=filename."""
-        body = f"![poster]({FIXTURE_URL})"
-        client = nio.AsyncClient(MATRIX_URL, MATRIX_ID)
-
-        await client.login(MATRIX_PW)
-        room = await client.room_create()
-
-        self.assertEqual(
-            httpx.post(
-                f"{BOT_URL}/{room.room_id}",
-                json={"body": body, "key": KEY},
-            ).json(),
-            {"status": 200, "ret": "OK"},
-        )
-
-        sync = await client.sync()
-        messages = await client.room_messages(room.room_id, sync.next_batch)
-        await client.close()
-
-        msg = messages.chunk[0]
-        self.assertIsInstance(msg, nio.RoomMessageImage)
-        # No caption -> body falls back to filename
-        self.assertEqual(msg.body, "poster.png")
-        # No formatted_body when there is no caption
-        self.assertNotIn("formatted_body", msg.source["content"])
-
-    async def test_no_image_falls_back_to_text(self):
-        """Body without any markdown image -> existing m.text path."""
+    async def test_no_image_url_sends_text(self):
+        """No image_url -> m.text."""
         body = "Plain text, no image."
         client = nio.AsyncClient(MATRIX_URL, MATRIX_ID)
 
@@ -158,10 +129,9 @@ class CaptionedImageTest(unittest.IsolatedAsyncioTestCase):
         self.assertIsInstance(msg, nio.RoomMessageText)
         self.assertEqual(msg.body, body)
 
-    async def test_failed_image_falls_back_to_text(self):
-        """If the upload fails, the original body is sent unchanged as m.text."""
-        bad_url = f"http://localhost:{FIXTURE_PORT}/missing.png"
-        body = f"caption text\n\n![poster]({bad_url})"
+    async def test_empty_image_url_sends_text(self):
+        """Empty image_url string -> m.text."""
+        body = "Plain text, no image."
         client = nio.AsyncClient(MATRIX_URL, MATRIX_ID)
 
         await client.login(MATRIX_PW)
@@ -170,7 +140,7 @@ class CaptionedImageTest(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(
             httpx.post(
                 f"{BOT_URL}/{room.room_id}",
-                json={"body": body, "key": KEY},
+                json={"body": body, "image_url": "", "key": KEY},
             ).json(),
             {"status": 200, "ret": "OK"},
         )
@@ -181,17 +151,40 @@ class CaptionedImageTest(unittest.IsolatedAsyncioTestCase):
 
         msg = messages.chunk[0]
         self.assertIsInstance(msg, nio.RoomMessageText)
-        self.assertIn(bad_url, msg.body)
-        # No m.image event sent
+        self.assertEqual(msg.body, body)
+
+    async def test_failed_image_falls_back_to_text(self):
+        """If the upload fails, body is sent as m.text without the URL."""
+        bad_url = f"http://localhost:{FIXTURE_PORT}/missing.png"
+        body = "caption text"
+        client = nio.AsyncClient(MATRIX_URL, MATRIX_ID)
+
+        await client.login(MATRIX_PW)
+        room = await client.room_create()
+
+        self.assertEqual(
+            httpx.post(
+                f"{BOT_URL}/{room.room_id}",
+                json={"body": body, "image_url": bad_url, "key": KEY},
+            ).json(),
+            {"status": 200, "ret": "OK"},
+        )
+
+        sync = await client.sync()
+        messages = await client.room_messages(room.room_id, sync.next_batch)
+        await client.close()
+
+        msg = messages.chunk[0]
+        self.assertIsInstance(msg, nio.RoomMessageText)
+        self.assertEqual(msg.body, body)
+        self.assertNotIn(bad_url, msg.body)
         for event in messages.chunk:
             self.assertNotIsInstance(event, nio.RoomMessageImage)
 
     async def test_unreachable_image_host_falls_back_to_text(self):
-        """An image URL whose host doesn't resolve must NOT crash the request."""
-        # Port closed on a non-existent hostname — produces a DNS or
-        # connection error (aiohttp.ClientError, not ValueError).
+        """An image_url whose host doesn't resolve must NOT crash the request."""
         bad_url = "http://this-host-does-not-exist.invalid/poster.png"
-        body = f"caption text\n\n![poster]({bad_url})"
+        body = "caption text"
         client = nio.AsyncClient(MATRIX_URL, MATRIX_ID)
 
         await client.login(MATRIX_PW)
@@ -200,7 +193,7 @@ class CaptionedImageTest(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(
             httpx.post(
                 f"{BOT_URL}/{room.room_id}",
-                json={"body": body, "key": KEY},
+                json={"body": body, "image_url": bad_url, "key": KEY},
             ).json(),
             {"status": 200, "ret": "OK"},
         )
@@ -211,30 +204,5 @@ class CaptionedImageTest(unittest.IsolatedAsyncioTestCase):
 
         msg = messages.chunk[0]
         self.assertIsInstance(msg, nio.RoomMessageText)
-        self.assertIn(bad_url, msg.body)
-
-    async def test_orphan_empty_image_link_stripped(self):
-        """Empty `![alt]()` is stripped from m.text fallback so it doesn't render as a broken img."""
-        body = "**Title**\n\n![poster]()\n\nDescription text."
-        client = nio.AsyncClient(MATRIX_URL, MATRIX_ID)
-
-        await client.login(MATRIX_PW)
-        room = await client.room_create()
-
-        self.assertEqual(
-            httpx.post(
-                f"{BOT_URL}/{room.room_id}",
-                json={"body": body, "key": KEY},
-            ).json(),
-            {"status": 200, "ret": "OK"},
-        )
-
-        sync = await client.sync()
-        messages = await client.room_messages(room.room_id, sync.next_batch)
-        await client.close()
-
-        msg = messages.chunk[0]
-        self.assertIsInstance(msg, nio.RoomMessageText)
-        self.assertEqual(msg.body, "**Title**\n\nDescription text.")
-        self.assertNotIn("![poster]", msg.body)
-        self.assertNotIn("<img", msg.formatted_body)
+        self.assertEqual(msg.body, body)
+        self.assertNotIn(bad_url, msg.body)
