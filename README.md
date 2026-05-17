@@ -135,6 +135,12 @@ as secret token. Not yet as pretty as other formatters, contributions welcome !
 
 To receiver notifications about new releases of projects hosted at github.com you can add a matrix webhook ending with `?formatter=grn&key=API_KEY` to [Github Release Notifier (grn)](https://github.com/femtopixel/github-release-notifier).
 
+### Discord
+
+To forward notifications sent in [Discord's webhook format](https://discord.com/developers/docs/resources/webhook#execute-webhook) (with `embeds`) to a Matrix room, use `?formatter=discord&key=API_KEY`.
+
+This is useful when a service supports sending webhooks to Discord but not Matrix: point its webhook URL to matrix-webhook with `?formatter=discord` instead.
+
 ## Test room
 
 [#matrix-webhook:tetaneutral.net](https://matrix.to/#/!DPrUlnwOhBEfYwsDLh:matrix.org)

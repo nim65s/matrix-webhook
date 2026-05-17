@@ -111,3 +111,36 @@ def grn(data, headers):
     )
 
     return data
+
+
+def discord(data, headers):
+    """Pretty-print a Discord notification."""
+    text = ""
+    if "username" in data and "content" in data:
+        text += f"**{data['username']}**: {data['content']}\n\n"
+    elif "username" in data:
+        text += f"**{data['username']}**\n\n"
+    elif "content" in data:
+        text += data["content"] + "\n\n"
+    for embed in data.get("embeds", []):
+        if "author" in embed and "name" in embed["author"]:
+            author = embed["author"]
+            if "url" in author:
+                text += f"[{author['name']}]({author['url']})\n"
+            else:
+                text += f"{author['name']}\n"
+        if "title" in embed:
+            if "url" in embed:
+                text += f"#### [{embed['title']}]({embed['url']})\n\n"
+            else:
+                text += f"#### {embed['title']}\n\n"
+        if "description" in embed:
+            text += embed["description"] + "\n\n"
+        for field in embed.get("fields", []):
+            text += f"**{field['name']}**: {field['value']}\n"
+        if embed.get("fields"):
+            text += "\n"
+        if "footer" in embed and "text" in embed["footer"]:
+            text += embed["footer"]["text"] + "\n"
+    data["body"] = text
+    return data
