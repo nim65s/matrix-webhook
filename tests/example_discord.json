@@ -1,0 +1,31 @@
+{
+  "username": "GitHub",
+  "content": "New commit pushed",
+  "embeds": [
+    {
+      "title": "matrix-webhook: 1 new commit",
+      "url": "https://github.com/nim65s/matrix-webhook/compare/ac7d1d964700...4bcdb25c8093",
+      "description": "formatters: also get headers",
+      "color": 3447003,
+      "author": {
+        "name": "nim65s",
+        "url": "https://github.com/nim65s"
+      },
+      "fields": [
+        {
+          "name": "Repository",
+          "value": "matrix-webhook",
+          "inline": true
+        },
+        {
+          "name": "Branch",
+          "value": "devel",
+          "inline": true
+        }
+      ],
+      "footer": {
+        "text": "Pushed by nim65s"
+      }
+    }
+  ]
+}
