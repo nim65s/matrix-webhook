@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   in [#169](https://github.com/nim65s/matrix-webhook/pull/243)
   by [@nim65s](https://github.com/nim65s)
 - setup mergify
+- captioned image support
 
 ## [v3.9.1] - 2024-03-09
 
