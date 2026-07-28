@@ -1,6 +1,7 @@
 """Formatters for matrix webhook."""
 
 import re
+
 from . import utils
 
 
@@ -123,7 +124,14 @@ def slack(data, headers):
         for attachment in data["attachments"]:
             text = text + "<div>"
             if "title_link" in attachment and "title" in attachment:
-                text = text + "<h4><a href=\"" + attachment["title_link"] + "\">" + attachment["title"] + "</a></h4>\n"
+                text = (
+                    text
+                    + '<h4><a href="'
+                    + attachment["title_link"]
+                    + '">'
+                    + attachment["title"]
+                    + "</a></h4>\n"
+                )
             elif "title" in attachment:
                 text = text + "<h4>" + utils.format_url(attachment["title"]) + "</h4>\n"
             if "text" in attachment:
@@ -133,11 +141,12 @@ def slack(data, headers):
                 for field in attachment["fields"]:
                     text = text + "<div>"
                     if "title" in field:
-                        text = text + "<h5>" + utils.format_url(field["title"]) + "</h5>\n"
+                        text = (
+                            text + "<h5>" + utils.format_url(field["title"]) + "</h5>\n"
+                        )
                     if "value" in field:
                         text = text + utils.format_url(str(field["value"])) + "\n"
                     text = text + "</div>"
             text = text + "</div>"
     data["body"] = text
     return data
-

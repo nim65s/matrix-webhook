@@ -25,11 +25,13 @@ async def matrix_webhook(request):
         return utils.create_json_response(HTTPStatus.OK, "OK")
 
     data_b = await request.read()
-    formatter = request.rel_url.query.get('formatter', None)
+    formatter = request.rel_url.query.get("formatter", None)
     try:
         data = json.loads(data_b.decode())
     except json.decoder.JSONDecodeError:
-        return utils.create_json_response(status=HTTPStatus.BAD_REQUEST, ret="Invalid JSON", formatter=formatter)
+        return utils.create_json_response(
+            status=HTTPStatus.BAD_REQUEST, ret="Invalid JSON", formatter=formatter
+        )
 
     # legacy naming
     if "text" in data and "body" not in data:
@@ -81,7 +83,9 @@ async def matrix_webhook(request):
         )
 
     if data["key"] != conf.API_KEY:
-        return utils.create_json_response(status=HTTPStatus.UNAUTHORIZED, ret="Invalid API key",formatter=formatter)
+        return utils.create_json_response(
+            status=HTTPStatus.UNAUTHORIZED, ret="Invalid API key", formatter=formatter
+        )
 
     if "formatted_body" in data:
         formatted_body = data["formatted_body"]
@@ -99,4 +103,6 @@ async def matrix_webhook(request):
         "format": "org.matrix.custom.html",
         "formatted_body": formatted_body,
     }
-    return await utils.send_room_message(room_id=data["room_id"], content=content, formatter=formatter)
+    return await utils.send_room_message(
+        room_id=data["room_id"], content=content, formatter=formatter
+    )

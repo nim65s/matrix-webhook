@@ -1,17 +1,17 @@
 """Matrix Webhook utils."""
 
 import logging
+from asyncio import create_task
 from collections import defaultdict
 from http import HTTPStatus
+from re import sub
 
 from aiohttp import web
-from asyncio import create_task
 from nio import AsyncClient, InviteEvent, MatrixRoom
 from nio.exceptions import LocalProtocolError
 from nio.responses import JoinError, RoomSendError
 
 from . import conf
-from re import sub
 
 ERROR_MAP = defaultdict(
     lambda: HTTPStatus.INTERNAL_SERVER_ERROR,
@@ -23,9 +23,19 @@ ERROR_MAP = defaultdict(
 LOGGER = logging.getLogger("matrix_webhook.utils")
 CLIENT = AsyncClient(conf.MATRIX_URL, conf.MATRIX_ID, proxy=conf.PROXY)
 
+
 def format_url(data):
-    data = sub(r"(<(https?://[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+)\|([\w\s]+)>)", r'<a href="\2">\3</a>', data)
-    return sub(r"(<)(https?://[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+)(>)", r'<a href="\2">\2</a>', data)
+    data = sub(
+        r"(<(https?://[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+)\|([\w\s]+)>)",
+        r'<a href="\2">\3</a>',
+        data,
+    )
+    return sub(
+        r"(<)(https?://[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+)(>)",
+        r'<a href="\2">\2</a>',
+        data,
+    )
+
 
 def error_map(resp):
     """Map response errors to HTTP status."""
@@ -46,7 +56,7 @@ def create_json_response(status, ret, formatter: str = None):
     return web.json_response(response_data, status=status)
 
 
-async def join_room(room_id,formatter: str = None):
+async def join_room(room_id, formatter: str = None):
     """Try to join the room."""
     msg = f"Join room {room_id=}"
     LOGGER.debug(msg)
@@ -60,7 +70,9 @@ async def join_room(room_id,formatter: str = None):
                     if conf.MATRIX_PW:
                         await CLIENT.login(conf.MATRIX_PW)
                 else:
-                    return create_json_response(status=error_map(resp), ret=resp.message, formatter=formatter)
+                    return create_json_response(
+                        status=error_map(resp), ret=resp.message, formatter=formatter
+                    )
             else:
                 return None
         except LocalProtocolError as e:
@@ -70,7 +82,11 @@ async def join_room(room_id,formatter: str = None):
             if conf.MATRIX_PW:
                 await CLIENT.login(conf.MATRIX_PW)
         LOGGER.warning("Trying again")
-    return create_json_response(status=HTTPStatus.GATEWAY_TIMEOUT, ret="Homeserver not responding", formatter=formatter)
+    return create_json_response(
+        status=HTTPStatus.GATEWAY_TIMEOUT,
+        ret="Homeserver not responding",
+        formatter=formatter,
+    )
 
 
 async def accept_invitation(room: MatrixRoom, event: InviteEvent):
@@ -101,9 +117,13 @@ async def send_room_message(room_id, content, formatter: str = None):
                     if conf.MATRIX_PW:
                         await CLIENT.login(conf.MATRIX_PW)
                 else:
-                    return create_json_response(status=error_map(resp), ret=resp.message,formatter=formatter)
+                    return create_json_response(
+                        status=error_map(resp), ret=resp.message, formatter=formatter
+                    )
             else:
-                return create_json_response(status=HTTPStatus.OK, ret="OK", formatter=formatter)
+                return create_json_response(
+                    status=HTTPStatus.OK, ret="OK", formatter=formatter
+                )
         except LocalProtocolError as e:
             msg = f"Send error: {e}"
             LOGGER.error(msg)
@@ -111,4 +131,8 @@ async def send_room_message(room_id, content, formatter: str = None):
             if conf.MATRIX_PW:
                 await CLIENT.login(conf.MATRIX_PW)
         LOGGER.warning("Trying again")
-    return create_json_response(status=HTTPStatus.GATEWAY_TIMEOUT, ret="Homeserver not responding", formatter=formatter)
+    return create_json_response(
+        status=HTTPStatus.GATEWAY_TIMEOUT,
+        ret="Homeserver not responding",
+        formatter=formatter,
+    )
