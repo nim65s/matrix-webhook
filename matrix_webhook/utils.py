@@ -39,7 +39,6 @@ def error_map(resp):
 def create_json_response(status, ret, formatter: str = None):
     """Create a JSON response."""
     msg = f"Creating json response: {status=}, {ret=}"
-    LOGGER.debug(f"FORMATTER: {formatter}")
     if formatter == "slack":
         response_data = {"ok": 200 <= status.value < 300, "error": ret}
     else:
