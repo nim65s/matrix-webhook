@@ -9,7 +9,7 @@ from pathlib import Path
 import httpx
 import nio
 
-from .start import BOT_URL, FULL_ID, MATRIX_ID, MATRIX_PW, MATRIX_URL
+from .start import BOT_URL, FULL_ID, MATRIX_ID, MATRIX_PW, MATRIX_URL, assert_sent
 
 
 class GrafanaForwardFormatterTest(unittest.IsolatedAsyncioTestCase):
@@ -25,13 +25,13 @@ class GrafanaForwardFormatterTest(unittest.IsolatedAsyncioTestCase):
 
         with Path("tests/example_grafana_9x.json").open() as f:
             example_grafana_request = f.read()
-        self.assertEqual(
+        assert_sent(
+            self,
             httpx.post(
                 f"{BOT_URL}/{room.room_id}",
                 params={"formatter": "grafana"},
                 content=example_grafana_request,
             ).json(),
-            {"status": 200, "ret": "OK"},
         )
 
         sync = await client.sync()

@@ -112,6 +112,23 @@ Supports sending images as messages by including an `image_url` field in the pay
 Requests without `image_url` continue to send as `m.text` events.
 If the fetch or upload fails, `body` is sent as `m.text` and a warning is logged.
 
+### Threads
+
+Every successful send returns the new event's ID:
+
+```json
+{"status": 200, "ret": "OK", "event_id": "$abc..."}
+```
+
+Pass that ID back as `thread_root` to post inside the thread rooted at that
+event. The relation carries `is_falling_back` and `m.in_reply_to`, so clients
+without thread support show the message as a plain reply.
+
+```bash
+curl -d '{"body":"```\ntraceback...\n```", "thread_root":"$abc...", "key":"secret"}' \
+     'http://localhost:4785/!DPrUlnwOhBEfYwsDLh:matrix.org'
+```
+
 ### For Github
 
 Add a JSON webhook with `?formatter=github`, and put the `API_KEY` as secret

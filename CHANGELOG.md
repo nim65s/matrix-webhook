@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   by [@nim65s](https://github.com/nim65s)
 - setup mergify
 - captioned image support
+- threads: successful sends return the new `event_id`; a `thread_root` field
+  in the payload posts the message into the thread rooted at that event
+  (`m.thread` relation with `is_falling_back` and `m.in_reply_to`).
 
 ## [v3.9.1] - 2024-03-09
 

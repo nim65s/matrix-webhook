@@ -9,7 +9,7 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 import httpx
 import nio
 
-from .start import BOT_URL, FULL_ID, KEY, MATRIX_ID, MATRIX_PW, MATRIX_URL
+from .start import BOT_URL, FULL_ID, KEY, MATRIX_ID, MATRIX_PW, MATRIX_URL, assert_sent
 
 
 def _tiny_png():
@@ -82,12 +82,12 @@ class CaptionedImageTest(unittest.IsolatedAsyncioTestCase):
         await client.login(MATRIX_PW)
         room = await client.room_create()
 
-        self.assertEqual(
+        assert_sent(
+            self,
             httpx.post(
                 f"{BOT_URL}/{room.room_id}",
                 json={"body": body, "image_url": FIXTURE_URL, "key": KEY},
             ).json(),
-            {"status": 200, "ret": "OK"},
         )
 
         sync = await client.sync()
@@ -113,12 +113,12 @@ class CaptionedImageTest(unittest.IsolatedAsyncioTestCase):
         await client.login(MATRIX_PW)
         room = await client.room_create()
 
-        self.assertEqual(
+        assert_sent(
+            self,
             httpx.post(
                 f"{BOT_URL}/{room.room_id}",
                 json={"body": body, "key": KEY},
             ).json(),
-            {"status": 200, "ret": "OK"},
         )
 
         sync = await client.sync()
@@ -137,12 +137,12 @@ class CaptionedImageTest(unittest.IsolatedAsyncioTestCase):
         await client.login(MATRIX_PW)
         room = await client.room_create()
 
-        self.assertEqual(
+        assert_sent(
+            self,
             httpx.post(
                 f"{BOT_URL}/{room.room_id}",
                 json={"body": body, "image_url": "", "key": KEY},
             ).json(),
-            {"status": 200, "ret": "OK"},
         )
 
         sync = await client.sync()
@@ -162,12 +162,12 @@ class CaptionedImageTest(unittest.IsolatedAsyncioTestCase):
         await client.login(MATRIX_PW)
         room = await client.room_create()
 
-        self.assertEqual(
+        assert_sent(
+            self,
             httpx.post(
                 f"{BOT_URL}/{room.room_id}",
                 json={"body": body, "image_url": bad_url, "key": KEY},
             ).json(),
-            {"status": 200, "ret": "OK"},
         )
 
         sync = await client.sync()
@@ -190,12 +190,12 @@ class CaptionedImageTest(unittest.IsolatedAsyncioTestCase):
         await client.login(MATRIX_PW)
         room = await client.room_create()
 
-        self.assertEqual(
+        assert_sent(
+            self,
             httpx.post(
                 f"{BOT_URL}/{room.room_id}",
                 json={"body": body, "image_url": bad_url, "key": KEY},
             ).json(),
-            {"status": 200, "ret": "OK"},
         )
 
         sync = await client.sync()
