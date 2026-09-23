@@ -70,7 +70,8 @@ class BotTest(unittest.IsolatedAsyncioTestCase):
         room = await client.room_create()
 
         assert_sent(
-            self, bot_req({"body": body, "room_id": room.room_id}, KEY, room.room_id),
+            self,
+            bot_req({"body": body, "room_id": room.room_id}, KEY, room.room_id),
         )
 
         sync = await client.sync()
@@ -92,7 +93,8 @@ class BotTest(unittest.IsolatedAsyncioTestCase):
         room = await client.room_create()
 
         assert_sent(
-            self, bot_req({"body": body}, KEY, room.room_id, room_as_parameter=True),
+            self,
+            bot_req({"body": body}, KEY, room.room_id, room_as_parameter=True),
         )
 
         sync = await client.sync()
