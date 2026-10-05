@@ -26,6 +26,8 @@ async def main(event):
         LOGGER.info(msg)
         utils.CLIENT.access_token = conf.MATRIX_TOKEN
 
+    invitation_watcher = utils.watch_for_invitation()
+
     server = web.Server(handler.matrix_webhook)
     runner = web.ServerRunner(server)
     await runner.setup()
@@ -44,6 +46,7 @@ async def main(event):
     await event.wait()
 
     # Cleanup
+    invitation_watcher.cancel()
     await runner.cleanup()
     await utils.CLIENT.close()
 
