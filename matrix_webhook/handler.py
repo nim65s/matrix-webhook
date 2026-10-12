@@ -25,11 +25,13 @@ async def matrix_webhook(request):
         return utils.create_json_response(HTTPStatus.OK, "OK")
 
     data_b = await request.read()
-
+    formatter = request.rel_url.query.get("formatter", None)
     try:
         data = json.loads(data_b.decode())
     except json.decoder.JSONDecodeError:
-        return utils.create_json_response(HTTPStatus.BAD_REQUEST, "Invalid JSON")
+        return utils.create_json_response(
+            status=HTTPStatus.BAD_REQUEST, ret="Invalid JSON", formatter=formatter
+        )
 
     # legacy naming
     if "text" in data and "body" not in data:
@@ -47,8 +49,9 @@ async def matrix_webhook(request):
             )
         except AttributeError:
             return utils.create_json_response(
-                HTTPStatus.BAD_REQUEST,
-                "Unknown formatter",
+                status=HTTPStatus.BAD_REQUEST,
+                ret="Unknown formatter",
+                formatter=formatter,
             )
 
     if "room_id" in request.rel_url.query and "room_id" not in data:
@@ -63,8 +66,9 @@ async def matrix_webhook(request):
             data["key"] = conf.API_KEY
         else:  # but if there is a wrong digest, an informative error should be provided
             return utils.create_json_response(
-                HTTPStatus.UNAUTHORIZED,
-                "Invalid SHA-256 HMAC digest",
+                status=HTTPStatus.UNAUTHORIZED,
+                ret="Invalid SHA-256 HMAC digest",
+                formatter=formatter,
             )
 
     missing = []
@@ -73,12 +77,15 @@ async def matrix_webhook(request):
             missing.append(key)
     if missing:
         return utils.create_json_response(
-            HTTPStatus.BAD_REQUEST,
-            f"Missing {', '.join(missing)}",
+            status=HTTPStatus.BAD_REQUEST,
+            ret=f"Missing {', '.join(missing)}",
+            formatter=formatter,
         )
 
     if data["key"] != conf.API_KEY:
-        return utils.create_json_response(HTTPStatus.UNAUTHORIZED, "Invalid API key")
+        return utils.create_json_response(
+            status=HTTPStatus.UNAUTHORIZED, ret="Invalid API key", formatter=formatter
+        )
 
     if "formatted_body" in data:
         formatted_body = data["formatted_body"]
@@ -86,7 +93,7 @@ async def matrix_webhook(request):
         formatted_body = markdown(str(data["body"]), extensions=["extra"])
 
     # try to join room first -> non none response means error
-    resp = await utils.join_room(data["room_id"])
+    resp = await utils.join_room(room_id=data["room_id"], formatter=formatter)
     if resp is not None:
         return resp
 
@@ -96,4 +103,6 @@ async def matrix_webhook(request):
         "format": "org.matrix.custom.html",
         "formatted_body": formatted_body,
     }
-    return await utils.send_room_message(data["room_id"], content)
+    return await utils.send_room_message(
+        room_id=data["room_id"], content=content, formatter=formatter
+    )
