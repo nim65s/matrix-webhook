@@ -31,11 +31,11 @@ def error_map(resp):
     return ERROR_MAP[resp.status_code]
 
 
-def create_json_response(status, ret):
-    """Create a JSON response."""
-    msg = f"Creating json response: {status=}, {ret=}"
+def create_json_response(status, ret, **extra):
+    """Create a JSON response, with optional extra top-level fields."""
+    msg = f"Creating json response: {status=}, {ret=}, {extra=}"
     LOGGER.debug(msg)
-    response_data = {"status": status, "ret": ret}
+    response_data = {"status": status, "ret": ret, **extra}
     return web.json_response(response_data, status=status)
 
 
@@ -86,7 +86,11 @@ async def send_room_message(room_id, content):
                 else:
                     return create_json_response(error_map(resp), resp.message)
             else:
-                return create_json_response(HTTPStatus.OK, "OK")
+                return create_json_response(
+                    HTTPStatus.OK,
+                    "OK",
+                    event_id=resp.event_id,
+                )
         except LocalProtocolError as e:
             msg = f"Send error: {e}"
             LOGGER.error(msg)

@@ -7,7 +7,7 @@ from http import HTTPStatus
 
 from markdown import markdown
 
-from . import conf, formatters, utils
+from . import conf, formatters, media, utils
 
 LOGGER = logging.getLogger("matrix_webhook.handler")
 
@@ -80,20 +80,36 @@ async def matrix_webhook(request):
     if data["key"] != conf.API_KEY:
         return utils.create_json_response(HTTPStatus.UNAUTHORIZED, "Invalid API key")
 
-    if "formatted_body" in data:
-        formatted_body = data["formatted_body"]
-    else:
-        formatted_body = markdown(str(data["body"]), extensions=["extra"])
+    body = str(data["body"])
+    formatted_body = data.get("formatted_body")
+    image_url = data.get("image_url")
+    thread_root = data.get("thread_root")
+
+    content = None
+    if image_url:
+        content = await media.captioned_image(image_url, body, formatted_body)
+    if content is None:
+        content = {
+            "msgtype": "m.text",
+            "body": body,
+            "format": "org.matrix.custom.html",
+            "formatted_body": formatted_body or markdown(body, extensions=["extra"]),
+        }
+
+    # Post inside the thread rooted at ``thread_root`` (an event ID returned by
+    # a previous call). ``is_falling_back`` + ``m.in_reply_to`` let clients
+    # without thread support render the message as a plain reply instead.
+    if thread_root:
+        content["m.relates_to"] = {
+            "rel_type": "m.thread",
+            "event_id": str(thread_root),
+            "is_falling_back": True,
+            "m.in_reply_to": {"event_id": str(thread_root)},
+        }
 
     # try to join room first -> non none response means error
     resp = await utils.join_room(data["room_id"])
     if resp is not None:
         return resp
 
-    content = {
-        "msgtype": "m.text",
-        "body": data["body"],
-        "format": "org.matrix.custom.html",
-        "formatted_body": formatted_body,
-    }
     return await utils.send_room_message(data["room_id"], content)

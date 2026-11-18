@@ -30,6 +30,15 @@ parser.add_argument(
 )
 
 
+def assert_sent(test, resp):
+    """Assert ``resp`` is a successful send: status 200, ret OK, and an event ID."""
+    test.assertEqual(
+        {k: resp.get(k) for k in ("status", "ret")},
+        {"status": 200, "ret": "OK"},
+    )
+    test.assertRegex(resp.get("event_id", ""), r"^\$")
+
+
 def bot_req(
     req=None,
     key=None,
