@@ -1,11 +1,13 @@
 """Matrix Webhook utils."""
 
 import logging
+from asyncio import create_task
 from collections import defaultdict
 from http import HTTPStatus
+from re import sub
 
 from aiohttp import web
-from nio import AsyncClient
+from nio import AsyncClient, InviteEvent, MatrixRoom
 from nio.exceptions import LocalProtocolError
 from nio.responses import JoinError, RoomSendError
 
@@ -22,6 +24,19 @@ LOGGER = logging.getLogger("matrix_webhook.utils")
 CLIENT = AsyncClient(conf.MATRIX_URL, conf.MATRIX_ID, proxy=conf.PROXY)
 
 
+def format_url(data):
+    data = sub(
+        r"(<(https?://[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+)\|([\w\s]+)>)",
+        r'<a href="\2">\3</a>',
+        data,
+    )
+    return sub(
+        r"(<)(https?://[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+)(>)",
+        r'<a href="\2">\2</a>',
+        data,
+    )
+
+
 def error_map(resp):
     """Map response errors to HTTP status."""
     if resp.status_code == "M_UNKNOWN":
@@ -31,15 +46,17 @@ def error_map(resp):
     return ERROR_MAP[resp.status_code]
 
 
-def create_json_response(status, ret):
+def create_json_response(status, ret, formatter: str = None):
     """Create a JSON response."""
     msg = f"Creating json response: {status=}, {ret=}"
-    LOGGER.debug(msg)
-    response_data = {"status": status, "ret": ret}
+    if formatter == "slack":
+        response_data = {"ok": 200 <= status.value < 300, "error": ret}
+    else:
+        response_data = {"status": status, "ret": ret}
     return web.json_response(response_data, status=status)
 
 
-async def join_room(room_id):
+async def join_room(room_id, formatter: str = None):
     """Try to join the room."""
     msg = f"Join room {room_id=}"
     LOGGER.debug(msg)
@@ -53,7 +70,9 @@ async def join_room(room_id):
                     if conf.MATRIX_PW:
                         await CLIENT.login(conf.MATRIX_PW)
                 else:
-                    return create_json_response(error_map(resp), resp.message)
+                    return create_json_response(
+                        status=error_map(resp), ret=resp.message, formatter=formatter
+                    )
             else:
                 return None
         except LocalProtocolError as e:
@@ -63,10 +82,24 @@ async def join_room(room_id):
             if conf.MATRIX_PW:
                 await CLIENT.login(conf.MATRIX_PW)
         LOGGER.warning("Trying again")
-    return create_json_response(HTTPStatus.GATEWAY_TIMEOUT, "Homeserver not responding")
+    return create_json_response(
+        status=HTTPStatus.GATEWAY_TIMEOUT,
+        ret="Homeserver not responding",
+        formatter=formatter,
+    )
 
 
-async def send_room_message(room_id, content):
+async def accept_invitation(room: MatrixRoom, event: InviteEvent):
+    LOGGER.info(f"Got invite to room {room.room_id=}")
+    await CLIENT.join(room.room_id)
+
+
+def watch_for_invitation():
+    CLIENT.add_event_callback(accept_invitation, InviteEvent)
+    return create_task(CLIENT.sync_forever())
+
+
+async def send_room_message(room_id, content, formatter: str = None):
     """Send a message to a room."""
     msg = f"Sending room message in {room_id=}: {content=}"
     LOGGER.debug(msg)
@@ -84,9 +117,13 @@ async def send_room_message(room_id, content):
                     if conf.MATRIX_PW:
                         await CLIENT.login(conf.MATRIX_PW)
                 else:
-                    return create_json_response(error_map(resp), resp.message)
+                    return create_json_response(
+                        status=error_map(resp), ret=resp.message, formatter=formatter
+                    )
             else:
-                return create_json_response(HTTPStatus.OK, "OK")
+                return create_json_response(
+                    status=HTTPStatus.OK, ret="OK", formatter=formatter
+                )
         except LocalProtocolError as e:
             msg = f"Send error: {e}"
             LOGGER.error(msg)
@@ -94,4 +131,8 @@ async def send_room_message(room_id, content):
             if conf.MATRIX_PW:
                 await CLIENT.login(conf.MATRIX_PW)
         LOGGER.warning("Trying again")
-    return create_json_response(HTTPStatus.GATEWAY_TIMEOUT, "Homeserver not responding")
+    return create_json_response(
+        status=HTTPStatus.GATEWAY_TIMEOUT,
+        ret="Homeserver not responding",
+        formatter=formatter,
+    )
