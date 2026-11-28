@@ -4,7 +4,7 @@ import unittest
 
 import nio
 
-from .start import FULL_ID, KEY, MATRIX_ID, MATRIX_PW, MATRIX_URL, bot_req
+from .start import FULL_ID, KEY, MATRIX_ID, MATRIX_PW, MATRIX_URL, assert_sent, bot_req
 
 
 class BotTest(unittest.IsolatedAsyncioTestCase):
@@ -49,10 +49,7 @@ class BotTest(unittest.IsolatedAsyncioTestCase):
         await client.login(MATRIX_PW)
         room = await client.room_create()
 
-        self.assertEqual(
-            bot_req({"text": text}, KEY, room.room_id),
-            {"status": 200, "ret": "OK"},
-        )
+        assert_sent(self, bot_req({"text": text}, KEY, room.room_id))
 
         sync = await client.sync()
         messages = await client.room_messages(room.room_id, sync.next_batch)
@@ -72,9 +69,9 @@ class BotTest(unittest.IsolatedAsyncioTestCase):
         await client.login(MATRIX_PW)
         room = await client.room_create()
 
-        self.assertEqual(
+        assert_sent(
+            self,
             bot_req({"body": body, "room_id": room.room_id}, KEY, room.room_id),
-            {"status": 200, "ret": "OK"},
         )
 
         sync = await client.sync()
@@ -95,9 +92,9 @@ class BotTest(unittest.IsolatedAsyncioTestCase):
         await client.login(MATRIX_PW)
         room = await client.room_create()
 
-        self.assertEqual(
+        assert_sent(
+            self,
             bot_req({"body": body}, KEY, room.room_id, room_as_parameter=True),
-            {"status": 200, "ret": "OK"},
         )
 
         sync = await client.sync()
@@ -118,10 +115,7 @@ class BotTest(unittest.IsolatedAsyncioTestCase):
         await client.login(MATRIX_PW)
         room = await client.room_create()
 
-        self.assertEqual(
-            bot_req({"body": body}, KEY, room.room_id),
-            {"status": 200, "ret": "OK"},
-        )
+        assert_sent(self, bot_req({"body": body}, KEY, room.room_id))
 
         sync = await client.sync()
         messages = await client.room_messages(room.room_id, sync.next_batch)
@@ -142,13 +136,13 @@ class BotTest(unittest.IsolatedAsyncioTestCase):
         await client.login(MATRIX_PW)
         room = await client.room_create()
 
-        self.assertEqual(
+        assert_sent(
+            self,
             bot_req(
                 {"body": body, "formatted_body": formatted_body},
                 KEY,
                 room.room_id,
             ),
-            {"status": 200, "ret": "OK"},
         )
 
         sync = await client.sync()
@@ -167,10 +161,7 @@ class BotTest(unittest.IsolatedAsyncioTestCase):
         room = await client.room_create()
         await client.logout(all_devices=True)
         await client.close()
-        self.assertEqual(
-            bot_req({"body": "Re"}, KEY, room.room_id),
-            {"status": 200, "ret": "OK"},
-        )
+        assert_sent(self, bot_req({"body": "Re"}, KEY, room.room_id))
 
     async def test_healthcheck(self):
         """Check the healthcheck endpoint returns 200."""
